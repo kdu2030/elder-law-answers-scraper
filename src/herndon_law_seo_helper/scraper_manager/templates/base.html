@@ -16,12 +16,22 @@
 <body>
 <nav class="navbar navbar-expand-lg bg-herndon-law px-2 sticky-top">
     <div class="container-fluid">
-        <a class="navbar-brand text-white fw-semibold fs-4">Herndon Law Blog Manager</a>
+        <a class="navbar-brand text-white fw-semibold fs-4" href="{% url 'index' %}">Herndon Law Blog Manager</a>
+        <div class="collapse navbar-collapse">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link text-white">Sign In</a>
+                </li>
+            </ul>
+        </div>
     </div>
 </nav>
 
 {% block content %}
 {% endblock %}
 
+<div class="w-100 mt-3 p-3 bg-herndon-law">
+    <p class="text-white mb-0">Created by Kevin Du for Herndon Law, P.C.</p>
+</div>
 </body>
 </html>
