@@ -1,3 +1,9 @@
 .bg-herndon-law {
     background-color: #083360;
 }
+
+@media (min-width: 1400px) {
+    .xxl-w-50{
+        width: 50% !important;
+    }
+}
