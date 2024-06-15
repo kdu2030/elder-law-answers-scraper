@@ -1,4 +1,20 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load static %}
 
 {% block page_title %} Herndon Law Blog Manager {% endblock page_title %}
+
+{% block head_content %}
+    <link rel="stylesheet" href="{% static 'scraper_manager/styles/index.css' %}" >
+{% endblock %}
+
+{% block content %}
+<div class="header-image">
+    <img src="https://images.crexi.com/lease-assets/560493/9ef5f7c46e194ed3b219cbcef6f313f8_1306x734.jpg" width="100%">
+    <div class="overlay"></div>
+    <div class="text-overlay text-white d-flex flex-column align-items-center">
+        <h1 class="fs-1">Herndon Law Blog Manager</h1>
+        <p class="fs-5">Automatically create blog posts using Elder Law Answers</p>
+    </div>
+</div>
+{% endblock content %}
