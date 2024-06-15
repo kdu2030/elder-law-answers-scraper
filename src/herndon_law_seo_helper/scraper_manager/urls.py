@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import home
+from .views import authentication
 
 urlpatterns = [
-    path("", home.index, name="index")
+    path("", authentication.index, name="index"),
+    path("signin/", authentication.sign_in, name="sign_in")
 ]
