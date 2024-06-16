@@ -18,6 +18,7 @@ def sign_in_post(request: HttpRequest) -> HttpResponse:
     if signin_form.is_valid() and signin_form.cleaned_data["valid_user"] is not None:
         login(request, signin_form.cleaned_data["valid_user"])
         return render(request, "scraper_manager/index.html")
+
     return render(request, "scraper_manager/sign-in.html", {"form": signin_form})
 
 
