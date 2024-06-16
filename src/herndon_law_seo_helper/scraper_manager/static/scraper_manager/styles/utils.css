@@ -19,3 +19,11 @@
 .btn.bg-herndon-law:hover {
     background-color: #0d4b8c;
 }
+
+.start-auto {
+    left: auto !important;
+}
+
+.dropdown-item-herndon-law:active {
+    background-color: #083360
+}
