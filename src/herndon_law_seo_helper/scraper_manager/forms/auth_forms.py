@@ -23,7 +23,7 @@ class SignInForm(forms.Form):
 
         if user is None:
             self.add_error("email", ValidationError(
-                "A user with this email was not found"))
+                "A user with this email was not found."))
             self.fields["email"].widget.attrs["class"] = "form-control is-invalid"
 
         return self.cleaned_data
