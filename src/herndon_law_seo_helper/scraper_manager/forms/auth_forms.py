@@ -32,5 +32,7 @@ class SignInForm(forms.Form):
                 "Your password is incorrect."))
             self.fields["password"].widget.attrs["class"] = error_input_class
             self.fields["password"].widget.attrs["value"] = password
+        else:
+            self.cleaned_data["valid_user"] = user
 
         return self.cleaned_data
