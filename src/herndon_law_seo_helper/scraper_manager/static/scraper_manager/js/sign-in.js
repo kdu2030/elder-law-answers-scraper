@@ -23,7 +23,7 @@ var validateEmail = function (emailAddress) {
     }
 };
 var validatePassword = function (password) {
-    if (!password || password.trim().length === 0) {
+    if (!password || password.length === 0) {
         return "Password is required.";
     }
 };

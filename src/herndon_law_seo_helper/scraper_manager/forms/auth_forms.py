@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
+from django.contrib.auth import authenticate
 
 
 class SignInForm(forms.Form):
@@ -20,10 +21,17 @@ class SignInForm(forms.Form):
         password = self.cleaned_data.get("password")
 
         user = User.objects.filter(email=email).first()
+        error_input_class = "form-control is-invalid"
 
         if user is None:
             self.add_error("email", ValidationError(
                 "A user with this email was not found."))
-            self.fields["email"].widget.attrs["class"] = "form-control is-invalid"
+            self.fields["email"].widget.attrs["class"] = error_input_class
+
+        if authenticate(username=user.username, password=password) is None:
+            self.add_error("password", ValidationError(
+                "Your password is incorrect."))
+            self.fields["password"].widget.attrs["class"] = error_input_class
+            self.fields["password"].widget.attrs["value"] = password
 
         return self.cleaned_data
