@@ -3,6 +3,7 @@ enum SignInFormId {
   EmailInput = "signin-email-input",
   PasswordInput = "signin-password-input",
   PasswordErrorMessage = "password-error-message",
+  Spinner = "signin-submit-spinner",
 }
 
 const addErrorMessage = (
@@ -117,4 +118,7 @@ const onSubmit = (event: SubmitEvent) => {
   if (emailErrorMessage || passwordErrorMessage) {
     event.preventDefault();
   }
+
+  const spinner = document.getElementById(SignInFormId.Spinner);
+  spinner?.classList.remove("d-none");
 };

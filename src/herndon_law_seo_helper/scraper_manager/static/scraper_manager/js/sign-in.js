@@ -4,6 +4,7 @@ var SignInFormId;
     SignInFormId["EmailInput"] = "signin-email-input";
     SignInFormId["PasswordInput"] = "signin-password-input";
     SignInFormId["PasswordErrorMessage"] = "password-error-message";
+    SignInFormId["Spinner"] = "signin-submit-spinner";
 })(SignInFormId || (SignInFormId = {}));
 var addErrorMessage = function (inputElement, errorMessageElement, errorMessage) {
     inputElement.classList.add("is-invalid");
@@ -73,4 +74,6 @@ var onSubmit = function (event) {
     if (emailErrorMessage || passwordErrorMessage) {
         event.preventDefault();
     }
+    var spinner = document.getElementById(SignInFormId.Spinner);
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
 };
