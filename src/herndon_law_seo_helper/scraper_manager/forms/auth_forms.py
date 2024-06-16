@@ -27,8 +27,7 @@ class SignInForm(forms.Form):
             self.add_error("email", ValidationError(
                 "A user with this email was not found."))
             self.fields["email"].widget.attrs["class"] = error_input_class
-
-        if authenticate(username=user.username, password=password) is None:
+        elif authenticate(username=user.username, password=password) is None:
             self.add_error("password", ValidationError(
                 "Your password is incorrect."))
             self.fields["password"].widget.attrs["class"] = error_input_class
