@@ -49,9 +49,15 @@
               >
               <ul class="dropdown-menu start-auto end-0">
                 <li>
-                  <a class="dropdown-item dropdown-item-herndon-law" href="#"
-                    >Sign Out</a
-                  >
+                  <form action="{% url 'sign_out' %}" method="POST">
+                    {% csrf_token %}
+                    <button
+                      class="dropdown-item dropdown-item-herndon-law"
+                      href="#"
+                    >
+                      Sign Out
+                    </button>
+                  </form>
                 </li>
               </ul>
             </li>

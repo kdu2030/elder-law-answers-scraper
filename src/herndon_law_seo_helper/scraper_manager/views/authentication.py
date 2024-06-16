@@ -1,7 +1,7 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from ..forms.auth_forms import SignInForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 
 
 def index(request: HttpRequest) -> HttpResponse:
@@ -26,4 +26,11 @@ def sign_in(request: HttpRequest) -> HttpResponse:
     if request.method == 'POST':
         return sign_in_post(request)
 
+    return sign_in_get(request)
+
+
+def sign_out(request: HttpRequest) -> HttpResponse:
+    if request.method != "POST":
+        return render(request, "scraper_manager/index.html")
+    logout(request)
     return sign_in_get(request)
