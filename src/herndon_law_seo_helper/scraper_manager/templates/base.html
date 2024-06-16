@@ -33,11 +33,41 @@
         >
         <div class="collapse navbar-collapse">
           <ul class="navbar-nav ms-auto">
+            {% if user.is_authenticated %}
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle text-white"
+                href="#"
+                data-bs-toggle="dropdown"
+              >
+                {%if not user.profile %}
+                <img
+                  src="https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
+                  width="35px"
+                />
+                {% endif %} {{user.username}}</a
+              >
+              <ul class="dropdown-menu start-auto end-0">
+                <li>
+                  <form action="{% url 'sign_out' %}" method="POST">
+                    {% csrf_token %}
+                    <button
+                      class="dropdown-item dropdown-item-herndon-law"
+                      href="#"
+                    >
+                      Sign Out
+                    </button>
+                  </form>
+                </li>
+              </ul>
+            </li>
+            {% else %}
             <li class="nav-item">
               <a class="nav-link text-white" href="{% url 'sign_in' %}"
                 >Sign In</a
               >
             </li>
+            {% endif %}
           </ul>
         </div>
       </div>

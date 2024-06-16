@@ -23,7 +23,7 @@ var validateEmail = function (emailAddress) {
     }
 };
 var validatePassword = function (password) {
-    if (!password || password.trim().length === 0) {
+    if (!password || password.length === 0) {
         return "Password is required.";
     }
 };
@@ -73,6 +73,7 @@ var onSubmit = function (event) {
     }
     if (emailErrorMessage || passwordErrorMessage) {
         event.preventDefault();
+        return;
     }
     var spinner = document.getElementById(SignInFormId.Spinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
