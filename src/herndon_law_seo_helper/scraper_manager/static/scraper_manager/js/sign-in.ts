@@ -117,6 +117,7 @@ const onSubmit = (event: SubmitEvent) => {
 
   if (emailErrorMessage || passwordErrorMessage) {
     event.preventDefault();
+    return;
   }
 
   const spinner = document.getElementById(SignInFormId.Spinner);

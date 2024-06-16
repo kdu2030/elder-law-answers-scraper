@@ -73,6 +73,7 @@ var onSubmit = function (event) {
     }
     if (emailErrorMessage || passwordErrorMessage) {
         event.preventDefault();
+        return;
     }
     var spinner = document.getElementById(SignInFormId.Spinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
