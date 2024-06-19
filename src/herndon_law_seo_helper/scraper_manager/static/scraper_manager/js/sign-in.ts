@@ -38,7 +38,7 @@ const validateEmail = (
 };
 
 const validatePassword = (password: string | undefined): string | undefined => {
-  if (!password || password.trim().length === 0) {
+  if (!password || password.length === 0) {
     return "Password is required.";
   }
 };
@@ -117,6 +117,7 @@ const onSubmit = (event: SubmitEvent) => {
 
   if (emailErrorMessage || passwordErrorMessage) {
     event.preventDefault();
+    return;
   }
 
   const spinner = document.getElementById(SignInFormId.Spinner);
