@@ -11,6 +11,7 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'herndon_law_seo_helper.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE',
+                      'herndon_law_seo_helper.production_settings')
 
 application = get_wsgi_application()
