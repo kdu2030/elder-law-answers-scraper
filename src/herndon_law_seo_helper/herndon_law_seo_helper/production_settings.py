@@ -22,7 +22,7 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 
 DEBUG = False
 
-ALLOWED_HOSTS = [".adaptable.app"]
+ALLOWED_HOSTS = ["herndon-law-seo-helper.adaptable.app", ".adaptable.app"]
 
 
 # Application definition
