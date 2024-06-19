@@ -22,9 +22,9 @@ SECRET_KEY = os.environ["SECRET_KEY"]
 
 DEBUG = True
 
-ALLOWED_HOSTS = ["*", "herndon-law-seo-helper.adaptable.app"]
+ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ["herndon-law-seo-helper.adaptable.app"]
+CSRF_TRUSTED_ORIGINS = ["https://herndon-law-seo-helper.adaptable.app"]
 
 
 # Application definition
