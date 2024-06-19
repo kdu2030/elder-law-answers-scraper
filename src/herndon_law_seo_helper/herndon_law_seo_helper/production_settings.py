@@ -24,6 +24,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*", "herndon-law-seo-helper.adaptable.app"]
 
+CSRF_TRUSTED_ORIGINS = ["herndon-law-seo-helper.adaptable.app"]
+
 
 # Application definition
 
