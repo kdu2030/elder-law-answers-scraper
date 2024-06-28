@@ -7,7 +7,7 @@
 }
 
 @media (min-width: 1400px) {
-    .xxl-w-50{
+    .xxl-w-50 {
         width: 50% !important;
     }
 }
@@ -26,4 +26,9 @@
 
 .dropdown-item-herndon-law:active {
     background-color: #083360
+}
+
+.bg-herndon-law.list-group-item.active {
+    background-color: #083360;
+    border-color: #083360;
 }
