@@ -1,0 +1,10 @@
+{% extends "base.html" %} 
+{% load i18n %}
+{% load static %} 
+{% block page_title%} Settings {% endblock page_title %} 
+
+{% block head_content %} {%endblock head_content %}
+
+{% block content %} 
+    <form> {% csrf_token %}</form>
+{% endblock content%}
