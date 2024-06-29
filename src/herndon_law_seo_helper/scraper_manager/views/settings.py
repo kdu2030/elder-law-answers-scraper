@@ -21,7 +21,7 @@ def ela_settings_get(request: HttpRequest) -> HttpResponse:
         source=SourceOptions.ELDER_LAW_ANSWERS.value).first()
 
     email = existing_ela_configuration.email if existing_ela_configuration else None
-    password_msg = "*****" if existing_ela_configuration.encrypted_password else "Password does not exist."
+    password_msg = "**********" if existing_ela_configuration.encrypted_password else "Password does not exist."
 
     source_config_form = SourceConfigurationForm(
         existing_config=existing_ela_configuration)

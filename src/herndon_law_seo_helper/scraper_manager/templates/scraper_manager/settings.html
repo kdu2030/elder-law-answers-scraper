@@ -58,7 +58,7 @@
                             <div>
                                 <p class="fw-bold">Change Password</p>
                                 <div id="ela-change-password-read-mode">
-                                    <p>{{ password_msg }}</p>
+                                    <p id="ela-password-message">{{ password_msg }}</p>
                                     <button class="btn btn-outline-primary outline-herndon-law" type="button" onclick="onElaPasswordClick()">Change Password</button>
                                 </div>
 
@@ -78,7 +78,7 @@
                                     
                                     <div class="d-flex flex-row justify-content-end mt-3">
                                         <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onElaPasswordCancel()">Cancel</button>
-                                        <button class="btn btn-primary bg-herndon-law" type="button" onclick="onElaEmailSave()">
+                                        <button class="btn btn-primary bg-herndon-law" type="button" onclick="onElaPasswordSave()">
                                             <div class="spinner-border spinner-border-sm text-white d-none" id="ela-password-spinner"></div> 
                                             Save
                                         </button>

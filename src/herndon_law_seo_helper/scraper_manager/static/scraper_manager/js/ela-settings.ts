@@ -27,6 +27,8 @@ enum ElaSettingsIds {
   confirmPasswordInput = "ela-confirm-password-input",
   passwordErrorMessage = "ela-password-error-message",
   confirmPasswordErrorMessage = "ela-confirm-password-error-message",
+  elaPasswordSpinner = "ela-password-spinner",
+  passwordReadMessage = "ela-password-message",
 }
 
 const csrfTokenName = "csrfmiddlewaretoken";
@@ -251,7 +253,7 @@ const fetchPasswordElements = (): PasswordElements | undefined => {
   };
 };
 
-const onElaPasswordBlur = () => {
+const onElaPasswordBlur = (): PasswordErrorMessages | undefined => {
   const passwordElements = fetchPasswordElements();
   if (!passwordElements) {
     return;
@@ -265,4 +267,59 @@ const onElaPasswordBlur = () => {
   );
 
   updatePasswordErrorMessages(passwordElements, errorMessages);
+
+  return errorMessages;
+};
+
+const onElaPasswordSave = async () => {
+  const passwordInputElement = document.getElementById(
+    ElaSettingsIds.passwordInput
+  ) as HTMLInputElement;
+  const csrfTokenInput = document.getElementsByName(
+    csrfTokenName
+  )[0] as HTMLInputElement;
+
+  const errorMessages = onElaPasswordBlur();
+
+  if (errorMessages || !csrfTokenInput) {
+    return;
+  }
+
+  const spinner = document.getElementById(ElaSettingsIds.elaPasswordSpinner);
+  spinner?.classList.remove("d-none");
+
+  const response = await postElaSettings(
+    {
+      password: passwordInputElement.value,
+    },
+    csrfTokenInput.value
+  );
+
+  spinner?.classList.add("d-none");
+
+  if (response.isError) {
+    //@ts-ignore
+    createErrorToaster(
+      "Unable to save data",
+      "Unable to save Elder Law Answers password"
+    );
+
+    return;
+  }
+
+  //@ts-ignore
+  createSuccessToaster(
+    "Data successfully saved",
+    "Elder Law Answers password changed."
+  );
+
+  const passwordReadMessage = document.getElementById(
+    ElaSettingsIds.passwordReadMessage
+  );
+
+  if (!passwordReadMessage) {
+    return;
+  }
+  passwordReadMessage.innerText = "**********";
+  onElaPasswordCancel();
 };

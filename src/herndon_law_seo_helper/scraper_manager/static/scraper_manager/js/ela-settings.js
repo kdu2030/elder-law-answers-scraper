@@ -25,6 +25,8 @@ var ElaSettingsIds;
     ElaSettingsIds["confirmPasswordInput"] = "ela-confirm-password-input";
     ElaSettingsIds["passwordErrorMessage"] = "ela-password-error-message";
     ElaSettingsIds["confirmPasswordErrorMessage"] = "ela-confirm-password-error-message";
+    ElaSettingsIds["elaPasswordSpinner"] = "ela-password-spinner";
+    ElaSettingsIds["passwordReadMessage"] = "ela-password-message";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const csrfTokenName = "csrfmiddlewaretoken";
 const onChangeEmailClick = () => {
@@ -162,4 +164,32 @@ const onElaPasswordBlur = () => {
     const { passwordInput, confirmPasswordInput } = passwordElements;
     const errorMessages = validatePasswords(passwordInput.value, confirmPasswordInput.value);
     updatePasswordErrorMessages(passwordElements, errorMessages);
+    return errorMessages;
 };
+const onElaPasswordSave = () => __awaiter(void 0, void 0, void 0, function* () {
+    const passwordInputElement = document.getElementById(ElaSettingsIds.passwordInput);
+    const csrfTokenInput = document.getElementsByName(csrfTokenName)[0];
+    const errorMessages = onElaPasswordBlur();
+    if (errorMessages || !csrfTokenInput) {
+        return;
+    }
+    const spinner = document.getElementById(ElaSettingsIds.elaPasswordSpinner);
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+    const response = yield postElaSettings({
+        password: passwordInputElement.value,
+    }, csrfTokenInput.value);
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    if (response.isError) {
+        //@ts-ignore
+        createErrorToaster("Unable to save data", "Unable to save Elder Law Answers password");
+        return;
+    }
+    //@ts-ignore
+    createSuccessToaster("Data successfully saved", "Elder Law Answers password changed.");
+    const passwordReadMessage = document.getElementById(ElaSettingsIds.passwordReadMessage);
+    if (!passwordReadMessage) {
+        return;
+    }
+    passwordReadMessage.innerText = "**********";
+    onElaPasswordCancel();
+});
