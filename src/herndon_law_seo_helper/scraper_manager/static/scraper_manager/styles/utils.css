@@ -20,6 +20,10 @@
     background-color: #0d4b8c;
 }
 
+.btn.bg-herndon-law:active {
+    background-color: #0d4b8c !important;
+}
+
 .start-auto {
     left: auto !important;
 }
