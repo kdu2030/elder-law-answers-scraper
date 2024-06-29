@@ -20,7 +20,7 @@ def ela_settings_get(request: HttpRequest) -> HttpResponse:
     existing_ela_configuration = SourceConfiguration.objects.filter(
         source=SourceOptions.ELDER_LAW_ANSWERS.value).first()
 
-    email = existing_ela_configuration.email if existing_ela_configuration is not None else None
+    email = existing_ela_configuration.email if existing_ela_configuration else None
 
     source_config_form = SourceConfigurationForm(
         existing_config=existing_ela_configuration)
@@ -44,13 +44,13 @@ def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]
             SourceConfiguration.objects.create(
                 source=SourceOptions.ELDER_LAW_ANSWERS.value,
                 email=email,
-                encrypted_password=encrypt_string(password) if password is not None else None)
+                encrypted_password=encrypt_string(password) if password else None)
 
             return JsonResponse({"isError": False})
 
         existing_ela_configuration.email = email or existing_ela_configuration.email
         existing_ela_configuration.encrypted_password = encrypt_string(
-            password) if password is not None else existing_ela_configuration.encrypted_password
+            password) if password else existing_ela_configuration.encrypted_password
 
         existing_ela_configuration.save()
 
