@@ -32,3 +32,13 @@
     background-color: #083360;
     border-color: #083360;
 }
+
+button.outline-herndon-law {
+    color: #083360;
+    border-color: #083360;
+}
+
+button.outline-herndon-law:hover {
+    background-color: #083360;
+    border-color: #083360;
+}
