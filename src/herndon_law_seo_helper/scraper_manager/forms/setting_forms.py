@@ -16,4 +16,4 @@ class SourceConfigurationForm(forms.Form):
         if existing_config is None:
             return
 
-        self.fields["email"].widget.attrs["value"] = existing_config.email
+        self.fields["email"].widget.attrs["value"] = existing_config.email if existing_config else ""
