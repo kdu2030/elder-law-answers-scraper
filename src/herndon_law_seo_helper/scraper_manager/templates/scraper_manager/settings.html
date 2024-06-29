@@ -30,6 +30,17 @@
                                 <h5 class="mb-3">Elder Law Answers Settings</h5>
                                 <p class="fw-bold">Email</p>
                                 <button class="btn btn-outline-primary outline-herndon-law">Change Email</button>
+                                
+                                <form>
+                                    {% csrf_token %}
+                                    <label for="{{ email_form.email.id_for_label }}" class="form-label">Email<span class="text-danger">*</span></label>
+                                    {{ email_form.email }}
+                                    
+                                    <div class="d-flex flex-row justify-content-end mt-3">
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3">Cancel</button>
+                                        <button class="btn btn-primary bg-herndon-law">Save</button>
+                                    </div>
+                                </form>
                             </div>
                             <div>
                                 <p class="fw-bold">Change Password</p>
