@@ -7,35 +7,36 @@ enum ElaSettingsIds {
   emailErrorMessage = "ela-email-error-message",
   emailInput = "ela-email-input",
   elaEmailSpinner = "ela-email-spinner",
+  changeEmailReadMode = "ela-change-email-read-mode",
 }
 
 const csrfTokenName = "csrfmiddlewaretoken";
 
 const onChangeEmailClick = () => {
   const emailForm = document.getElementById(ElaSettingsIds.emailForm);
-  const changeEmailButton = document.getElementById(
-    ElaSettingsIds.changeEmailButton
+  const changeEmailReadMode = document.getElementById(
+    ElaSettingsIds.changeEmailReadMode
   );
 
-  if (!emailForm || !changeEmailButton) {
+  if (!emailForm || !changeEmailReadMode) {
     return;
   }
 
-  changeEmailButton.classList.add("d-none");
+  changeEmailReadMode.classList.add("d-none");
   emailForm.classList.remove("d-none");
 };
 
 const onEmailCancelClick = () => {
   const emailForm = document.getElementById(ElaSettingsIds.emailForm);
-  const changeEmailButton = document.getElementById(
-    ElaSettingsIds.changeEmailButton
+  const changeEmailReadMode = document.getElementById(
+    ElaSettingsIds.changeEmailReadMode
   );
 
-  if (!emailForm || !changeEmailButton) {
+  if (!emailForm || !changeEmailReadMode) {
     return;
   }
 
-  changeEmailButton.classList.remove("d-none");
+  changeEmailReadMode.classList.remove("d-none");
   emailForm.classList.add("d-none");
 };
 

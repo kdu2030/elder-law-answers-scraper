@@ -17,24 +17,25 @@ var ElaSettingsIds;
     ElaSettingsIds["emailErrorMessage"] = "ela-email-error-message";
     ElaSettingsIds["emailInput"] = "ela-email-input";
     ElaSettingsIds["elaEmailSpinner"] = "ela-email-spinner";
+    ElaSettingsIds["changeEmailReadMode"] = "ela-change-email-read-mode";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const csrfTokenName = "csrfmiddlewaretoken";
 const onChangeEmailClick = () => {
     const emailForm = document.getElementById(ElaSettingsIds.emailForm);
-    const changeEmailButton = document.getElementById(ElaSettingsIds.changeEmailButton);
-    if (!emailForm || !changeEmailButton) {
+    const changeEmailReadMode = document.getElementById(ElaSettingsIds.changeEmailReadMode);
+    if (!emailForm || !changeEmailReadMode) {
         return;
     }
-    changeEmailButton.classList.add("d-none");
+    changeEmailReadMode.classList.add("d-none");
     emailForm.classList.remove("d-none");
 };
 const onEmailCancelClick = () => {
     const emailForm = document.getElementById(ElaSettingsIds.emailForm);
-    const changeEmailButton = document.getElementById(ElaSettingsIds.changeEmailButton);
-    if (!emailForm || !changeEmailButton) {
+    const changeEmailReadMode = document.getElementById(ElaSettingsIds.changeEmailReadMode);
+    if (!emailForm || !changeEmailReadMode) {
         return;
     }
-    changeEmailButton.classList.remove("d-none");
+    changeEmailReadMode.classList.remove("d-none");
     emailForm.classList.add("d-none");
 };
 const onElaEmailBlur = (event) => {

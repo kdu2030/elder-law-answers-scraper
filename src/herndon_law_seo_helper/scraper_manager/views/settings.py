@@ -17,8 +17,14 @@ def encrypt_string(value: str) -> str:
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
-    source_config_form = SourceConfigurationForm()
-    return render(request, "scraper_manager/settings.html", {"email_form": source_config_form})
+    existing_ela_configuration = SourceConfiguration.objects.filter(
+        source=SourceOptions.ELDER_LAW_ANSWERS.value).first()
+
+    email = existing_ela_configuration.email if existing_ela_configuration is not None else None
+
+    source_config_form = SourceConfigurationForm(
+        existing_config=existing_ela_configuration)
+    return render(request, "scraper_manager/settings.html", {"email_form": source_config_form, "email": email})
 
 
 def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]:
