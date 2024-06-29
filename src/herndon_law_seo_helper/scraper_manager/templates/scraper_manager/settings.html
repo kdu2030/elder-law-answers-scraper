@@ -41,8 +41,8 @@
                                 
                                 <form class="d-none" id="ela-email-form">
                                     {% csrf_token %}
-                                    <label for="{{ email_form.email.id_for_label }}" class="form-label">Email<span class="text-danger">*</span></label>
-                                    {{ email_form.email }}
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">Email<span class="text-danger">*</span></label>
+                                    {{ form.email }}
                                     <div class="invalid-feedback" id="ela-email-error-message">
                                     </div>
                                     
@@ -61,6 +61,29 @@
                                     <p>{{ password_msg }}</p>
                                     <button class="btn btn-outline-primary outline-herndon-law">Change Password</button>
                                 </div>
+
+                                <form class="" id="ela-password-form">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="{{ form.password.id_for_label }}" class="form-label">Password<span class="text-danger">*</span></label>
+                                        {{ form.password }}
+                                        <div class="invalid-feedback" id="ela-password-error-message">
+                                        </div>
+                                    </div>
+
+                                    <label for="{{ form.confirm_password.id_for_label }}" class="form-label">Confirm Password<span class="text-danger">*</span></label>
+                                    {{ form.confirm_password }}
+                                    <div class="invalid-feedback" id="ela-confirm-password-error-message">
+                                    </div>
+                                    
+                                    <div class="d-flex flex-row justify-content-end mt-3">
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onEmailCancelClick()">Cancel</button>
+                                        <button class="btn btn-primary bg-herndon-law" type="button" onclick="onElaEmailSave()">
+                                            <div class="spinner-border spinner-border-sm text-white d-none" id="ela-password-spinner"></div> 
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                         

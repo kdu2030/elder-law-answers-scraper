@@ -10,6 +10,9 @@ class SourceConfigurationForm(forms.Form):
     password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control"}),
                                label="Password", required=False)
 
+    confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password", "class": "form-control"}),
+                                       label="Confirm Password", required=False)
+
     def __init__(self, existing_config: Union[SourceConfiguration, None], *args, **kwargs):
         super().__init__(*args, **kwargs)
 

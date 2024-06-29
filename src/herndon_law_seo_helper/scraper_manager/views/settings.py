@@ -25,7 +25,7 @@ def ela_settings_get(request: HttpRequest) -> HttpResponse:
 
     source_config_form = SourceConfigurationForm(
         existing_config=existing_ela_configuration)
-    return render(request, "scraper_manager/settings.html", {"email_form": source_config_form, "email": email, "password_msg": password_msg})
+    return render(request, "scraper_manager/settings.html", {"form": source_config_form, "email": email, "password_msg": password_msg})
 
 
 def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]:
