@@ -3,6 +3,7 @@ from django.shortcuts import render
 from ..forms.setting_forms import SourceConfigurationForm
 from ..models.setting_models import SourceConfiguration, SourceOptions
 from typing import Union
+from django.conf import settings
 
 
 def settings_get(request: HttpRequest) -> HttpResponse:
@@ -19,6 +20,8 @@ def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]
     existing_ela_configuration = SourceConfiguration.objects.filter(
         source=SourceOptions.ELDER_LAW_ANSWERS).first()
 
-    if existing_ela_configuration is None:
-        new_source_config = SourceConfiguration.objects.create(
-            source=SourceOptions.ELDER_LAW_ANSWERS, email=source_config_form["email"])
+    print(settings.SECRET_KEY)
+
+    # if existing_ela_configuration is None:
+    #     new_source_config = SourceConfiguration.objects.create(
+    #         source=SourceOptions.ELDER_LAW_ANSWERS, email=source_config_form["email"])

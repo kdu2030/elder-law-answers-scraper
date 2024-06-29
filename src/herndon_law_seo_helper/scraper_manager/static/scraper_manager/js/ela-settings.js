@@ -1,12 +1,23 @@
 "use strict";
 /// <reference path="./sign-in.ts">
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var ElaSettingsIds;
 (function (ElaSettingsIds) {
     ElaSettingsIds["emailForm"] = "ela-email-form";
     ElaSettingsIds["changeEmailButton"] = "ela-change-email-button";
     ElaSettingsIds["emailErrorMessage"] = "ela-email-error-message";
     ElaSettingsIds["emailInput"] = "ela-email-input";
+    ElaSettingsIds["elaEmailSpinner"] = "ela-email-spinner";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
+const csrfTokenName = "csrfmiddlewaretoken";
 const onChangeEmailClick = () => {
     const emailForm = document.getElementById(ElaSettingsIds.emailForm);
     const changeEmailButton = document.getElementById(ElaSettingsIds.changeEmailButton);
@@ -40,10 +51,12 @@ const onElaEmailBlur = (event) => {
         removeErrorMessage(emailInput, errorMessageDiv);
     }
 };
-const onElaEmailSave = () => {
+const onElaEmailSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const emailInput = document.getElementById(ElaSettingsIds.emailInput);
     const emailErrorMessageDiv = document.getElementById(ElaSettingsIds.emailErrorMessage);
-    if (!emailInput || !emailErrorMessageDiv) {
+    const csrfTokenInput = document.getElementsByName(csrfTokenName)[0];
+    const csrfToken = csrfTokenInput === null || csrfTokenInput === void 0 ? void 0 : csrfTokenInput.value;
+    if (!emailInput || !emailErrorMessageDiv || !csrfToken) {
         return;
     }
     const errorMessage = validateEmail(emailInput.value);
@@ -52,4 +65,6 @@ const onElaEmailSave = () => {
         return;
     }
     removeErrorMessage(emailInput, emailErrorMessageDiv);
-};
+    const spinner = document.getElementById(ElaSettingsIds.elaEmailSpinner);
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+});

@@ -4,8 +4,11 @@ enum ElaSettingsIds {
     emailForm = "ela-email-form",
     changeEmailButton = "ela-change-email-button",
     emailErrorMessage = "ela-email-error-message",
-    emailInput = "ela-email-input"
+    emailInput = "ela-email-input",
+    elaEmailSpinner = "ela-email-spinner"
 }
+
+const csrfTokenName = "csrfmiddlewaretoken";
 
 const onChangeEmailClick = () => {
     const emailForm = document.getElementById(ElaSettingsIds.emailForm);
@@ -51,20 +54,27 @@ const onElaEmailBlur = (event: FocusEvent) => {
     }
   };
 
-  const onElaEmailSave = () => {
+  const onElaEmailSave = async () => {
     const emailInput = document.getElementById(ElaSettingsIds.emailInput) as HTMLInputElement;
     const emailErrorMessageDiv = document.getElementById(ElaSettingsIds.emailErrorMessage) as HTMLDivElement;
+    
+    const csrfTokenInput = document.getElementsByName(csrfTokenName)[0] as HTMLInputElement;
+    const csrfToken = csrfTokenInput?.value;
 
-    if(!emailInput || !emailErrorMessageDiv){
+    if(!emailInput || !emailErrorMessageDiv || !csrfToken){
       return;
     }
 
     const errorMessage = validateEmail(emailInput.value);
     
     if(errorMessage){
-      addErrorMessage(emailInput, emailErrorMessageDiv, errorMessage)
+      addErrorMessage(emailInput, emailErrorMessageDiv, errorMessage);
       return;
     }
 
-    removeErrorMessage(emailInput, emailErrorMessageDiv)
+    removeErrorMessage(emailInput, emailErrorMessageDiv);
+   
+    const spinner = document.getElementById(ElaSettingsIds.elaEmailSpinner);
+    spinner?.classList.remove("d-none");
+  
   }
