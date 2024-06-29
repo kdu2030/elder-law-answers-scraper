@@ -24,6 +24,7 @@ var ElaSettingsIds;
     ElaSettingsIds["passwordInput"] = "ela-password-input";
     ElaSettingsIds["confirmPasswordInput"] = "ela-confirm-password-input";
     ElaSettingsIds["passwordErrorMessage"] = "ela-password-error-message";
+    ElaSettingsIds["confirmPasswordErrorMessage"] = "ela-confirm-password-error-message";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const csrfTokenName = "csrfmiddlewaretoken";
 const onChangeEmailClick = () => {
@@ -121,35 +122,44 @@ const validatePasswords = (password, confirmPassword) => {
     }
 };
 const updatePasswordErrorMessages = (passwordElements, errorMessages) => {
-    const { passwordInput, passwordErrorDiv, confirmPasswordDiv, confirmPasswordInput, } = passwordElements;
-    if (!errorMessages) {
-        return;
-    }
-    if (errorMessages.passwordError) {
+    const { passwordInput, passwordErrorDiv, confirmPasswordErrorDiv, confirmPasswordInput, } = passwordElements;
+    if (errorMessages === null || errorMessages === void 0 ? void 0 : errorMessages.passwordError) {
         addErrorMessage(passwordInput, passwordErrorDiv, errorMessages.passwordError);
     }
     else {
         removeErrorMessage(passwordInput, passwordErrorDiv);
     }
-    if (errorMessages.confirmPasswordError) {
-        addErrorMessage(confirmPasswordInput, confirmPasswordDiv, errorMessages.confirmPasswordError);
+    if (errorMessages === null || errorMessages === void 0 ? void 0 : errorMessages.confirmPasswordError) {
+        addErrorMessage(confirmPasswordInput, confirmPasswordErrorDiv, errorMessages.confirmPasswordError);
     }
     else {
-        removeErrorMessage(confirmPasswordInput, confirmPasswordDiv);
+        removeErrorMessage(confirmPasswordInput, confirmPasswordErrorDiv);
     }
 };
-const onElaPasswordBlur = (event) => {
-    const errorMessageDiv = document.getElementById(ElaSettingsIds.passwordErrorMessage);
-    if (!event.target || !errorMessageDiv) {
+const fetchPasswordElements = () => {
+    const passwordInput = document.getElementById(ElaSettingsIds.passwordInput);
+    const passwordErrorDiv = document.getElementById(ElaSettingsIds.passwordErrorMessage);
+    const confirmPasswordInput = document.getElementById(ElaSettingsIds.confirmPasswordInput);
+    const confirmPasswordErrorDiv = document.getElementById(ElaSettingsIds.confirmPasswordErrorMessage);
+    if (!passwordInput ||
+        !passwordErrorDiv ||
+        !confirmPasswordInput ||
+        !confirmPasswordErrorDiv) {
         return;
     }
-    const emailInput = event.target;
-    const value = emailInput.value;
-    const errorMessage = validateEmail(value);
-    if (errorMessage) {
-        addErrorMessage(emailInput, errorMessageDiv, errorMessage);
+    return {
+        passwordInput,
+        passwordErrorDiv,
+        confirmPasswordInput,
+        confirmPasswordErrorDiv,
+    };
+};
+const onElaPasswordBlur = () => {
+    const passwordElements = fetchPasswordElements();
+    if (!passwordElements) {
+        return;
     }
-    else {
-        removeErrorMessage(emailInput, errorMessageDiv);
-    }
+    const { passwordInput, confirmPasswordInput } = passwordElements;
+    const errorMessages = validatePasswords(passwordInput.value, confirmPasswordInput.value);
+    updatePasswordErrorMessages(passwordElements, errorMessages);
 };

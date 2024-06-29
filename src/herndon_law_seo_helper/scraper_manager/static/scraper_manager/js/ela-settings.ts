@@ -10,7 +10,7 @@ type PasswordElements = {
   passwordInput: HTMLInputElement;
   passwordErrorDiv: HTMLDivElement;
   confirmPasswordInput: HTMLInputElement;
-  confirmPasswordDiv: HTMLDivElement;
+  confirmPasswordErrorDiv: HTMLDivElement;
 };
 
 enum ElaSettingsIds {
@@ -26,6 +26,7 @@ enum ElaSettingsIds {
   passwordInput = "ela-password-input",
   confirmPasswordInput = "ela-confirm-password-input",
   passwordErrorMessage = "ela-password-error-message",
+  confirmPasswordErrorMessage = "ela-confirm-password-error-message",
 }
 
 const csrfTokenName = "csrfmiddlewaretoken";
@@ -193,15 +194,11 @@ const updatePasswordErrorMessages = (
   const {
     passwordInput,
     passwordErrorDiv,
-    confirmPasswordDiv,
+    confirmPasswordErrorDiv,
     confirmPasswordInput,
   } = passwordElements;
 
-  if (!errorMessages) {
-    return;
-  }
-
-  if (errorMessages.passwordError) {
+  if (errorMessages?.passwordError) {
     addErrorMessage(
       passwordInput,
       passwordErrorDiv,
@@ -211,32 +208,61 @@ const updatePasswordErrorMessages = (
     removeErrorMessage(passwordInput, passwordErrorDiv);
   }
 
-  if (errorMessages.confirmPasswordError) {
+  if (errorMessages?.confirmPasswordError) {
     addErrorMessage(
       confirmPasswordInput,
-      confirmPasswordDiv,
+      confirmPasswordErrorDiv,
       errorMessages.confirmPasswordError
     );
   } else {
-    removeErrorMessage(confirmPasswordInput, confirmPasswordDiv);
+    removeErrorMessage(confirmPasswordInput, confirmPasswordErrorDiv);
   }
 };
 
-const onElaPasswordBlur = (event: FocusEvent) => {
-  const errorMessageDiv = document.getElementById(
+const fetchPasswordElements = (): PasswordElements | undefined => {
+  const passwordInput = document.getElementById(
+    ElaSettingsIds.passwordInput
+  ) as HTMLInputElement;
+  const passwordErrorDiv = document.getElementById(
     ElaSettingsIds.passwordErrorMessage
   ) as HTMLDivElement;
 
-  if (!event.target || !errorMessageDiv) {
+  const confirmPasswordInput = document.getElementById(
+    ElaSettingsIds.confirmPasswordInput
+  ) as HTMLInputElement;
+  const confirmPasswordErrorDiv = document.getElementById(
+    ElaSettingsIds.confirmPasswordErrorMessage
+  ) as HTMLDivElement;
+
+  if (
+    !passwordInput ||
+    !passwordErrorDiv ||
+    !confirmPasswordInput ||
+    !confirmPasswordErrorDiv
+  ) {
     return;
   }
-  const emailInput = event.target as HTMLInputElement;
-  const value = emailInput.value;
-  const errorMessage = validateEmail(value);
 
-  if (errorMessage) {
-    addErrorMessage(emailInput, errorMessageDiv, errorMessage);
-  } else {
-    removeErrorMessage(emailInput, errorMessageDiv);
+  return {
+    passwordInput,
+    passwordErrorDiv,
+    confirmPasswordInput,
+    confirmPasswordErrorDiv,
+  };
+};
+
+const onElaPasswordBlur = () => {
+  const passwordElements = fetchPasswordElements();
+  if (!passwordElements) {
+    return;
   }
+
+  const { passwordInput, confirmPasswordInput } = passwordElements;
+
+  const errorMessages = validatePasswords(
+    passwordInput.value,
+    confirmPasswordInput.value
+  );
+
+  updatePasswordErrorMessages(passwordElements, errorMessages);
 };
