@@ -3,7 +3,8 @@
 enum ElaSettingsIds {
     emailForm = "ela-email-form",
     changeEmailButton = "ela-change-email-button",
-    emailErrorMessage = "ela-email-error-message"
+    emailErrorMessage = "ela-email-error-message",
+    emailInput = "ela-email-input"
 }
 
 const onChangeEmailClick = () => {
@@ -49,3 +50,21 @@ const onElaEmailBlur = (event: FocusEvent) => {
       removeErrorMessage(emailInput, errorMessageDiv);
     }
   };
+
+  const onElaEmailSave = () => {
+    const emailInput = document.getElementById(ElaSettingsIds.emailInput) as HTMLInputElement;
+    const emailErrorMessageDiv = document.getElementById(ElaSettingsIds.emailErrorMessage) as HTMLDivElement;
+
+    if(!emailInput || !emailErrorMessageDiv){
+      return;
+    }
+
+    const errorMessage = validateEmail(emailInput.value);
+    
+    if(errorMessage){
+      addErrorMessage(emailInput, emailErrorMessageDiv, errorMessage)
+      return;
+    }
+
+    removeErrorMessage(emailInput, emailErrorMessageDiv)
+  }

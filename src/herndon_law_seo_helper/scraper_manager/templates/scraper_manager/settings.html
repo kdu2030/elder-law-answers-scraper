@@ -32,7 +32,7 @@
                             <div class="mb-3">
                                 <h5 class="mb-3">Elder Law Answers Settings</h5>
                                 <p class="fw-bold">Email</p>
-                                <button class="btn btn-outline-primary outline-herndon-law" id="ela-change-email-button" onClick="onChangeEmailClick()">Change Email</button>
+                                <button class="btn btn-outline-primary outline-herndon-law" id="ela-change-email-button" onclick="onChangeEmailClick()">Change Email</button>
                                 
                                 <form class="d-none" id="ela-email-form">
                                     {% csrf_token %}
@@ -42,8 +42,8 @@
                                     </div>
                                     
                                     <div class="d-flex flex-row justify-content-end mt-3">
-                                        <button class="btn btn-outline-primary outline-herndon-law me-3" onClick="onEmailCancelClick()">Cancel</button>
-                                        <button class="btn btn-primary bg-herndon-law">Save</button>
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3" onclick="onEmailCancelClick()">Cancel</button>
+                                        <button class="btn btn-primary bg-herndon-law" type="button" onclick="onElaEmailSave()">Save</button>
                                     </div>
                                 </form>
                             </div>

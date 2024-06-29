@@ -5,6 +5,7 @@ var ElaSettingsIds;
     ElaSettingsIds["emailForm"] = "ela-email-form";
     ElaSettingsIds["changeEmailButton"] = "ela-change-email-button";
     ElaSettingsIds["emailErrorMessage"] = "ela-email-error-message";
+    ElaSettingsIds["emailInput"] = "ela-email-input";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const onChangeEmailClick = () => {
     const emailForm = document.getElementById(ElaSettingsIds.emailForm);
@@ -38,4 +39,17 @@ const onElaEmailBlur = (event) => {
     else {
         removeErrorMessage(emailInput, errorMessageDiv);
     }
+};
+const onElaEmailSave = () => {
+    const emailInput = document.getElementById(ElaSettingsIds.emailInput);
+    const emailErrorMessageDiv = document.getElementById(ElaSettingsIds.emailErrorMessage);
+    if (!emailInput || !emailErrorMessageDiv) {
+        return;
+    }
+    const errorMessage = validateEmail(emailInput.value);
+    if (errorMessage) {
+        addErrorMessage(emailInput, emailErrorMessageDiv, errorMessage);
+        return;
+    }
+    removeErrorMessage(emailInput, emailErrorMessageDiv);
 };
