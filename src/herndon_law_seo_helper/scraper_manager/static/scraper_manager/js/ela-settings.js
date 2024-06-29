@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="./sign-in.ts">
+/// <reference path="./api/post-ela-settings.ts">
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -67,4 +68,5 @@ const onElaEmailSave = () => __awaiter(void 0, void 0, void 0, function* () {
     removeErrorMessage(emailInput, emailErrorMessageDiv);
     const spinner = document.getElementById(ElaSettingsIds.elaEmailSpinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+    postElaSettings({ email: emailInput.value }, csrfToken);
 });

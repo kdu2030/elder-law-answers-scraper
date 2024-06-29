@@ -1,5 +1,7 @@
 asgiref==3.8.1
 beautifulsoup4==4.12.3
+cffi==1.16.0
+cryptography==42.0.8
 Django==4.2.13
 django-environ==0.11.2
 greenlet==3.0.3
@@ -9,6 +11,7 @@ playwright==1.44.0
 psycopg==3.1.19
 psycopg-binary==3.1.19
 psycopg-pool==3.2.2
+pycparser==2.22
 pyee==11.1.0
 soupsieve==2.5
 sqlparse==0.5.0

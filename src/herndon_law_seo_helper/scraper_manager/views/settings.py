@@ -4,6 +4,15 @@ from ..forms.setting_forms import SourceConfigurationForm
 from ..models.setting_models import SourceConfiguration, SourceOptions
 from typing import Union
 from django.conf import settings
+from cryptography.fernet import Fernet
+import json
+import base64
+
+
+def encrypt_string(value: str) -> str:
+    key_bytes = settings.ENCRYPTION_KEY.encode()
+    fernet = Fernet(base64.b64encode(key_bytes))
+    return fernet.encrypt(value.encode()).decode("utf-8")
 
 
 def settings_get(request: HttpRequest) -> HttpResponse:
@@ -15,13 +24,26 @@ def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]
     if (request.method != "POST"):
         return settings_get(request)
 
-    source_config_form = SourceConfigurationForm(request.POST).cleaned_data
+    request_body = json.loads(request.body.decode())
+
+    email = request_body.get("email")
+    password = request_body.get("password")
 
     existing_ela_configuration = SourceConfiguration.objects.filter(
-        source=SourceOptions.ELDER_LAW_ANSWERS).first()
+        source=SourceOptions.ELDER_LAW_ANSWERS.value).first()
 
-    print(settings.SECRET_KEY)
+    if existing_ela_configuration is None:
+        SourceConfiguration.objects.create(
+            source=SourceOptions.ELDER_LAW_ANSWERS.value,
+            email=email,
+            encrypted_password=encrypt_string(password) if password is not None else None)
 
-    # if existing_ela_configuration is None:
-    #     new_source_config = SourceConfiguration.objects.create(
-    #         source=SourceOptions.ELDER_LAW_ANSWERS, email=source_config_form["email"])
+        return JsonResponse({"isError": False})
+
+    existing_ela_configuration.email = email or existing_ela_configuration.email
+    existing_ela_configuration.encrypted_password = encrypt_string(
+        password) if password is not None else existing_ela_configuration.encrypted_password
+
+    existing_ela_configuration.save()
+
+    return JsonResponse({"isError": False})

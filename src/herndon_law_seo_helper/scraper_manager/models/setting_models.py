@@ -10,5 +10,5 @@ class SourceOptions(Enum):
 class SourceConfiguration(models.Model):
     source = models.IntegerField(default=SourceOptions.UNKNOWN, blank=False)
 
-    email = models.CharField(max_length=255)
-    encrypted_password = models.CharField(max_length=255)
+    email = models.CharField(max_length=255, null=True)
+    encrypted_password = models.CharField(max_length=255, null=True)
