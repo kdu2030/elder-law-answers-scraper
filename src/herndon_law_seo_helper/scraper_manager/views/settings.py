@@ -20,11 +20,14 @@ def ela_settings_get(request: HttpRequest) -> HttpResponse:
     existing_ela_configuration = SourceConfiguration.objects.filter(
         source=SourceOptions.ELDER_LAW_ANSWERS.value).first()
 
-    email = existing_ela_configuration.email if existing_ela_configuration else None
-    password_msg = "**********" if existing_ela_configuration.encrypted_password else "Password does not exist."
+    if existing_ela_configuration:
+        email = existing_ela_configuration.email if existing_ela_configuration else None
+        password_msg = "**********" if existing_ela_configuration.encrypted_password else "Password does not exist."
+        source_config_form = SourceConfigurationForm(
+            existing_config=existing_ela_configuration)
+    else:
+        source_config_form = SourceConfigurationForm()
 
-    source_config_form = SourceConfigurationForm(
-        existing_config=existing_ela_configuration)
     return render(request, "scraper_manager/settings.html", {"form": source_config_form, "email": email, "password_msg": password_msg})
 
 
