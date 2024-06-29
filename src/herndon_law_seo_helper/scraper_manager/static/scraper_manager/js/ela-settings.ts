@@ -9,6 +9,8 @@ enum ElaSettingsIds {
   elaEmailSpinner = "ela-email-spinner",
   changeEmailReadMode = "ela-change-email-read-mode",
   existingEmailValue = "ela-existing-email-value",
+  changePasswordReadMode = "ela-change-password-read-mode",
+  passwordForm = "ela-password-form",
 }
 
 const csrfTokenName = "csrfmiddlewaretoken";
@@ -120,4 +122,32 @@ const onElaEmailSave = async () => {
   }
 
   onEmailCancelClick();
+};
+
+const onElaPasswordClick = () => {
+  const passwordReadMode = document.getElementById(
+    ElaSettingsIds.changePasswordReadMode
+  );
+  const passwordEditMode = document.getElementById(ElaSettingsIds.passwordForm);
+
+  if (!passwordReadMode || !passwordEditMode) {
+    return;
+  }
+
+  passwordReadMode.classList.add("d-none");
+  passwordEditMode.classList.remove("d-none");
+};
+
+const onElaPasswordCancel = () => {
+  const passwordReadMode = document.getElementById(
+    ElaSettingsIds.changePasswordReadMode
+  );
+  const passwordEditMode = document.getElementById(ElaSettingsIds.passwordForm);
+
+  if (!passwordReadMode || !passwordEditMode) {
+    return;
+  }
+
+  passwordReadMode.classList.remove("d-none");
+  passwordEditMode.classList.add("d-none");
 };

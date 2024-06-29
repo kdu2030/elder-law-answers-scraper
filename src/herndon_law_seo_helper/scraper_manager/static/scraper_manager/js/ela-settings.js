@@ -19,6 +19,8 @@ var ElaSettingsIds;
     ElaSettingsIds["elaEmailSpinner"] = "ela-email-spinner";
     ElaSettingsIds["changeEmailReadMode"] = "ela-change-email-read-mode";
     ElaSettingsIds["existingEmailValue"] = "ela-existing-email-value";
+    ElaSettingsIds["changePasswordReadMode"] = "ela-change-password-read-mode";
+    ElaSettingsIds["passwordForm"] = "ela-password-form";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const csrfTokenName = "csrfmiddlewaretoken";
 const onChangeEmailClick = () => {
@@ -85,3 +87,21 @@ const onElaEmailSave = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     onEmailCancelClick();
 });
+const onElaPasswordClick = () => {
+    const passwordReadMode = document.getElementById(ElaSettingsIds.changePasswordReadMode);
+    const passwordEditMode = document.getElementById(ElaSettingsIds.passwordForm);
+    if (!passwordReadMode || !passwordEditMode) {
+        return;
+    }
+    passwordReadMode.classList.add("d-none");
+    passwordEditMode.classList.remove("d-none");
+};
+const onElaPasswordCancel = () => {
+    const passwordReadMode = document.getElementById(ElaSettingsIds.changePasswordReadMode);
+    const passwordEditMode = document.getElementById(ElaSettingsIds.passwordForm);
+    if (!passwordReadMode || !passwordEditMode) {
+        return;
+    }
+    passwordReadMode.classList.remove("d-none");
+    passwordEditMode.classList.add("d-none");
+};
