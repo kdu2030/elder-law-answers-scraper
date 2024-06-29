@@ -7,6 +7,7 @@ from django.conf import settings
 from cryptography.fernet import Fernet
 import json
 import base64
+import traceback
 
 
 def encrypt_string(value: str) -> str:
@@ -32,18 +33,21 @@ def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]
     existing_ela_configuration = SourceConfiguration.objects.filter(
         source=SourceOptions.ELDER_LAW_ANSWERS.value).first()
 
-    if existing_ela_configuration is None:
-        SourceConfiguration.objects.create(
-            source=SourceOptions.ELDER_LAW_ANSWERS.value,
-            email=email,
-            encrypted_password=encrypt_string(password) if password is not None else None)
+    try:
+        if existing_ela_configuration is None:
+            SourceConfiguration.objects.create(
+                source=SourceOptions.ELDER_LAW_ANSWERS.value,
+                email=email,
+                encrypted_password=encrypt_string(password) if password is not None else None)
+
+            return JsonResponse({"isError": False})
+
+        existing_ela_configuration.email = email or existing_ela_configuration.email
+        existing_ela_configuration.encrypted_password = encrypt_string(
+            password) if password is not None else existing_ela_configuration.encrypted_password
+
+        existing_ela_configuration.save()
 
         return JsonResponse({"isError": False})
-
-    existing_ela_configuration.email = email or existing_ela_configuration.email
-    existing_ela_configuration.encrypted_password = encrypt_string(
-        password) if password is not None else existing_ela_configuration.encrypted_password
-
-    existing_ela_configuration.save()
-
-    return JsonResponse({"isError": False})
+    except Exception:
+        return JsonResponse({"isError": True, "error": traceback.format_exc()})

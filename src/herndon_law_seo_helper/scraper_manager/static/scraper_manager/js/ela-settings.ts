@@ -87,5 +87,16 @@ const onElaEmailSave = async () => {
   const spinner = document.getElementById(ElaSettingsIds.elaEmailSpinner);
   spinner?.classList.remove("d-none");
 
-  postElaSettings({ email: emailInput.value }, csrfToken);
+  const response = await postElaSettings(
+    { email: emailInput.value },
+    csrfToken
+  );
+
+  if (!response.isError) {
+    // @ts-ignore
+    createSuccessToaster(
+      "Data saved successfully",
+      "Elder Law Answers username changed"
+    );
+  }
 };
