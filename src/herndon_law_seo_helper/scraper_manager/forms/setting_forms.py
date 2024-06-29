@@ -17,4 +17,3 @@ class SourceConfigurationForm(forms.Form):
             return
 
         self.fields["email"].widget.attrs["value"] = existing_config.email
-        self.fields["password"].widget.attrs["value"] = existing_config.encrypted_password

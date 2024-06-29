@@ -8,6 +8,7 @@ enum ElaSettingsIds {
   emailInput = "ela-email-input",
   elaEmailSpinner = "ela-email-spinner",
   changeEmailReadMode = "ela-change-email-read-mode",
+  existingEmailValue = "ela-existing-email-value",
 }
 
 const csrfTokenName = "csrfmiddlewaretoken";
@@ -109,4 +110,14 @@ const onElaEmailSave = async () => {
     "Data saved successfully",
     "Elder Law Answers username changed"
   );
+
+  const existingEmailValue = document.getElementById(
+    ElaSettingsIds.existingEmailValue
+  );
+
+  if (existingEmailValue) {
+    existingEmailValue.innerText = emailInput.value;
+  }
+
+  onEmailCancelClick();
 };

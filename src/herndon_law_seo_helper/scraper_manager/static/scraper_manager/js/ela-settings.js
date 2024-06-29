@@ -18,6 +18,7 @@ var ElaSettingsIds;
     ElaSettingsIds["emailInput"] = "ela-email-input";
     ElaSettingsIds["elaEmailSpinner"] = "ela-email-spinner";
     ElaSettingsIds["changeEmailReadMode"] = "ela-change-email-read-mode";
+    ElaSettingsIds["existingEmailValue"] = "ela-existing-email-value";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const csrfTokenName = "csrfmiddlewaretoken";
 const onChangeEmailClick = () => {
@@ -78,4 +79,9 @@ const onElaEmailSave = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     // @ts-ignore
     createSuccessToaster("Data saved successfully", "Elder Law Answers username changed");
+    const existingEmailValue = document.getElementById(ElaSettingsIds.existingEmailValue);
+    if (existingEmailValue) {
+        existingEmailValue.innerText = emailInput.value;
+    }
+    onEmailCancelClick();
 });
