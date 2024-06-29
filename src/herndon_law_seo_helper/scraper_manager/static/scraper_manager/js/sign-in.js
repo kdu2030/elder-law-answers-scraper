@@ -1,3 +1,4 @@
+"use strict";
 var SignInFormId;
 (function (SignInFormId) {
     SignInFormId["EmailErrorMessage"] = "email-error-message";
@@ -6,15 +7,15 @@ var SignInFormId;
     SignInFormId["PasswordErrorMessage"] = "password-error-message";
     SignInFormId["Spinner"] = "signin-submit-spinner";
 })(SignInFormId || (SignInFormId = {}));
-var addErrorMessage = function (inputElement, errorMessageElement, errorMessage) {
+const addErrorMessage = (inputElement, errorMessageElement, errorMessage) => {
     inputElement.classList.add("is-invalid");
     errorMessageElement.innerText = errorMessage;
 };
-var removeErrorMessage = function (inputElement, errorMessageElement) {
+const removeErrorMessage = (inputElement, errorMessageElement) => {
     inputElement.classList.remove("is-invalid");
     errorMessageElement.innerText = "";
 };
-var validateEmail = function (emailAddress) {
+const validateEmail = (emailAddress) => {
     if (!emailAddress || emailAddress.trim().length <= 0) {
         return "Email is required.";
     }
@@ -22,19 +23,19 @@ var validateEmail = function (emailAddress) {
         return "Email address is invalid.";
     }
 };
-var validatePassword = function (password) {
+const validatePassword = (password) => {
     if (!password || password.length === 0) {
         return "Password is required.";
     }
 };
-var onEmailBlur = function (event) {
-    var errorMessageDiv = document.getElementById(SignInFormId.EmailErrorMessage);
+const onEmailBlur = (event) => {
+    const errorMessageDiv = document.getElementById(SignInFormId.EmailErrorMessage);
     if (!event.target || !errorMessageDiv) {
         return;
     }
-    var emailInput = event.target;
-    var value = emailInput.value;
-    var errorMessage = validateEmail(value);
+    const emailInput = event.target;
+    const value = emailInput.value;
+    const errorMessage = validateEmail(value);
     if (errorMessage) {
         addErrorMessage(emailInput, errorMessageDiv, errorMessage);
     }
@@ -42,29 +43,29 @@ var onEmailBlur = function (event) {
         removeErrorMessage(emailInput, errorMessageDiv);
     }
 };
-var onPasswordBlur = function (event) {
-    var passwordErrorDiv = document.getElementById(SignInFormId.PasswordErrorMessage);
-    var passwordInput = event.target;
+const onPasswordBlur = (event) => {
+    const passwordErrorDiv = document.getElementById(SignInFormId.PasswordErrorMessage);
+    const passwordInput = event.target;
     if (!passwordErrorDiv || !passwordInput) {
         return;
     }
-    var errorMessage = validatePassword(passwordInput.value);
+    const errorMessage = validatePassword(passwordInput.value);
     if (errorMessage) {
         addErrorMessage(passwordInput, passwordErrorDiv, errorMessage);
         return;
     }
     removeErrorMessage(passwordInput, passwordErrorDiv);
 };
-var onSubmit = function (event) {
-    var emailInput = document.getElementById(SignInFormId.EmailInput);
-    var passwordInput = document.getElementById(SignInFormId.PasswordInput);
-    var emailErrorDiv = document.getElementById(SignInFormId.EmailErrorMessage);
-    var passwordErrorDiv = document.getElementById(SignInFormId.PasswordErrorMessage);
+const onSubmit = (event) => {
+    const emailInput = document.getElementById(SignInFormId.EmailInput);
+    const passwordInput = document.getElementById(SignInFormId.PasswordInput);
+    const emailErrorDiv = document.getElementById(SignInFormId.EmailErrorMessage);
+    const passwordErrorDiv = document.getElementById(SignInFormId.PasswordErrorMessage);
     if (!emailInput || !passwordInput) {
         return;
     }
-    var emailErrorMessage = validateEmail(emailInput.value);
-    var passwordErrorMessage = validatePassword(passwordInput.value);
+    const emailErrorMessage = validateEmail(emailInput.value);
+    const passwordErrorMessage = validatePassword(passwordInput.value);
     if (emailErrorMessage) {
         addErrorMessage(emailInput, emailErrorDiv, emailErrorMessage);
     }
@@ -75,6 +76,6 @@ var onSubmit = function (event) {
         event.preventDefault();
         return;
     }
-    var spinner = document.getElementById(SignInFormId.Spinner);
+    const spinner = document.getElementById(SignInFormId.Spinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
 };

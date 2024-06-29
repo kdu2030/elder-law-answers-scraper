@@ -1,6 +1,9 @@
+/// <reference path="./sign-in.ts">
+
 enum ElaSettingsIds {
     emailForm = "ela-email-form",
-    changeEmailButton = "ela-change-email-button"
+    changeEmailButton = "ela-change-email-button",
+    emailErrorMessage = "ela-email-error-message"
 }
 
 const onChangeEmailClick = () => {
@@ -27,3 +30,22 @@ const onEmailCancelClick = () => {
     emailForm.classList.add("d-none")
 }
 
+
+const onElaEmailBlur = (event: FocusEvent) => {
+    const errorMessageDiv = document.getElementById(
+      ElaSettingsIds.emailErrorMessage
+    ) as HTMLDivElement;
+  
+    if (!event.target || !errorMessageDiv) {
+      return;
+    }
+    const emailInput = event.target as HTMLInputElement;
+    const value = emailInput.value;
+    const errorMessage = validateEmail(value);
+  
+    if (errorMessage) {
+      addErrorMessage(emailInput, errorMessageDiv, errorMessage);
+    } else {
+      removeErrorMessage(emailInput, errorMessageDiv);
+    }
+  };
