@@ -1,0 +1,98 @@
+{% extends "base.html" %} 
+{% load i18n %}
+{% load static %} 
+{% block page_title%} Settings {% endblock page_title %} 
+
+{% block head_content %} 
+    <script src="{% static 'scraper_manager/js/sign-in.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/ela-settings.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/post-ela-settings.js' %}"></script>
+{%endblock head_content %}
+
+{% block content %} 
+    <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
+        <div class="w-75 h-75">
+            <h4>Settings</h4>
+            <div class="row h-100">
+                <div class="col-4">
+                    <ul class="list-group">
+                        <li class="list-group-item active bg-herndon-law">
+                            <i class="bi bi-globe-americas"></i>
+                            Elder Law Answers Settings
+                        </li>
+                        <li class="list-group-item">
+                            <i class="bi bi-gear-wide"></i>
+                            User Settings
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <div class="d-flex flex-row align-items-center justify-content-between mb-3">
+                                    <h5>Elder Law Answers Settings</h5>
+                                    <button class="btn btn-primary bg-herndon-law">Create Test Blog Post</button>
+                                </div>
+                                <p class="fw-bold">Email</p>
+
+                                <div id="ela-change-email-read-mode">
+                                    <p id="ela-existing-email-value">{{ email | default:""}}</p>
+                                    <button class="btn btn-outline-primary outline-herndon-law" id="ela-change-email-button" onclick="onChangeEmailClick()">Change Email</button>
+                                </div>
+                                
+                                <form class="d-none" id="ela-email-form">
+                                    {% csrf_token %}
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">Email<span class="text-danger">*</span></label>
+                                    {{ form.email }}
+                                    <div class="invalid-feedback" id="ela-email-error-message">
+                                    </div>
+                                    
+                                    <div class="d-flex flex-row justify-content-end mt-3">
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onEmailCancelClick()">Cancel</button>
+                                        <button class="btn btn-primary bg-herndon-law" type="button" onclick="onElaEmailSave()">
+                                            <div class="spinner-border spinner-border-sm text-white d-none" id="ela-email-spinner"></div> 
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <p class="fw-bold">Change Password</p>
+                                <div id="ela-change-password-read-mode">
+                                    <p id="ela-password-message">{{ password_msg }}</p>
+                                    <button class="btn btn-outline-primary outline-herndon-law" type="button" onclick="onElaPasswordClick()">Change Password</button>
+                                </div>
+
+                                <form class="d-none" id="ela-password-form">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="{{ form.password.id_for_label }}" class="form-label">Password<span class="text-danger">*</span></label>
+                                        {{ form.password }}
+                                        <div class="invalid-feedback" id="ela-password-error-message">
+                                        </div>
+                                    </div>
+
+                                    <label for="{{ form.confirm_password.id_for_label }}" class="form-label">Confirm Password<span class="text-danger">*</span></label>
+                                    {{ form.confirm_password }}
+                                    <div class="invalid-feedback" id="ela-confirm-password-error-message">
+                                    </div>
+                                    
+                                    <div class="d-flex flex-row justify-content-end mt-3">
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onElaPasswordCancel()">Cancel</button>
+                                        <button class="btn btn-primary bg-herndon-law" type="button" onclick="onElaPasswordSave()">
+                                            <div class="spinner-border spinner-border-sm text-white d-none" id="ela-password-spinner"></div> 
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content%}

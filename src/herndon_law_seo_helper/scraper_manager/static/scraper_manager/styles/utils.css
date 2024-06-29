@@ -7,7 +7,7 @@
 }
 
 @media (min-width: 1400px) {
-    .xxl-w-50{
+    .xxl-w-50 {
         width: 50% !important;
     }
 }
@@ -20,10 +20,34 @@
     background-color: #0d4b8c;
 }
 
+.btn.bg-herndon-law:active {
+    background-color: #0d4b8c !important;
+}
+
 .start-auto {
     left: auto !important;
 }
 
 .dropdown-item-herndon-law:active {
     background-color: #083360
+}
+
+.bg-herndon-law.list-group-item.active {
+    background-color: #083360;
+    border-color: #083360;
+}
+
+button.outline-herndon-law {
+    color: #083360;
+    border-color: #083360;
+}
+
+button.outline-herndon-law:hover {
+    background-color: #083360;
+    border-color: #083360;
+}
+
+button.outline-herndon-law:active {
+    background-color: #083360 !important;
+    border-color: #083360 !important; 
 }

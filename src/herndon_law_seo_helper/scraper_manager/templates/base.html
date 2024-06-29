@@ -21,6 +21,8 @@
       rel="stylesheet"
       href="{% static 'scraper_manager/styles/utils.css' %}"
     />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <script src="{% static 'scraper_manager/js/toaster.js' %}"></script>
     {% block head_content %} {% endblock %}
   </head>
   <body>
@@ -32,9 +34,14 @@
           >Herndon Law Blog Manager</a
         >
         <div class="collapse navbar-collapse">
-          <ul class="navbar-nav ms-auto">
+          <ul class="navbar-nav ms-auto align-items-center">
             {% if user.is_authenticated %}
-            <li class="nav-item dropdown">
+            <li class="nav-item">
+              <a class="nav-link text-white" href={% url 'settings' %}>Settings</a>
+            </li>
+
+            <li></li>
+            <li class="nav-item dropdown align-items-center">
               <a
                 class="nav-link dropdown-toggle text-white"
                 href="#"
@@ -74,6 +81,31 @@
     </nav>
 
     {% block content %} {% endblock %}
+
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+      <div class="toast" role="alert" id="base-success-toaster">
+        <div class="toast-header text-success">
+          <i class="bi bi-check-circle-fill me-3"></i>
+          <p class="mb-0" id="base-success-toaster-header">Data saved successfully</p>
+          <button type="button" class="ms-auto btn-close me-1" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="base-success-toaster-body">
+          Data successfully saved
+        </div>
+      </div>
+
+      <div class="toast" role="alert" id="base-error-toaster">
+        <div class="toast-header text-danger">
+          <i class="bi bi-x-circle-fill me-3"></i>
+          <p class="mb-0" id="base-error-toaster-header">Unable to save data</p>
+          <button type="button" class="ms-auto btn-close me-1" data-bs-dismiss="toast" aria-label="Close"></button>
+        </div>
+        <div class="toast-body" id="base-error-toaster-body">
+          Unable to save data
+        </div>
+      </div>
+    </div>
+  </div>
 
     <div class="w-100 mt-3 p-3 bg-herndon-law">
       <p class="text-white mb-0">Created by Kevin Du for Herndon Law, P.C.</p>
