@@ -1,8 +1,24 @@
-from django.http import HttpResponse, HttpRequest
+from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render
-from ..forms.setting_forms import EmailForm
+from ..forms.setting_forms import SourceConfigurationForm
+from ..models.setting_models import SourceConfiguration, SourceOptions
+from typing import Union
 
 
-def settings_get(response: HttpRequest) -> HttpResponse:
-    email_form = EmailForm()
-    return render(response, "scraper_manager/settings.html", {"email_form": email_form})
+def settings_get(request: HttpRequest) -> HttpResponse:
+    source_config_form = SourceConfigurationForm()
+    return render(request, "scraper_manager/settings.html", {"email_form": source_config_form})
+
+
+def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]:
+    if (request.method != "POST"):
+        return settings_get(request)
+
+    source_config_form = SourceConfigurationForm(request.POST).cleaned_data
+
+    existing_ela_configuration = SourceConfiguration.objects.filter(
+        source=SourceOptions.ELDER_LAW_ANSWERS).first()
+
+    if existing_ela_configuration is None:
+        new_source_config = SourceConfiguration.objects.create(
+            source=SourceOptions.ELDER_LAW_ANSWERS, email=source_config_form["email"])
