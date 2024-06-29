@@ -21,6 +21,9 @@ var ElaSettingsIds;
     ElaSettingsIds["existingEmailValue"] = "ela-existing-email-value";
     ElaSettingsIds["changePasswordReadMode"] = "ela-change-password-read-mode";
     ElaSettingsIds["passwordForm"] = "ela-password-form";
+    ElaSettingsIds["passwordInput"] = "ela-password-input";
+    ElaSettingsIds["confirmPasswordInput"] = "ela-confirm-password-input";
+    ElaSettingsIds["passwordErrorMessage"] = "ela-password-error-message";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const csrfTokenName = "csrfmiddlewaretoken";
 const onChangeEmailClick = () => {
@@ -104,4 +107,49 @@ const onElaPasswordCancel = () => {
     }
     passwordReadMode.classList.remove("d-none");
     passwordEditMode.classList.add("d-none");
+};
+const validatePasswords = (password, confirmPassword) => {
+    const passwordError = validatePassword(password);
+    if (passwordError) {
+        return { passwordError };
+    }
+    if (!confirmPassword || confirmPassword.length === 0) {
+        return { confirmPasswordError: "Please confirm your password" };
+    }
+    if (password !== confirmPassword) {
+        return { confirmPasswordError: "Passwords do not match." };
+    }
+};
+const updatePasswordErrorMessages = (passwordElements, errorMessages) => {
+    const { passwordInput, passwordErrorDiv, confirmPasswordDiv, confirmPasswordInput, } = passwordElements;
+    if (!errorMessages) {
+        return;
+    }
+    if (errorMessages.passwordError) {
+        addErrorMessage(passwordInput, passwordErrorDiv, errorMessages.passwordError);
+    }
+    else {
+        removeErrorMessage(passwordInput, passwordErrorDiv);
+    }
+    if (errorMessages.confirmPasswordError) {
+        addErrorMessage(confirmPasswordInput, confirmPasswordDiv, errorMessages.confirmPasswordError);
+    }
+    else {
+        removeErrorMessage(confirmPasswordInput, confirmPasswordDiv);
+    }
+};
+const onElaPasswordBlur = (event) => {
+    const errorMessageDiv = document.getElementById(ElaSettingsIds.passwordErrorMessage);
+    if (!event.target || !errorMessageDiv) {
+        return;
+    }
+    const emailInput = event.target;
+    const value = emailInput.value;
+    const errorMessage = validateEmail(value);
+    if (errorMessage) {
+        addErrorMessage(emailInput, errorMessageDiv, errorMessage);
+    }
+    else {
+        removeErrorMessage(emailInput, errorMessageDiv);
+    }
 };
