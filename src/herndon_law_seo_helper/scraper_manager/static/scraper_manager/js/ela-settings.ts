@@ -92,11 +92,20 @@ const onElaEmailSave = async () => {
     csrfToken
   );
 
-  if (!response.isError) {
+  spinner?.classList.add("d-none");
+
+  if (response.isError) {
     // @ts-ignore
-    createSuccessToaster(
-      "Data saved successfully",
-      "Elder Law Answers username changed"
+    createErrorToaster(
+      "Unable to save data",
+      "Unable to save Elder Law Answers username"
     );
+    return;
   }
+
+  // @ts-ignore
+  createSuccessToaster(
+    "Data saved successfully",
+    "Elder Law Answers username changed"
+  );
 };

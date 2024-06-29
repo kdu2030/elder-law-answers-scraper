@@ -16,14 +16,14 @@ def encrypt_string(value: str) -> str:
     return fernet.encrypt(value.encode()).decode("utf-8")
 
 
-def settings_get(request: HttpRequest) -> HttpResponse:
+def ela_settings_get(request: HttpRequest) -> HttpResponse:
     source_config_form = SourceConfigurationForm()
     return render(request, "scraper_manager/settings.html", {"email_form": source_config_form})
 
 
 def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]:
     if (request.method != "POST"):
-        return settings_get(request)
+        return ela_settings_get(request)
 
     request_body = json.loads(request.body.decode())
 

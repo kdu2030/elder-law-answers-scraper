@@ -69,8 +69,12 @@ const onElaEmailSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const spinner = document.getElementById(ElaSettingsIds.elaEmailSpinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
     const response = yield postElaSettings({ email: emailInput.value }, csrfToken);
-    if (!response.isError) {
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    if (response.isError) {
         // @ts-ignore
-        createSuccessToaster("Data saved successfully", "Elder Law Answers username changed");
+        createErrorToaster("Unable to save data", "Unable to save Elder Law Answers username");
+        return;
     }
+    // @ts-ignore
+    createSuccessToaster("Data saved successfully", "Elder Law Answers username changed");
 });
