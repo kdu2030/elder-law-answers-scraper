@@ -68,3 +68,6 @@ class ElderLawAnswersScraper:
 
         wordpress_button = self.page.query_selector("a.js-share-wordpress")
         wordpress_button.click()
+
+        article_title = self.page.query_selector("h1.title")
+        return article_title.inner_text()

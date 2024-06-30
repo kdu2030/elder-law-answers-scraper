@@ -8,6 +8,7 @@ from ..helpers.encryption_helpers import decrypt_string
 from traceback import print_tb
 from ..models.blog_posts import BlogPost
 from typing import List
+from datetime import datetime
 
 
 def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
@@ -16,8 +17,9 @@ def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
 
 
 def get_posted_articles() -> List[BlogPost]:
-    max_entries = 20
-    blog_posts = BlogPost.objects.order_by("date_posted").all()[:max_entries]
+    max_entries = 40
+    blog_posts = BlogPost.objects.filter(
+        source=SourceOptions.ELDER_LAW_ANSWERS.value).order_by("date_posted").all()[:max_entries]
     return blog_posts
 
 
@@ -37,7 +39,10 @@ def scrape_ela_article(configuration: SourceConfiguration):
         ela_scraper.sign_in()
 
         article_link = ela_scraper.find_article(article_names)
-        ela_scraper.post_article(article_link)
+        article_title = ela_scraper.post_article(article_link)
+
+    BlogPost.objects.create(source=SourceOptions.ELDER_LAW_ANSWERS.value,
+                            post_title=article_title, date_posted=datetime.now())
 
 
 @csrf_exempt
