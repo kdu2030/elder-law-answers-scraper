@@ -1,10 +1,12 @@
 from playwright.sync_api import Playwright, Browser
 from enum import Enum
+from typing import List
 
 
 class ScraperErrorCode(Enum):
     UNKNOWN = 0
     LOGIN_FAILED = 1
+    UNABLE_TO_FIND_ARTICLE = 2
 
 
 class ScraperException(Exception):
@@ -14,6 +16,7 @@ class ScraperException(Exception):
 
 class ElderLawAnswersScraper:
     ELDER_LAW_ANSWERS_BASE_URL = "https://attorney.elderlawanswers.com"
+    MAX_ARTICLE_PAGES = 20
 
     def __init__(self, playwright: Playwright, username: str, password: str):
         self.browser: Browser = playwright.chromium.launch(headless=False)
@@ -40,12 +43,19 @@ class ElderLawAnswersScraper:
         if login_error:
             raise ScraperException(ScraperErrorCode.LOGIN_FAILED.value)
 
-    def find_article(self):
-        self.page.goto(
-            f"{self.ELDER_LAW_ANSWERS_BASE_URL}/content-hub?org=ELA&page=1")
+    def find_article(self, posted_articles: List[str]):
+        posted_articles_set = set(posted_articles)
 
-        article_elements = self.page.query_selector_all(
-            ".article-listings article h2 a")
+        for page_index in range(self.MAX_ARTICLE_PAGES):
+            self.page.goto(
+                f"{self.ELDER_LAW_ANSWERS_BASE_URL}/content-hub?org=ELA&page={page_index + 1}")
 
-        # TODO: For testing purposes only, remove
-        self.page.wait_for_event("close", timeout=0)
+            article_elements = self.page.query_selector_all(
+                ".article-listings article h2 a")
+
+            for article_element in article_elements:
+                if article_element.inner_text() not in posted_articles_set:
+                    # article element href is a relative url, already prefixed with /
+                    return f"{self.ELDER_LAW_ANSWERS_BASE_URL}{article_element.get_attribute('href')}"
+
+        raise ScraperException(ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value)

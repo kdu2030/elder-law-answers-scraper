@@ -6,6 +6,8 @@ from playwright.sync_api import sync_playwright
 from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper, ScraperException, ScraperErrorCode
 from ..helpers.encryption_helpers import decrypt_string
 from traceback import print_tb
+from ..models.blog_posts import BlogPost
+from typing import List
 
 
 def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
@@ -13,14 +15,28 @@ def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
         return JsonResponse({"isError": True, "error": "Elder Law Answers login failed."}, status=400)
 
 
+def get_posted_articles() -> List[BlogPost]:
+    max_entries = 20
+    blog_posts = BlogPost.objects.order_by("date_posted").all()[:max_entries]
+    return blog_posts
+
+
+def blog_posts_to_article_names(blog_posts: List[BlogPost]) -> List[str]:
+    return map(lambda blog_post: blog_post.post_title, blog_posts)
+
+
 def scrape_ela_article(configuration: SourceConfiguration):
+    posted_articles = get_posted_articles()
+    article_names = blog_posts_to_article_names(posted_articles)
+
     with sync_playwright() as playwright:
         password = decrypt_string(configuration.encrypted_password)
 
         ela_scraper = ElderLawAnswersScraper(
             playwright, configuration.email, password)
         ela_scraper.sign_in()
-        ela_scraper.find_article()
+
+        print(ela_scraper.find_article(article_names))
 
 
 @csrf_exempt
