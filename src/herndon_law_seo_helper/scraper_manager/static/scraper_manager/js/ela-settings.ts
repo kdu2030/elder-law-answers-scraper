@@ -31,6 +31,7 @@ enum ElaSettingsIds {
   confirmPasswordErrorMessage = "ela-confirm-password-error-message",
   elaPasswordSpinner = "ela-password-spinner",
   passwordReadMessage = "ela-password-message",
+  testScrapeSpinner = "ela-test-scrape-spinner",
 }
 
 const csrfTokenName = "csrfmiddlewaretoken";
@@ -320,4 +321,26 @@ const onElaPasswordSave = async () => {
   }
   passwordReadMessage.innerText = "**********";
   onElaPasswordCancel();
+};
+
+const onTestElaScrapeClick = async () => {
+  const spinner = document.getElementById(ElaSettingsIds.testScrapeSpinner);
+  spinner?.classList.remove("d-none");
+
+  const response = await getScrapeElaArticle();
+
+  spinner?.classList.add("d-none");
+
+  if (response.isError) {
+    createErrorToaster(
+      "Post creation failed",
+      "Unable to create post using Elder Law Answers"
+    );
+    return;
+  }
+
+  createSuccessToaster(
+    "Post successfully created",
+    "Created a new post using Elder Law Answers"
+  );
 };

@@ -29,6 +29,7 @@ var ElaSettingsIds;
     ElaSettingsIds["confirmPasswordErrorMessage"] = "ela-confirm-password-error-message";
     ElaSettingsIds["elaPasswordSpinner"] = "ela-password-spinner";
     ElaSettingsIds["passwordReadMessage"] = "ela-password-message";
+    ElaSettingsIds["testScrapeSpinner"] = "ela-test-scrape-spinner";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const csrfTokenName = "csrfmiddlewaretoken";
 const onChangeEmailClick = () => {
@@ -190,4 +191,15 @@ const onElaPasswordSave = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     passwordReadMessage.innerText = "**********";
     onElaPasswordCancel();
+});
+const onTestElaScrapeClick = () => __awaiter(void 0, void 0, void 0, function* () {
+    const spinner = document.getElementById(ElaSettingsIds.testScrapeSpinner);
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+    const response = yield getScrapeElaArticle();
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    if (response.isError) {
+        createErrorToaster("Post creation failed", "Unable to create post using Elder Law Answers");
+        return;
+    }
+    createSuccessToaster("Post successfully created", "Created a new post using Elder Law Answers");
 });
