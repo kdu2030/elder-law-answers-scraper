@@ -334,7 +334,7 @@ const onTestElaScrapeClick = async () => {
   if (response.isError) {
     createErrorToaster(
       "Post creation failed",
-      "Unable to create post using Elder Law Answers"
+      response.error ?? "Unable to create post using Elder Law Answers"
     );
     return;
   }

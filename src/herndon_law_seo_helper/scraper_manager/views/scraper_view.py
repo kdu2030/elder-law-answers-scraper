@@ -3,8 +3,13 @@ from ..models.setting_models import SourceConfiguration, SourceOptions
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from playwright.sync_api import sync_playwright
-from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper
+from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper, ScraperException, ScraperErrorCode
 from ..helpers.encryption_helpers import decrypt_string
+
+
+def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
+    if (exception.error_code == ScraperErrorCode.LOGIN_FAILED.value):
+        return JsonResponse({"isError": True, "error": "Elder Law Answers login failed."}, status=400)
 
 
 def scrape_ela_article(configuration: SourceConfiguration):
@@ -26,9 +31,11 @@ def scrape_ela_article_get(request: HttpRequest) -> JsonResponse:
             raise ObjectDoesNotExist()
 
         scrape_ela_article(existing_configuration)
+        return JsonResponse({"isError": False})
 
     except ObjectDoesNotExist:
         return JsonResponse({"isError": True, "error": "Elder Law Answers username or password is missing."}, status=400)
+    except ScraperException as e:
+        return handle_scraper_exception(e)
     except:
         return JsonResponse({"isError": True}, status=500)
-    return JsonResponse({"isError": False})
