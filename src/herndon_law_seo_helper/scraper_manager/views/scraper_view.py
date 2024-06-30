@@ -36,7 +36,8 @@ def scrape_ela_article(configuration: SourceConfiguration):
             playwright, configuration.email, password)
         ela_scraper.sign_in()
 
-        print(ela_scraper.find_article(article_names))
+        article_link = ela_scraper.find_article(article_names)
+        ela_scraper.post_article(article_link)
 
 
 @csrf_exempt

@@ -59,3 +59,12 @@ class ElderLawAnswersScraper:
                     return f"{self.ELDER_LAW_ANSWERS_BASE_URL}{article_element.get_attribute('href')}"
 
         raise ScraperException(ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value)
+
+    def post_article(self, article_link: str):
+        self.page.goto(article_link)
+
+        article_body = self.page.query_selector(".article")
+        article_body.click()
+
+        wordpress_button = self.page.query_selector("a.js-share-wordpress")
+        wordpress_button.click()
