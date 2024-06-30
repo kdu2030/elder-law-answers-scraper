@@ -3,17 +3,9 @@ from django.shortcuts import render
 from ..forms.setting_forms import SourceConfigurationForm
 from ..models.setting_models import SourceConfiguration, SourceOptions
 from typing import Union
-from django.conf import settings
-from cryptography.fernet import Fernet
 import json
-import base64
 import traceback
-
-
-def encrypt_string(value: str) -> str:
-    key_bytes = settings.ENCRYPTION_KEY.encode()
-    fernet = Fernet(base64.b64encode(key_bytes))
-    return fernet.encrypt(value.encode()).decode("utf-8")
+from ..helpers.encryption_helpers import encrypt_string
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:

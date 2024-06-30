@@ -21,5 +21,8 @@ class ElderLawAnswersScraper:
 
         button_input = page.query_selector("button[type='submit']")
         button_input.click()
+
+        login_error = page.query_selector(".login-form .text-danger")
+
         # TODO: For testing purposes only, remove
         page.wait_for_event("close", timeout=0)
