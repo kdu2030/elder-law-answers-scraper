@@ -5,6 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from playwright.sync_api import sync_playwright
 from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper, ScraperException, ScraperErrorCode
 from ..helpers.encryption_helpers import decrypt_string
+from traceback import print_tb
 
 
 def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
@@ -19,6 +20,7 @@ def scrape_ela_article(configuration: SourceConfiguration):
         ela_scraper = ElderLawAnswersScraper(
             playwright, configuration.email, password)
         ela_scraper.sign_in()
+        ela_scraper.find_article()
 
 
 @csrf_exempt
@@ -37,5 +39,6 @@ def scrape_ela_article_get(request: HttpRequest) -> JsonResponse:
         return JsonResponse({"isError": True, "error": "Elder Law Answers username or password is missing."}, status=400)
     except ScraperException as e:
         return handle_scraper_exception(e)
-    except:
+    except Exception as e:
+        print_tb()
         return JsonResponse({"isError": True}, status=500)
