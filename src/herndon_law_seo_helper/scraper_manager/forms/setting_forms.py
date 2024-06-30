@@ -13,7 +13,7 @@ class SourceConfigurationForm(forms.Form):
     confirm_password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Confirm Password", "class": "form-control", "id": "ela-confirm-password-input", "onblur": "onElaPasswordBlur()"}),
                                        label="Confirm Password", required=False)
 
-    def __init__(self, existing_config: Union[SourceConfiguration, None], *args, **kwargs):
+    def __init__(self, existing_config: Union[SourceConfiguration, None] = None, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         if existing_config is None:
