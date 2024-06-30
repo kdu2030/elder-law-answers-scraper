@@ -25,10 +25,10 @@ def ela_settings_get(request: HttpRequest) -> HttpResponse:
         password_msg = "**********" if existing_ela_configuration.encrypted_password else "Password does not exist."
         source_config_form = SourceConfigurationForm(
             existing_config=existing_ela_configuration)
-        return render(request, "scraper_manager/settings.html", {"form": source_config_form, "email": email, "password_msg": password_msg})
+        return render(request, "scraper_manager/ela-settings.html", {"form": source_config_form, "email": email, "password_msg": password_msg})
 
     source_config_form = SourceConfigurationForm()
-    return render(request, "scraper_manager/settings.html", {"form": source_config_form, "email": "", "password_msg": "Password does not exist."})
+    return render(request, "scraper_manager/ela-settings.html", {"form": source_config_form, "email": "", "password_msg": "Password does not exist."})
 
 
 def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]:

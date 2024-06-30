@@ -1,5 +1,7 @@
 /// <reference path="./sign-in.ts">
 /// <reference path="./api/post-ela-settings.ts">
+/// <reference path="./toaster.ts">
+/// <reference path="./api/get-scrape-ela-article.ts">
 
 type PasswordErrorMessages = {
   passwordError?: string;
@@ -117,7 +119,6 @@ const onElaEmailSave = async () => {
   spinner?.classList.add("d-none");
 
   if (response.isError) {
-    // @ts-ignore
     createErrorToaster(
       "Unable to save data",
       "Unable to save Elder Law Answers username"
@@ -125,7 +126,6 @@ const onElaEmailSave = async () => {
     return;
   }
 
-  // @ts-ignore
   createSuccessToaster(
     "Data saved successfully",
     "Elder Law Answers username changed"
@@ -298,7 +298,6 @@ const onElaPasswordSave = async () => {
   spinner?.classList.add("d-none");
 
   if (response.isError) {
-    //@ts-ignore
     createErrorToaster(
       "Unable to save data",
       "Unable to save Elder Law Answers password"
@@ -307,7 +306,6 @@ const onElaPasswordSave = async () => {
     return;
   }
 
-  //@ts-ignore
   createSuccessToaster(
     "Data successfully saved",
     "Elder Law Answers password changed."

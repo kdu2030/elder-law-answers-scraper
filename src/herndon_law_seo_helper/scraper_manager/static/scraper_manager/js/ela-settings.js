@@ -1,6 +1,8 @@
 "use strict";
 /// <reference path="./sign-in.ts">
 /// <reference path="./api/post-ela-settings.ts">
+/// <reference path="./toaster.ts">
+/// <reference path="./api/get-scrape-ela-article.ts">
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -81,11 +83,9 @@ const onElaEmailSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield postElaSettings({ email: emailInput.value }, csrfToken);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
     if (response.isError) {
-        // @ts-ignore
         createErrorToaster("Unable to save data", "Unable to save Elder Law Answers username");
         return;
     }
-    // @ts-ignore
     createSuccessToaster("Data saved successfully", "Elder Law Answers username changed");
     const existingEmailValue = document.getElementById(ElaSettingsIds.existingEmailValue);
     if (existingEmailValue) {
@@ -180,11 +180,9 @@ const onElaPasswordSave = () => __awaiter(void 0, void 0, void 0, function* () {
     }, csrfTokenInput.value);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
     if (response.isError) {
-        //@ts-ignore
         createErrorToaster("Unable to save data", "Unable to save Elder Law Answers password");
         return;
     }
-    //@ts-ignore
     createSuccessToaster("Data successfully saved", "Elder Law Answers password changed.");
     const passwordReadMessage = document.getElementById(ElaSettingsIds.passwordReadMessage);
     if (!passwordReadMessage) {
