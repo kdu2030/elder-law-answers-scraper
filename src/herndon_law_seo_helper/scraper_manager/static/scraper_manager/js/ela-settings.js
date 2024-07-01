@@ -193,13 +193,17 @@ const onElaPasswordSave = () => __awaiter(void 0, void 0, void 0, function* () {
     onElaPasswordCancel();
 });
 const onTestElaScrapeClick = () => __awaiter(void 0, void 0, void 0, function* () {
-    var _a;
+    var _a, _b;
     const spinner = document.getElementById(ElaSettingsIds.testScrapeSpinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
     const response = yield getScrapeElaArticle();
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
     if (response.isError) {
         createErrorToaster("Post creation failed", (_a = response.error) !== null && _a !== void 0 ? _a : "Unable to create post using Elder Law Answers");
+        return;
+    }
+    if (response.isWarning) {
+        createWarningToaster("Post creation unsuccessful", (_b = response.warning) !== null && _b !== void 0 ? _b : "Unable to create post using Elder Law Answers");
         return;
     }
     createSuccessToaster("Post successfully created", "Created a new post using Elder Law Answers");

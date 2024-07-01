@@ -1,6 +1,8 @@
 type GetScrapeElaArticleResponse = {
-  isError: boolean;
+  isError?: boolean;
   error?: string;
+  isWarning?: boolean;
+  warning?: string;
 };
 
 const getScrapeElaArticle = async (): Promise<GetScrapeElaArticleResponse> => {

@@ -14,6 +14,10 @@ from datetime import datetime
 def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
     if (exception.error_code == ScraperErrorCode.LOGIN_FAILED.value):
         return JsonResponse({"isError": True, "error": "Elder Law Answers login failed."}, status=400)
+    if (exception.error_code == ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value):
+        return JsonResponse({"isWarning": True, "warning": "Unable to find an article to post."}, status=400)
+
+    return JsonResponse({"isError": True}, status=400)
 
 
 def get_posted_articles() -> List[BlogPost]:
