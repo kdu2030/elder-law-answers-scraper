@@ -7,8 +7,6 @@ django-environ==0.11.2
 django-stubs-ext==5.0.2
 greenlet==3.0.3
 gunicorn==22.0.0
-mypy==1.10.1
-mypy-extensions==1.0.0
 packaging==24.1
 playwright==1.44.0
 psycopg==3.1.19
@@ -18,7 +16,5 @@ pycparser==2.22
 pyee==11.1.0
 soupsieve==2.5
 sqlparse==0.5.0
-types-PyYAML==6.0.12.20240311
-typing_extensions==4.12.2
 tzdata==2024.1
 whitenoise==6.7.0
