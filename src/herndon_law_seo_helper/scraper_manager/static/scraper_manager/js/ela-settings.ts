@@ -1,5 +1,7 @@
 /// <reference path="./sign-in.ts">
 /// <reference path="./api/post-ela-settings.ts">
+/// <reference path="./toaster.ts">
+/// <reference path="./api/get-scrape-ela-article.ts">
 
 type PasswordErrorMessages = {
   passwordError?: string;
@@ -29,6 +31,7 @@ enum ElaSettingsIds {
   confirmPasswordErrorMessage = "ela-confirm-password-error-message",
   elaPasswordSpinner = "ela-password-spinner",
   passwordReadMessage = "ela-password-message",
+  testScrapeSpinner = "ela-test-scrape-spinner",
 }
 
 const csrfTokenName = "csrfmiddlewaretoken";
@@ -117,7 +120,6 @@ const onElaEmailSave = async () => {
   spinner?.classList.add("d-none");
 
   if (response.isError) {
-    // @ts-ignore
     createErrorToaster(
       "Unable to save data",
       "Unable to save Elder Law Answers username"
@@ -125,7 +127,6 @@ const onElaEmailSave = async () => {
     return;
   }
 
-  // @ts-ignore
   createSuccessToaster(
     "Data saved successfully",
     "Elder Law Answers username changed"
@@ -298,7 +299,6 @@ const onElaPasswordSave = async () => {
   spinner?.classList.add("d-none");
 
   if (response.isError) {
-    //@ts-ignore
     createErrorToaster(
       "Unable to save data",
       "Unable to save Elder Law Answers password"
@@ -307,7 +307,6 @@ const onElaPasswordSave = async () => {
     return;
   }
 
-  //@ts-ignore
   createSuccessToaster(
     "Data successfully saved",
     "Elder Law Answers password changed."
@@ -322,4 +321,34 @@ const onElaPasswordSave = async () => {
   }
   passwordReadMessage.innerText = "**********";
   onElaPasswordCancel();
+};
+
+const onTestElaScrapeClick = async () => {
+  const spinner = document.getElementById(ElaSettingsIds.testScrapeSpinner);
+  spinner?.classList.remove("d-none");
+
+  const response = await getScrapeElaArticle();
+
+  spinner?.classList.add("d-none");
+
+  if (response.isError) {
+    createErrorToaster(
+      "Post creation failed",
+      response.error ?? "Unable to create post using Elder Law Answers"
+    );
+    return;
+  }
+
+  if (response.isWarning) {
+    createWarningToaster(
+      "Post creation unsuccessful",
+      response.warning ?? "Unable to create post using Elder Law Answers"
+    );
+    return;
+  }
+
+  createSuccessToaster(
+    "Post successfully created",
+    "Created a new post using Elder Law Answers"
+  );
 };
