@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from playwright.sync_api import sync_playwright
 from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper, ScraperException, ScraperErrorCode
 from ..helpers.encryption_helpers import decrypt_string
-from traceback import print_tb
+import traceback
 from ..models.blog_posts import BlogPost
 from typing import List
 from datetime import datetime
@@ -66,5 +66,5 @@ def scrape_ela_article_get(request: HttpRequest) -> JsonResponse:
     except ScraperException as e:
         return handle_scraper_exception(e)
     except Exception as e:
-        print_tb()
+        print(traceback.format_exc())
         return JsonResponse({"isError": True}, status=500)
