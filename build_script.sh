@@ -1,4 +1,5 @@
 #! /bin/bash
+nix-shell -p GLIBC-2.36
 playwright install --with-deps
 
 cd ./src/herndon_law_seo_helper
