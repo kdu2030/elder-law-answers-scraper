@@ -1,5 +1,5 @@
 #! /bin/bash
-playwright install --with-deps
+playwright install
 
 cd ./src/herndon_law_seo_helper
 
