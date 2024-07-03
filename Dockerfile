@@ -13,7 +13,7 @@ WORKDIR /app
 COPY requirements.txt /app
 
 RUN pip install -r requirements.txt && \
-    playwright install chromium --with-deps
+    playwright install firefox --with-deps
 
 COPY . /app
 
