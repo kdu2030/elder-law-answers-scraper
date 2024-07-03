@@ -19,7 +19,7 @@ class ElderLawAnswersScraper:
     MAX_ARTICLE_PAGES = 20
 
     def __init__(self, playwright: Playwright, username: str, password: str):
-        self.browser: Browser = playwright.firefox.launch(headless=False)
+        self.browser: Browser = playwright.firefox.launch(headless=True)
         self.username = username
         self.password = password
 
