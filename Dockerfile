@@ -24,4 +24,4 @@ RUN python3 manage.py collectstatic --no-input
 
 EXPOSE ${PORT}
 
-CMD ["./start_script.sh"]
+CMD chmod +x start_script.sh && ./start_script.sh
