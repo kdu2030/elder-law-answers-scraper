@@ -22,6 +22,6 @@ WORKDIR /app/src/herndon_law_seo_helper
 # RUN python3 manage.py migrate --settings herndon_law_seo_helper.production_settings && \
 RUN python3 manage.py collectstatic --no-input
 
-EXPOSE 8000
+EXPOSE ${PORT}
 
-CMD ["gunicorn", "herndon_law_seo_helper.wsgi:application", "--bind", "0.0.0.0:8000"]
+CMD ["./start_script.sh"]
