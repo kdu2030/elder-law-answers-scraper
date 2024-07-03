@@ -19,8 +19,8 @@ COPY . /app
 
 WORKDIR /app/src/herndon_law_seo_helper
 
-RUN python3 manage.py migrate --settings herndon_law_seo_helper.production_settings && \
-    python3 manage.py collectstatic --no-input
+# RUN python3 manage.py migrate --settings herndon_law_seo_helper.production_settings && \
+RUN python3 manage.py collectstatic --no-input
 
 EXPOSE 8000
 
