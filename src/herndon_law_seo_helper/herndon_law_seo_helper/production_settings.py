@@ -25,7 +25,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = ["https://herndonlawmanager.adaptable.app/"]
+CSRF_TRUSTED_ORIGINS = ["https://herndonlawmanager.adaptable.app"]
 
 
 # Application definition
