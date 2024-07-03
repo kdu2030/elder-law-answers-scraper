@@ -1,7 +1,10 @@
-FROM ubuntu/python:3.12-24.04_edge
+FROM ubuntu:22.04
 
 # Prevent interactive prompts during package installation
 ENV DEBIAN_FRONTEND=noninteractive
+
+RUN apt-get update && \
+    apt-get install -y python3-pip python3-dev libpq-dev build-essential
 
 WORKDIR /app
 
