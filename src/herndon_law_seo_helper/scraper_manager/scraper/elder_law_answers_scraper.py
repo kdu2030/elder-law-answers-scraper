@@ -19,7 +19,7 @@ class ElderLawAnswersScraper:
     MAX_ARTICLE_PAGES = 20
 
     def __init__(self, playwright: Playwright, username: str, password: str):
-        self.browser: Browser = playwright.firefox.launch(headless=True)
+        self.browser: Browser = playwright.firefox.launch(headless=False)
         self.username = username
         self.password = password
 
@@ -65,6 +65,8 @@ class ElderLawAnswersScraper:
 
         article_body = self.page.query_selector(".article")
         article_body.click()
+
+        self.page.evaluate("() => window.scrollTo(0, 0)")
 
         wordpress_button = self.page.query_selector("a.js-share-wordpress")
         wordpress_button.click()
