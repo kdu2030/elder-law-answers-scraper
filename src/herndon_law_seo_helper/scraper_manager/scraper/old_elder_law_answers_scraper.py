@@ -3,14 +3,14 @@ from enum import Enum
 from typing import List
 
 
-class ScraperErrorCode(Enum):
+class OldScraperErrorCode(Enum):
     UNKNOWN = 0
     LOGIN_FAILED = 1
     UNABLE_TO_FIND_ARTICLE = 2
 
 
-class ScraperException(Exception):
-    def __init__(self, error_code: ScraperErrorCode):
+class OldScraperException(Exception):
+    def __init__(self, error_code: OldScraperErrorCode):
         self.error_code = error_code
 
 
@@ -41,7 +41,7 @@ class OldElderLawAnswersScraper:
 
         login_error = self.page.query_selector(".login-form .text-danger")
         if login_error:
-            raise ScraperException(ScraperErrorCode.LOGIN_FAILED.value)
+            raise OldScraperException(OldScraperErrorCode.LOGIN_FAILED.value)
 
     def find_article(self, posted_articles: List[str]):
         posted_articles_set = set(posted_articles)
@@ -58,7 +58,7 @@ class OldElderLawAnswersScraper:
                     # article element href is a relative url, already prefixed with /
                     return f"{self.ELDER_LAW_ANSWERS_BASE_URL}{article_element.get_attribute('href')}"
 
-        raise ScraperException(ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value)
+        raise OldScraperException(OldScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value)
 
     def post_article(self, article_link: str):
         self.page.goto(article_link)
