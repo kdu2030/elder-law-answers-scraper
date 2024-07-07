@@ -1,6 +1,6 @@
 import requests
 from typing import List
-from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup, Tag
 from enum import Enum
 
 
@@ -21,6 +21,16 @@ class ElderLawAnswersScraper:
         self.website_username = website_username
         self.website_password = website_password
 
+    def is_article_qa(self, article_element: Tag):
+        article_url = f"{self.ELDER_LAW_ANSWERS_BASE_URL}{article_element.get('href')}"
+        article_html = requests.get(article_url)
+        article_parser = BeautifulSoup(article_html.content, "html.parser")
+        question_icon = article_parser.select(".question__icon")
+        if question_icon and len(question_icon) > 0:
+            return True
+        return False
+
+
     def find_article(self, posted_articles: List[str]) -> str:
         posted_articles_set = set(posted_articles)
         for page_index in range(self.MAX_ARTICLE_PAGES):
@@ -28,7 +38,8 @@ class ElderLawAnswersScraper:
             parser = BeautifulSoup(ela_page.content, "html.parser")
             article_links = parser.select(".excerpt__title a")
             for article_link in article_links:
-                if article_link.get_text() not in posted_articles_set:
+                article_text = article_link.get_text()
+                if not self.is_article_qa(article_link) and article_text not in posted_articles_set:
                     return article_link.get("href")
 
         raise ScraperException(ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value)
