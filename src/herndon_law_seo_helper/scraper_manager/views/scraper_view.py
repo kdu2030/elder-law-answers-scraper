@@ -37,7 +37,8 @@ def scrape_ela_article(configuration: SourceConfiguration):
     article_names = blog_posts_to_article_names(posted_articles)
 
     scraper = ElderLawAnswersScraper(website_username="herndonlaw", website_password="Est@teL@w2024")
-    print(scraper.find_article(article_names))
+    article_relative_url = scraper.find_article(article_names)
+    scraper.post_article(article_relative_url)
 
     #
     # with sync_playwright() as playwright:
