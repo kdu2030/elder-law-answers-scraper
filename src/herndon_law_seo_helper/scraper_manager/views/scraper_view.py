@@ -3,12 +3,13 @@ from ..models.setting_models import SourceConfiguration, SourceOptions
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from playwright.sync_api import sync_playwright
-from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper, ScraperException, ScraperErrorCode
+from ..scraper.old_elder_law_answers_scraper import OldElderLawAnswersScraper, ScraperException, ScraperErrorCode
 from ..helpers.encryption_helpers import decrypt_string
 import traceback
 from ..models.blog_posts import BlogPost
 from typing import List
 from datetime import datetime
+from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper
 
 
 def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
@@ -38,7 +39,7 @@ def scrape_ela_article(configuration: SourceConfiguration):
     with sync_playwright() as playwright:
         password = decrypt_string(configuration.encrypted_password)
 
-        ela_scraper = ElderLawAnswersScraper(
+        ela_scraper = OldElderLawAnswersScraper(
             playwright, configuration.email, password)
         ela_scraper.sign_in()
 
@@ -58,7 +59,11 @@ def scrape_ela_article_get(request: HttpRequest) -> JsonResponse:
         if existing_configuration.email is None or existing_configuration.encrypted_password is None:
             raise ObjectDoesNotExist()
 
-        scrape_ela_article(existing_configuration)
+        # scrape_ela_article(existing_configuration)
+
+        scraper = ElderLawAnswersScraper(website_username="herndonlaw", website_password="Est@teL@w2024")
+        scraper.post_article()
+
         return JsonResponse({"isError": False})
 
     except ObjectDoesNotExist:
