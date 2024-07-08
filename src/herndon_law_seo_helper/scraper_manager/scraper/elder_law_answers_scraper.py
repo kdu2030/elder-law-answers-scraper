@@ -3,6 +3,7 @@ from typing import List
 from bs4 import BeautifulSoup, Tag
 from enum import Enum
 
+
 class ScraperErrorCode(Enum):
     UNKNOWN = 0
     UNABLE_TO_FIND_ARTICLE = 1
@@ -68,5 +69,7 @@ class ElderLawAnswersScraper:
         response = requests.post(post_endpoint, json=post_data,
                                  auth=requests.auth.HTTPBasicAuth(self.website_username, self.website_password))
 
-        if response.status_code != 200:
+        if not response.ok:
             raise ScraperException(ScraperErrorCode.ARTICLE_POST_FAILED.value)
+
+        return article_title

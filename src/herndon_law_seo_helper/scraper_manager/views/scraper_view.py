@@ -13,9 +13,9 @@ from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper
 
 
 def handle_scraper_exception(exception: OldScraperException) -> JsonResponse:
-    if (exception.error_code == OldScraperErrorCode.LOGIN_FAILED.value):
+    if exception.error_code == OldScraperErrorCode.LOGIN_FAILED.value:
         return JsonResponse({"isError": True, "error": "Elder Law Answers login failed."}, status=400)
-    if (exception.error_code == OldScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value):
+    if exception.error_code == OldScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value:
         return JsonResponse({"isWarning": True, "warning": "Unable to find an article to post."}, status=400)
 
     return JsonResponse({"isError": True}, status=400)
@@ -23,8 +23,7 @@ def handle_scraper_exception(exception: OldScraperException) -> JsonResponse:
 
 def get_posted_articles() -> List[BlogPost]:
     max_entries = 40
-    blog_posts = BlogPost.objects.filter(
-        source=SourceOptions.ELDER_LAW_ANSWERS.value).order_by("date_posted").all()[:max_entries]
+    blog_posts = BlogPost.objects.order_by("date_posted").all()[:max_entries]
     return blog_posts
 
 
@@ -38,21 +37,9 @@ def scrape_ela_article(configuration: SourceConfiguration):
 
     scraper = ElderLawAnswersScraper(website_username="herndonlaw", website_password="Est@teL@w2024")
     article_relative_url = scraper.find_article(article_names)
-    scraper.post_article(article_relative_url)
+    article_title = scraper.post_article(article_relative_url)
 
-    #
-    # with sync_playwright() as playwright:
-    #     password = decrypt_string(configuration.encrypted_password)
-    #
-    #     ela_scraper = OldElderLawAnswersScraper(
-    #         playwright, configuration.email, password)
-    #     ela_scraper.sign_in()
-    #
-    #     article_link = ela_scraper.find_article(article_names)
-    #     article_title = ela_scraper.post_article(article_link)
-    #
-    # BlogPost.objects.create(source=SourceOptions.ELDER_LAW_ANSWERS.value,
-    #                         post_title=article_title, date_posted=datetime.now())
+    BlogPost.objects.create(post_title=article_title, date_posted=datetime.now())
 
 
 @csrf_exempt
