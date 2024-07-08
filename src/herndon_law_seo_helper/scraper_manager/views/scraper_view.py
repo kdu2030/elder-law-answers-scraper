@@ -2,20 +2,16 @@ from django.http import HttpRequest, JsonResponse
 from ..models.setting_models import SourceConfiguration, SourceOptions
 from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
-from playwright.sync_api import sync_playwright
-from ..scraper.old_elder_law_answers_scraper import OldElderLawAnswersScraper, OldScraperException, OldScraperErrorCode
 from ..helpers.encryption_helpers import decrypt_string
 import traceback
 from ..models.blog_posts import BlogPost
 from typing import List
 from datetime import datetime
-from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper
+from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper, ScraperErrorCode, ScraperException
 
 
-def handle_scraper_exception(exception: OldScraperException) -> JsonResponse:
-    if exception.error_code == OldScraperErrorCode.LOGIN_FAILED.value:
-        return JsonResponse({"isError": True, "error": "Elder Law Answers login failed."}, status=400)
-    if exception.error_code == OldScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value:
+def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
+    if exception.error_code == ScraperException.UNABLE_TO_FIND_ARTICLE.value:
         return JsonResponse({"isWarning": True, "warning": "Unable to find an article to post."}, status=400)
 
     return JsonResponse({"isError": True}, status=400)
@@ -35,11 +31,13 @@ def scrape_ela_article(configuration: SourceConfiguration):
     posted_articles = get_posted_articles()
     article_names = blog_posts_to_article_names(posted_articles)
 
-    scraper = ElderLawAnswersScraper(website_username="herndonlaw", website_password="Est@teL@w2024")
+    scraper = ElderLawAnswersScraper(
+        website_username="herndonlaw", website_password="Est@teL@w2024")
     article_relative_url = scraper.find_article(article_names)
     article_title = scraper.post_article(article_relative_url)
 
-    BlogPost.objects.create(post_title=article_title, date_posted=datetime.now())
+    BlogPost.objects.create(post_title=article_title,
+                            date_posted=datetime.now())
 
 
 @csrf_exempt
@@ -57,7 +55,7 @@ def scrape_ela_article_get(request: HttpRequest) -> JsonResponse:
 
     except ObjectDoesNotExist:
         return JsonResponse({"isError": True, "error": "Elder Law Answers username or password is missing."}, status=400)
-    except OldScraperException as e:
+    except ScraperException as e:
         return handle_scraper_exception(e)
     except Exception as e:
         print(traceback.format_exc())
