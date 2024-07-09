@@ -4,8 +4,8 @@ from typing import Union
 
 
 class SourceConfigurationForm(forms.Form):
-    email = forms.EmailField(widget=forms.EmailInput(attrs={"placeholder": "Email", "class": "form-control", "onblur": "onElaEmailBlur(event)", "id": "ela-email-input"}),
-                             label="Email", required=False)
+    username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control", "onblur": "onElaUsernameBlur(event)", "id": "ela-username-input"}),
+                               label="Email", required=False)
 
     password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control", "id": "ela-password-input", "onblur": "onElaPasswordBlur()"}),
                                label="Password", required=False)
@@ -19,4 +19,4 @@ class SourceConfigurationForm(forms.Form):
         if existing_config is None:
             return
 
-        self.fields["email"].widget.attrs["value"] = existing_config.email if existing_config else ""
+        self.fields["username"].widget.attrs["value"] = existing_config.email if existing_config else ""

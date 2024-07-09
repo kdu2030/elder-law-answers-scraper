@@ -16,13 +16,13 @@ type PasswordElements = {
 };
 
 enum ElaSettingsIds {
-  emailForm = "ela-email-form",
-  changeEmailButton = "ela-change-email-button",
-  emailErrorMessage = "ela-email-error-message",
-  emailInput = "ela-email-input",
-  elaEmailSpinner = "ela-email-spinner",
-  changeEmailReadMode = "ela-change-email-read-mode",
-  existingEmailValue = "ela-existing-email-value",
+  usernameForm = "ela-username-form",
+  changeUsernameButton = "ela-change-username-button",
+  usernameErrorMessage = "ela-username-error-message",
+  usernameInput = "ela-username-input",
+  elaUsernameSpinner = "ela-username-spinner",
+  changeUsernameReadMode = "ela-change-username-read-mode",
+  existingUsernameValue = "ela-existing-username-value",
   changePasswordReadMode = "ela-change-password-read-mode",
   passwordForm = "ela-password-form",
   passwordInput = "ela-password-input",
@@ -36,59 +36,66 @@ enum ElaSettingsIds {
 
 const csrfTokenName = "csrfmiddlewaretoken";
 
-const onChangeEmailClick = () => {
-  const emailForm = document.getElementById(ElaSettingsIds.emailForm);
-  const changeEmailReadMode = document.getElementById(
-    ElaSettingsIds.changeEmailReadMode
+const onChangeUsernameClick = () => {
+  const usernameForm = document.getElementById(ElaSettingsIds.usernameForm);
+  const changeUsernameReadMode = document.getElementById(
+    ElaSettingsIds.changeUsernameReadMode
   );
 
-  if (!emailForm || !changeEmailReadMode) {
+  if (!usernameForm || !changeUsernameReadMode) {
     return;
   }
 
-  changeEmailReadMode.classList.add("d-none");
-  emailForm.classList.remove("d-none");
+  changeUsernameReadMode.classList.add("d-none");
+  usernameForm.classList.remove("d-none");
 };
 
-const onEmailCancelClick = () => {
-  const emailForm = document.getElementById(ElaSettingsIds.emailForm);
-  const changeEmailReadMode = document.getElementById(
-    ElaSettingsIds.changeEmailReadMode
+const onUsernameCancelClick = () => {
+  const usernameForm = document.getElementById(ElaSettingsIds.usernameForm);
+  const changeUsernameReadMode = document.getElementById(
+    ElaSettingsIds.changeUsernameReadMode
   );
 
-  if (!emailForm || !changeEmailReadMode) {
+  if (!usernameForm || !changeUsernameReadMode) {
     return;
   }
 
-  changeEmailReadMode.classList.remove("d-none");
-  emailForm.classList.add("d-none");
+  changeUsernameReadMode.classList.remove("d-none");
+  usernameForm.classList.add("d-none");
 };
 
-const onElaEmailBlur = (event: FocusEvent) => {
+const validateUsername = (value: string): string | undefined => {
+  if (!value || value.trim().length === 0) {
+    return "Username is required.";
+  }
+  return;
+};
+
+const onElaUsernameBlur = (event: FocusEvent) => {
   const errorMessageDiv = document.getElementById(
-    ElaSettingsIds.emailErrorMessage
+    ElaSettingsIds.usernameErrorMessage
   ) as HTMLDivElement;
 
   if (!event.target || !errorMessageDiv) {
     return;
   }
-  const emailInput = event.target as HTMLInputElement;
-  const value = emailInput.value;
-  const errorMessage = validateEmail(value);
+  const usernameInput = event.target as HTMLInputElement;
+  const value = usernameInput.value;
+  const errorMessage = validateUsername(value);
 
   if (errorMessage) {
-    addErrorMessage(emailInput, errorMessageDiv, errorMessage);
+    addErrorMessage(usernameInput, errorMessageDiv, errorMessage);
   } else {
-    removeErrorMessage(emailInput, errorMessageDiv);
+    removeErrorMessage(usernameInput, errorMessageDiv);
   }
 };
 
-const onElaEmailSave = async () => {
-  const emailInput = document.getElementById(
-    ElaSettingsIds.emailInput
+const UsernameSave = async () => {
+  const userInput = document.getElementById(
+    ElaSettingsIds.usernameInput
   ) as HTMLInputElement;
-  const emailErrorMessageDiv = document.getElementById(
-    ElaSettingsIds.emailErrorMessage
+  const userErrorMessageDiv = document.getElementById(
+    ElaSettingsIds.usernameErrorMessage
   ) as HTMLDivElement;
 
   const csrfTokenInput = document.getElementsByName(
@@ -96,24 +103,24 @@ const onElaEmailSave = async () => {
   )[0] as HTMLInputElement;
   const csrfToken = csrfTokenInput?.value;
 
-  if (!emailInput || !emailErrorMessageDiv || !csrfToken) {
+  if (!userInput || !userErrorMessageDiv || !csrfToken) {
     return;
   }
 
-  const errorMessage = validateEmail(emailInput.value);
+  const errorMessage = validateEmail(userInput.value);
 
   if (errorMessage) {
-    addErrorMessage(emailInput, emailErrorMessageDiv, errorMessage);
+    addErrorMessage(userInput, userErrorMessageDiv, errorMessage);
     return;
   }
 
-  removeErrorMessage(emailInput, emailErrorMessageDiv);
+  removeErrorMessage(userInput, userErrorMessageDiv);
 
-  const spinner = document.getElementById(ElaSettingsIds.elaEmailSpinner);
+  const spinner = document.getElementById(ElaSettingsIds.elaUsernameSpinner);
   spinner?.classList.remove("d-none");
 
   const response = await postElaSettings(
-    { email: emailInput.value },
+    { username: userInput.value },
     csrfToken
   );
 
@@ -132,15 +139,15 @@ const onElaEmailSave = async () => {
     "Elder Law Answers username changed"
   );
 
-  const existingEmailValue = document.getElementById(
-    ElaSettingsIds.existingEmailValue
+  const existingUsernameValue = document.getElementById(
+    ElaSettingsIds.existingUsernameValue
   );
 
-  if (existingEmailValue) {
-    existingEmailValue.innerText = emailInput.value;
+  if (existingUsernameValue) {
+    existingUsernameValue.innerText = userInput.value;
   }
 
-  onEmailCancelClick();
+  onUsernameCancelClick();
 };
 
 const onElaPasswordClick = () => {

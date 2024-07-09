@@ -14,13 +14,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 var ElaSettingsIds;
 (function (ElaSettingsIds) {
-    ElaSettingsIds["emailForm"] = "ela-email-form";
-    ElaSettingsIds["changeEmailButton"] = "ela-change-email-button";
-    ElaSettingsIds["emailErrorMessage"] = "ela-email-error-message";
-    ElaSettingsIds["emailInput"] = "ela-email-input";
-    ElaSettingsIds["elaEmailSpinner"] = "ela-email-spinner";
-    ElaSettingsIds["changeEmailReadMode"] = "ela-change-email-read-mode";
-    ElaSettingsIds["existingEmailValue"] = "ela-existing-email-value";
+    ElaSettingsIds["usernameForm"] = "ela-username-form";
+    ElaSettingsIds["changeUsernameButton"] = "ela-change-username-button";
+    ElaSettingsIds["usernameErrorMessage"] = "ela-username-error-message";
+    ElaSettingsIds["usernameInput"] = "ela-username-input";
+    ElaSettingsIds["elaUsernameSpinner"] = "ela-username-spinner";
+    ElaSettingsIds["changeUsernameReadMode"] = "ela-change-username-read-mode";
+    ElaSettingsIds["existingUsernameValue"] = "ela-existing-username-value";
     ElaSettingsIds["changePasswordReadMode"] = "ela-change-password-read-mode";
     ElaSettingsIds["passwordForm"] = "ela-password-form";
     ElaSettingsIds["passwordInput"] = "ela-password-input";
@@ -32,67 +32,73 @@ var ElaSettingsIds;
     ElaSettingsIds["testScrapeSpinner"] = "ela-test-scrape-spinner";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const csrfTokenName = "csrfmiddlewaretoken";
-const onChangeEmailClick = () => {
-    const emailForm = document.getElementById(ElaSettingsIds.emailForm);
-    const changeEmailReadMode = document.getElementById(ElaSettingsIds.changeEmailReadMode);
-    if (!emailForm || !changeEmailReadMode) {
+const onChangeUsernameClick = () => {
+    const usernameForm = document.getElementById(ElaSettingsIds.usernameForm);
+    const changeUsernameReadMode = document.getElementById(ElaSettingsIds.changeUsernameReadMode);
+    if (!usernameForm || !changeUsernameReadMode) {
         return;
     }
-    changeEmailReadMode.classList.add("d-none");
-    emailForm.classList.remove("d-none");
+    changeUsernameReadMode.classList.add("d-none");
+    usernameForm.classList.remove("d-none");
 };
-const onEmailCancelClick = () => {
-    const emailForm = document.getElementById(ElaSettingsIds.emailForm);
-    const changeEmailReadMode = document.getElementById(ElaSettingsIds.changeEmailReadMode);
-    if (!emailForm || !changeEmailReadMode) {
+const onUsernameCancelClick = () => {
+    const usernameForm = document.getElementById(ElaSettingsIds.usernameForm);
+    const changeUsernameReadMode = document.getElementById(ElaSettingsIds.changeUsernameReadMode);
+    if (!usernameForm || !changeUsernameReadMode) {
         return;
     }
-    changeEmailReadMode.classList.remove("d-none");
-    emailForm.classList.add("d-none");
+    changeUsernameReadMode.classList.remove("d-none");
+    usernameForm.classList.add("d-none");
 };
-const onElaEmailBlur = (event) => {
-    const errorMessageDiv = document.getElementById(ElaSettingsIds.emailErrorMessage);
+const validateUsername = (value) => {
+    if (!value || value.trim().length === 0) {
+        return "Username is required.";
+    }
+    return;
+};
+const onElaUsernameBlur = (event) => {
+    const errorMessageDiv = document.getElementById(ElaSettingsIds.usernameErrorMessage);
     if (!event.target || !errorMessageDiv) {
         return;
     }
-    const emailInput = event.target;
-    const value = emailInput.value;
-    const errorMessage = validateEmail(value);
+    const usernameInput = event.target;
+    const value = usernameInput.value;
+    const errorMessage = validateUsername(value);
     if (errorMessage) {
-        addErrorMessage(emailInput, errorMessageDiv, errorMessage);
+        addErrorMessage(usernameInput, errorMessageDiv, errorMessage);
     }
     else {
-        removeErrorMessage(emailInput, errorMessageDiv);
+        removeErrorMessage(usernameInput, errorMessageDiv);
     }
 };
-const onElaEmailSave = () => __awaiter(void 0, void 0, void 0, function* () {
-    const emailInput = document.getElementById(ElaSettingsIds.emailInput);
-    const emailErrorMessageDiv = document.getElementById(ElaSettingsIds.emailErrorMessage);
+const UsernameSave = () => __awaiter(void 0, void 0, void 0, function* () {
+    const userInput = document.getElementById(ElaSettingsIds.usernameInput);
+    const userErrorMessageDiv = document.getElementById(ElaSettingsIds.usernameErrorMessage);
     const csrfTokenInput = document.getElementsByName(csrfTokenName)[0];
     const csrfToken = csrfTokenInput === null || csrfTokenInput === void 0 ? void 0 : csrfTokenInput.value;
-    if (!emailInput || !emailErrorMessageDiv || !csrfToken) {
+    if (!userInput || !userErrorMessageDiv || !csrfToken) {
         return;
     }
-    const errorMessage = validateEmail(emailInput.value);
+    const errorMessage = validateEmail(userInput.value);
     if (errorMessage) {
-        addErrorMessage(emailInput, emailErrorMessageDiv, errorMessage);
+        addErrorMessage(userInput, userErrorMessageDiv, errorMessage);
         return;
     }
-    removeErrorMessage(emailInput, emailErrorMessageDiv);
-    const spinner = document.getElementById(ElaSettingsIds.elaEmailSpinner);
+    removeErrorMessage(userInput, userErrorMessageDiv);
+    const spinner = document.getElementById(ElaSettingsIds.elaUsernameSpinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
-    const response = yield postElaSettings({ email: emailInput.value }, csrfToken);
+    const response = yield postElaSettings({ username: userInput.value }, csrfToken);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
     if (response.isError) {
         createErrorToaster("Unable to save data", "Unable to save Elder Law Answers username");
         return;
     }
     createSuccessToaster("Data saved successfully", "Elder Law Answers username changed");
-    const existingEmailValue = document.getElementById(ElaSettingsIds.existingEmailValue);
-    if (existingEmailValue) {
-        existingEmailValue.innerText = emailInput.value;
+    const existingUsernameValue = document.getElementById(ElaSettingsIds.existingUsernameValue);
+    if (existingUsernameValue) {
+        existingUsernameValue.innerText = userInput.value;
     }
-    onEmailCancelClick();
+    onUsernameCancelClick();
 });
 const onElaPasswordClick = () => {
     const passwordReadMode = document.getElementById(ElaSettingsIds.changePasswordReadMode);
