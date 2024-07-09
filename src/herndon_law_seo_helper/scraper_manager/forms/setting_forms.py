@@ -5,7 +5,7 @@ from typing import Union
 
 class WebsiteConfigurationForm(forms.Form):
     username = forms.CharField(widget=forms.TextInput(attrs={"placeholder": "Username", "class": "form-control", "onblur": "onElaUsernameBlur(event)", "id": "ela-username-input"}),
-                               label="Email", required=False)
+                               label="Username", required=False)
 
     password = forms.CharField(widget=forms.PasswordInput(attrs={"placeholder": "Password", "class": "form-control", "id": "ela-password-input", "onblur": "onElaPasswordBlur()"}),
                                label="Password", required=False)
