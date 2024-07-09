@@ -1,10 +1,4 @@
-FROM ubuntu:22.04
-
-# Prevent interactive prompts during package installation
-ENV DEBIAN_FRONTEND=noninteractive
-
-RUN apt-get update && \
-    apt-get install -y python3-pip python3-dev libpq-dev build-essential
+FROM python:3.11
 
 WORKDIR /.adaptable
 COPY .adaptable /.adaptable
@@ -12,8 +6,7 @@ COPY .adaptable /.adaptable
 WORKDIR /app
 COPY requirements.txt /app
 
-RUN pip install -r requirements.txt && \
-    playwright install firefox --with-deps
+RUN pip install -r requirements.txt
 
 COPY . /app
 
@@ -23,4 +16,5 @@ RUN python3 manage.py collectstatic --no-input
 
 EXPOSE ${PORT}
 
-CMD chmod +x start_script.sh && ./start_script.sh
+CMD python3 manage.py migrate --settings herndon_law_seo_helper.production_settings && \
+    gunicorn herndon_law_seo_helper.wsgi:application --bind 0.0.0.0:$PORT

@@ -12,3 +12,8 @@ class SourceConfiguration(models.Model):
 
     email = models.CharField(max_length=255, null=True)
     encrypted_password = models.CharField(max_length=255, null=True)
+
+
+class WebsiteConfiguration(models.Model):
+    username = models.CharField(max_length=255, null=True)
+    encrypted_password = models.CharField(max_length=255, null=True)

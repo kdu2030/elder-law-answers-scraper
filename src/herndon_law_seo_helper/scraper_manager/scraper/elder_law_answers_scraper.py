@@ -1,12 +1,13 @@
-from playwright.sync_api import Playwright, Browser
-from enum import Enum
+import requests
 from typing import List
+from bs4 import BeautifulSoup, Tag
+from enum import Enum
 
 
 class ScraperErrorCode(Enum):
     UNKNOWN = 0
-    LOGIN_FAILED = 1
-    UNABLE_TO_FIND_ARTICLE = 2
+    UNABLE_TO_FIND_ARTICLE = 1
+    ARTICLE_POST_FAILED = 2
 
 
 class ScraperException(Exception):
@@ -15,61 +16,71 @@ class ScraperException(Exception):
 
 
 class ElderLawAnswersScraper:
-    ELDER_LAW_ANSWERS_BASE_URL = "https://attorney.elderlawanswers.com"
+    HERNDON_LAW_BASE_URL = "https://www.herndonlawva.com"
+    ELDER_LAW_ANSWERS_BASE_URL = "https://www.elderlawanswers.com"
     MAX_ARTICLE_PAGES = 20
 
-    def __init__(self, playwright: Playwright, username: str, password: str):
-        self.browser: Browser = playwright.firefox.launch(headless=True)
-        self.username = username
-        self.password = password
+    def __init__(self, website_username: str, website_password: str):
+        self.website_username = website_username
+        self.website_password = website_password
 
-    def sign_in(self):
-        self.page = self.browser.new_page()
-        self.page.goto(f"{self.ELDER_LAW_ANSWERS_BASE_URL}/login")
+    def is_article_qa(self, article_element: Tag):
+        article_url = f"{self.ELDER_LAW_ANSWERS_BASE_URL}{article_element.get('href')}"
+        article_html = requests.get(article_url)
+        article_parser = BeautifulSoup(article_html.content, "html.parser")
+        question_icon = article_parser.select(".question__icon")
+        if question_icon and len(question_icon) > 0:
+            return True
+        return False
 
-        username_input = self.page.query_selector("input#id")
-        username_input.fill(self.username)
-
-        password_input = self.page.query_selector("input#password")
-        password_input.fill(self.password)
-
-        button_input = self.page.query_selector("button[type='submit']")
-        button_input.click()
-
-        # Wait for error message to show up
-        self.page.wait_for_timeout(20)
-
-        login_error = self.page.query_selector(".login-form .text-danger")
-        if login_error:
-            raise ScraperException(ScraperErrorCode.LOGIN_FAILED.value)
-
-    def find_article(self, posted_articles: List[str]):
+    def find_article(self, posted_articles: List[str]) -> str:
         posted_articles_set = set(posted_articles)
-
         for page_index in range(self.MAX_ARTICLE_PAGES):
-            self.page.goto(
-                f"{self.ELDER_LAW_ANSWERS_BASE_URL}/content-hub?org=ELA&page={page_index + 1}")
+            ela_page = requests.get(
+                f"{self.ELDER_LAW_ANSWERS_BASE_URL}/news-and-information?page={page_index + 1}")
+            parser = BeautifulSoup(ela_page.content, "html.parser")
+            article_links = parser.select(".excerpt__title a")
 
-            article_elements = self.page.query_selector_all(
-                ".article-listings article h2 a")
-
-            for article_element in article_elements:
-                if article_element.inner_text() not in posted_articles_set:
-                    # article element href is a relative url, already prefixed with /
-                    return f"{self.ELDER_LAW_ANSWERS_BASE_URL}{article_element.get_attribute('href')}"
+            for article_link in article_links:
+                article_text = article_link.get_text()
+                if not self.is_article_qa(article_link) and article_text not in posted_articles_set:
+                    return article_link.get("href")
 
         raise ScraperException(ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value)
 
-    def post_article(self, article_link: str):
-        self.page.goto(article_link)
+    def get_article_paragraph_text(self, article_paragraph: Tag) -> str:
+        created_links = article_paragraph.select(".mod-date")
+        created_link_html = created_links[0].decode(
+        ) if created_links and len(created_links) > 0 else None
+        article_paragraph_html = article_paragraph.decode_contents()
+        if created_link_html is not None:
+            return article_paragraph_html.replace(created_link_html, "")
+        return article_paragraph_html
 
-        article_body = self.page.query_selector(".article")
-        article_body.click()
+    def post_article(self, relative_url: str):
+        article_url = f"{self.ELDER_LAW_ANSWERS_BASE_URL}{relative_url}"
+        article_response = requests.get(article_url)
+        parser = BeautifulSoup(article_response.content, "html.parser")
 
-        self.page.evaluate("() => window.scrollTo(0, 0)")
+        article_title = parser.select(".heading__title")[0].get_text()
+        article_paragraphs = parser.select(".article")
 
-        wordpress_button = self.page.query_selector("a.js-share-wordpress")
-        wordpress_button.click()
+        article_content = ""
+        for article_paragraph in article_paragraphs:
+            article_content += self.get_article_paragraph_text(
+                article_paragraph)
 
-        article_title = self.page.query_selector("h1.title")
-        return article_title.inner_text()
+        post_endpoint = f"{self.HERNDON_LAW_BASE_URL}/wp-json/wp/v2/posts"
+        post_data = {
+            "title": article_title,
+            "content": article_content,
+            "status": "publish"
+        }
+
+        response = requests.post(post_endpoint, json=post_data,
+                                 auth=requests.auth.HTTPBasicAuth(self.website_username, self.website_password))
+
+        if not response.ok:
+            raise ScraperException(ScraperErrorCode.ARTICLE_POST_FAILED.value)
+
+        return article_title

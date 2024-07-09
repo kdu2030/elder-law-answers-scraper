@@ -1,5 +1,5 @@
 type PostElaSettingsRequest = {
-  email?: string;
+  username?: string;
   password?: string;
 };
 

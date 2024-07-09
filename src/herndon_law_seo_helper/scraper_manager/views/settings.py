@@ -1,7 +1,7 @@
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render
-from ..forms.setting_forms import SourceConfigurationForm
-from ..models.setting_models import SourceConfiguration, SourceOptions
+from ..forms.setting_forms import WebsiteConfigurationForm
+from ..models.setting_models import WebsiteConfiguration
 from typing import Union
 import json
 import traceback
@@ -9,46 +9,43 @@ from ..helpers.encryption_helpers import encrypt_string
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
-    existing_ela_configuration = SourceConfiguration.objects.filter(
-        source=SourceOptions.ELDER_LAW_ANSWERS.value).first()
+    existing_website_configuration: WebsiteConfiguration = WebsiteConfiguration.objects.all().first()
 
-    if existing_ela_configuration:
-        email = existing_ela_configuration.email if existing_ela_configuration else None
-        password_msg = "**********" if existing_ela_configuration.encrypted_password else "Password does not exist."
-        source_config_form = SourceConfigurationForm(
-            existing_config=existing_ela_configuration)
-        return render(request, "scraper_manager/ela-settings.html", {"form": source_config_form, "email": email, "password_msg": password_msg})
+    if existing_website_configuration:
+        username = existing_website_configuration.username if existing_website_configuration else None
+        password_msg = "**********" if existing_website_configuration.encrypted_password else "Password does not exist."
+        source_config_form = WebsiteConfigurationForm(
+            existing_config=existing_website_configuration)
+        return render(request, "scraper_manager/ela-settings.html", {"form": source_config_form, "username": username, "password_msg": password_msg})
 
-    source_config_form = SourceConfigurationForm()
-    return render(request, "scraper_manager/ela-settings.html", {"form": source_config_form, "email": "", "password_msg": "Password does not exist."})
+    source_config_form = WebsiteConfigurationForm()
+    return render(request, "scraper_manager/ela-settings.html", {"form": source_config_form, "username": "", "password_msg": "Password does not exist."})
 
 
 def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]:
-    if (request.method != "POST"):
+    if request.method != "POST":
         return ela_settings_get(request)
 
     request_body = json.loads(request.body.decode())
 
-    email = request_body.get("email")
+    username = request_body.get("username")
     password = request_body.get("password")
 
-    existing_ela_configuration = SourceConfiguration.objects.filter(
-        source=SourceOptions.ELDER_LAW_ANSWERS.value).first()
+    existing_website_configuration: WebsiteConfiguration = WebsiteConfiguration.objects.all().first()
 
     try:
-        if existing_ela_configuration is None:
-            SourceConfiguration.objects.create(
-                source=SourceOptions.ELDER_LAW_ANSWERS.value,
-                email=email,
+        if existing_website_configuration is None:
+            WebsiteConfiguration.objects.create(
+                username=username,
                 encrypted_password=encrypt_string(password) if password else None)
 
             return JsonResponse({"isError": False})
 
-        existing_ela_configuration.email = email or existing_ela_configuration.email
-        existing_ela_configuration.encrypted_password = encrypt_string(
-            password) if password else existing_ela_configuration.encrypted_password
+        existing_website_configuration.username = username or existing_website_configuration.username
+        existing_website_configuration.encrypted_password = encrypt_string(
+            password) if password else existing_website_configuration.encrypted_password
 
-        existing_ela_configuration.save()
+        existing_website_configuration.save()
 
         return JsonResponse({"isError": False})
     except Exception:
