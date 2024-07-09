@@ -71,7 +71,7 @@ const onElaUsernameBlur = (event) => {
         removeErrorMessage(usernameInput, errorMessageDiv);
     }
 };
-const UsernameSave = () => __awaiter(void 0, void 0, void 0, function* () {
+const onElaUsernameSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const userInput = document.getElementById(ElaSettingsIds.usernameInput);
     const userErrorMessageDiv = document.getElementById(ElaSettingsIds.usernameErrorMessage);
     const csrfTokenInput = document.getElementsByName(csrfTokenName)[0];
@@ -79,7 +79,7 @@ const UsernameSave = () => __awaiter(void 0, void 0, void 0, function* () {
     if (!userInput || !userErrorMessageDiv || !csrfToken) {
         return;
     }
-    const errorMessage = validateEmail(userInput.value);
+    const errorMessage = validateUsername(userInput.value);
     if (errorMessage) {
         addErrorMessage(userInput, userErrorMessageDiv, errorMessage);
         return;
@@ -90,10 +90,10 @@ const UsernameSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield postElaSettings({ username: userInput.value }, csrfToken);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
     if (response.isError) {
-        createErrorToaster("Unable to save data", "Unable to save Elder Law Answers username");
+        createErrorToaster("Unable to save data", "Unable to save website username");
         return;
     }
-    createSuccessToaster("Data saved successfully", "Elder Law Answers username changed");
+    createSuccessToaster("Data saved successfully", "Website username changed");
     const existingUsernameValue = document.getElementById(ElaSettingsIds.existingUsernameValue);
     if (existingUsernameValue) {
         existingUsernameValue.innerText = userInput.value;
@@ -187,10 +187,10 @@ const onElaPasswordSave = () => __awaiter(void 0, void 0, void 0, function* () {
     }, csrfTokenInput.value);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
     if (response.isError) {
-        createErrorToaster("Unable to save data", "Unable to save Elder Law Answers password");
+        createErrorToaster("Unable to save data", "Unable to save website password");
         return;
     }
-    createSuccessToaster("Data successfully saved", "Elder Law Answers password changed.");
+    createSuccessToaster("Data successfully saved", "Website password changed.");
     const passwordReadMessage = document.getElementById(ElaSettingsIds.passwordReadMessage);
     if (!passwordReadMessage) {
         return;
@@ -205,12 +205,12 @@ const onTestElaScrapeClick = () => __awaiter(void 0, void 0, void 0, function* (
     const response = yield getScrapeElaArticle();
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
     if (response.isError) {
-        createErrorToaster("Post creation failed", (_a = response.error) !== null && _a !== void 0 ? _a : "Unable to create post using Elder Law Answers");
+        createErrorToaster("Post creation failed", (_a = response.error) !== null && _a !== void 0 ? _a : "Unable to create post using website");
         return;
     }
     if (response.isWarning) {
-        createWarningToaster("Post creation unsuccessful", (_b = response.warning) !== null && _b !== void 0 ? _b : "Unable to create post using Elder Law Answers");
+        createWarningToaster("Post creation unsuccessful", (_b = response.warning) !== null && _b !== void 0 ? _b : "Unable to create post using website");
         return;
     }
-    createSuccessToaster("Post successfully created", "Created a new post using Elder Law Answers");
+    createSuccessToaster("Post successfully created", "Created a new post using website");
 });

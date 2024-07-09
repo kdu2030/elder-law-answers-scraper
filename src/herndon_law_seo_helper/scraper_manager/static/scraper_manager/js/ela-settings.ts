@@ -90,7 +90,7 @@ const onElaUsernameBlur = (event: FocusEvent) => {
   }
 };
 
-const UsernameSave = async () => {
+const onElaUsernameSave = async () => {
   const userInput = document.getElementById(
     ElaSettingsIds.usernameInput
   ) as HTMLInputElement;
@@ -107,7 +107,7 @@ const UsernameSave = async () => {
     return;
   }
 
-  const errorMessage = validateEmail(userInput.value);
+  const errorMessage = validateUsername(userInput.value);
 
   if (errorMessage) {
     addErrorMessage(userInput, userErrorMessageDiv, errorMessage);
@@ -129,15 +129,12 @@ const UsernameSave = async () => {
   if (response.isError) {
     createErrorToaster(
       "Unable to save data",
-      "Unable to save Elder Law Answers username"
+      "Unable to save website username"
     );
     return;
   }
 
-  createSuccessToaster(
-    "Data saved successfully",
-    "Elder Law Answers username changed"
-  );
+  createSuccessToaster("Data saved successfully", "Website username changed");
 
   const existingUsernameValue = document.getElementById(
     ElaSettingsIds.existingUsernameValue
@@ -308,16 +305,13 @@ const onElaPasswordSave = async () => {
   if (response.isError) {
     createErrorToaster(
       "Unable to save data",
-      "Unable to save Elder Law Answers password"
+      "Unable to save website password"
     );
 
     return;
   }
 
-  createSuccessToaster(
-    "Data successfully saved",
-    "Elder Law Answers password changed."
-  );
+  createSuccessToaster("Data successfully saved", "Website password changed.");
 
   const passwordReadMessage = document.getElementById(
     ElaSettingsIds.passwordReadMessage
@@ -341,7 +335,7 @@ const onTestElaScrapeClick = async () => {
   if (response.isError) {
     createErrorToaster(
       "Post creation failed",
-      response.error ?? "Unable to create post using Elder Law Answers"
+      response.error ?? "Unable to create post using website"
     );
     return;
   }
@@ -349,13 +343,13 @@ const onTestElaScrapeClick = async () => {
   if (response.isWarning) {
     createWarningToaster(
       "Post creation unsuccessful",
-      response.warning ?? "Unable to create post using Elder Law Answers"
+      response.warning ?? "Unable to create post using website"
     );
     return;
   }
 
   createSuccessToaster(
     "Post successfully created",
-    "Created a new post using Elder Law Answers"
+    "Created a new post using website"
   );
 };
