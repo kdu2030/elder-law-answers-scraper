@@ -335,7 +335,7 @@ const onTestElaScrapeClick = async () => {
   if (response.isError) {
     createErrorToaster(
       "Post creation failed",
-      response.error ?? "Unable to create post using website"
+      response.error ?? "Unable to create post using Elder Law Answers"
     );
     return;
   }
@@ -343,13 +343,13 @@ const onTestElaScrapeClick = async () => {
   if (response.isWarning) {
     createWarningToaster(
       "Post creation unsuccessful",
-      response.warning ?? "Unable to create post using website"
+      response.warning ?? "Unable to create post using Elder Law Answers"
     );
     return;
   }
 
   createSuccessToaster(
     "Post successfully created",
-    "Created a new post using website"
+    "Created a new post using Elder Law Answers"
   );
 };

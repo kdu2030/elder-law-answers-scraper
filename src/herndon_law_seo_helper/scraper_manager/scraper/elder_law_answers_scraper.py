@@ -36,7 +36,8 @@ class ElderLawAnswersScraper:
     def find_article(self, posted_articles: List[str]) -> str:
         posted_articles_set = set(posted_articles)
         for page_index in range(self.MAX_ARTICLE_PAGES):
-            ela_page = requests.get(f"{self.ELDER_LAW_ANSWERS_BASE_URL}/news-and-information?page=${page_index + 1}")
+            ela_page = requests.get(
+                f"{self.ELDER_LAW_ANSWERS_BASE_URL}/news-and-information?page={page_index + 1}")
             parser = BeautifulSoup(ela_page.content, "html.parser")
             article_links = parser.select(".excerpt__title a")
 
@@ -49,12 +50,12 @@ class ElderLawAnswersScraper:
 
     def get_article_paragraph_text(self, article_paragraph: Tag) -> str:
         created_links = article_paragraph.select(".mod-date")
-        created_link_html = created_links[0].decode() if created_links and len(created_links) > 0 else None
+        created_link_html = created_links[0].decode(
+        ) if created_links and len(created_links) > 0 else None
         article_paragraph_html = article_paragraph.decode_contents()
         if created_link_html is not None:
             return article_paragraph_html.replace(created_link_html, "")
         return article_paragraph_html
-
 
     def post_article(self, relative_url: str):
         article_url = f"{self.ELDER_LAW_ANSWERS_BASE_URL}{relative_url}"
@@ -66,7 +67,8 @@ class ElderLawAnswersScraper:
 
         article_content = ""
         for article_paragraph in article_paragraphs:
-            article_content += self.get_article_paragraph_text(article_paragraph)
+            article_content += self.get_article_paragraph_text(
+                article_paragraph)
 
         post_endpoint = f"{self.HERNDON_LAW_BASE_URL}/wp-json/wp/v2/posts"
         post_data = {
