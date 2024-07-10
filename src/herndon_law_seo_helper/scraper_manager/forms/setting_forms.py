@@ -27,7 +27,7 @@ class UserSettingsForm(forms.Form):
         attrs={"placeholder": "Email", "class": "form-control", "id": "user-settings-email-input", "onblur": "onChangeEmailBlur()"}))
 
     password = forms.CharField(widget=forms.PasswordInput(
-        attrs={"placeholder": "Password", "class": "form-control", "id": "user-settings-password-input"}))
+        attrs={"placeholder": "Password", "class": "form-control", "id": "user-settings-password-input", "onblur": "onChangePasswordBlur()"}))
 
     confirm_password = forms.CharField(widget=forms.PasswordInput(
-        attrs={"placeholder": "Password", "class": "form-control", "id": "user-settings-confirm-password-input"}))
+        attrs={"placeholder": "Password", "class": "form-control", "id": "user-settings-confirm-password-input", "onblur": "onChangePasswordBlur()"}))

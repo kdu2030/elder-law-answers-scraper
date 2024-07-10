@@ -66,3 +66,34 @@ const onChangePasswordCancel = () => {
     passwordReadMode === null || passwordReadMode === void 0 ? void 0 : passwordReadMode.classList.remove("d-none");
     passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.add("d-none");
 };
+const fetchUserSettingsPasswordElements = () => {
+    const passwordInput = document.getElementById(UserSettingsId.passwordInput);
+    const passwordErrorDiv = document.getElementById(UserSettingsId.passwordErrorMessage);
+    const confirmPasswordInput = document.getElementById(UserSettingsId.confirmPasswordInput);
+    const confirmPasswordErrorDiv = document.getElementById(UserSettingsId.confirmPasswordErrorMessage);
+    return {
+        passwordInput,
+        passwordErrorDiv,
+        confirmPasswordInput,
+        confirmPasswordErrorDiv,
+    };
+};
+const onChangePasswordBlur = () => {
+    const passwordElements = fetchUserSettingsPasswordElements();
+    const passwordValue = passwordElements.passwordInput.value;
+    const confirmPasswordValue = passwordElements.confirmPasswordInput.value;
+    const passwordErrorMessages = validatePasswords(passwordValue, confirmPasswordValue);
+    updatePasswordErrorMessages(passwordElements, passwordErrorMessages);
+    const passwordField = {
+        isValid: !(passwordErrorMessages === null || passwordErrorMessages === void 0 ? void 0 : passwordErrorMessages.passwordError),
+        value: passwordValue,
+    };
+    const confirmPasswordField = {
+        isValid: !(passwordElements === null || passwordElements === void 0 ? void 0 : passwordElements.confirmPasswordInput),
+        value: confirmPasswordValue,
+    };
+    return {
+        password: passwordField,
+        confirmPassword: confirmPasswordField,
+    };
+};

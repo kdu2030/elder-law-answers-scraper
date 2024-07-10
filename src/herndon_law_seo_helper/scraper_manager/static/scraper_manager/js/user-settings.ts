@@ -18,10 +18,15 @@ enum UserSettingsId {
   existingPasswordValue = "user-settings-password-message",
 }
 
-interface FormField {
+type FormField = {
   isValid: boolean;
   value?: string;
-}
+};
+
+type UserSettingsPasswordForm = {
+  password: FormField;
+  confirmPassword: FormField;
+};
 
 const onChangeEmailClick = () => {
   const emailForm = document.getElementById(UserSettingsId.emailForm);
@@ -97,4 +102,57 @@ const onChangePasswordCancel = () => {
 
   passwordReadMode?.classList.remove("d-none");
   passwordForm?.classList.add("d-none");
+};
+
+const fetchUserSettingsPasswordElements = (): PasswordElements => {
+  const passwordInput = document.getElementById(
+    UserSettingsId.passwordInput
+  ) as HTMLInputElement;
+
+  const passwordErrorDiv = document.getElementById(
+    UserSettingsId.passwordErrorMessage
+  ) as HTMLDivElement;
+
+  const confirmPasswordInput = document.getElementById(
+    UserSettingsId.confirmPasswordInput
+  ) as HTMLInputElement;
+
+  const confirmPasswordErrorDiv = document.getElementById(
+    UserSettingsId.confirmPasswordErrorMessage
+  ) as HTMLDivElement;
+
+  return {
+    passwordInput,
+    passwordErrorDiv,
+    confirmPasswordInput,
+    confirmPasswordErrorDiv,
+  };
+};
+
+const onChangePasswordBlur = (): UserSettingsPasswordForm => {
+  const passwordElements = fetchUserSettingsPasswordElements();
+  const passwordValue = passwordElements.passwordInput.value;
+  const confirmPasswordValue = passwordElements.confirmPasswordInput.value;
+
+  const passwordErrorMessages = validatePasswords(
+    passwordValue,
+    confirmPasswordValue
+  );
+
+  updatePasswordErrorMessages(passwordElements, passwordErrorMessages);
+
+  const passwordField: FormField = {
+    isValid: !passwordErrorMessages?.passwordError,
+    value: passwordValue,
+  };
+
+  const confirmPasswordField: FormField = {
+    isValid: !passwordElements?.confirmPasswordInput,
+    value: confirmPasswordValue,
+  };
+
+  return {
+    password: passwordField,
+    confirmPassword: confirmPasswordField,
+  };
 };
