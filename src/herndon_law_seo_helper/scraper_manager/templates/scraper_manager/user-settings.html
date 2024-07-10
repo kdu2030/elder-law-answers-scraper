@@ -4,6 +4,7 @@
 {% block page_title%} Settings {% endblock page_title %} 
 
 {% block head_content %} 
+    <script src="{% static 'scraper_manager/js/user-settings.js' %}"></script>
 {%endblock head_content %}
 
 {% block content %} 
@@ -33,7 +34,7 @@
 
                                 <div id="user-settings-change-email-read-mode">
                                     <p id="user-settings-existing-email-value">{{ email | default:""}}</p>
-                                    <button class="btn btn-outline-primary outline-herndon-law" id="user-settings-change-email-button" onclick="onChangeUsernameClick()">Change Email</button>
+                                    <button class="btn btn-outline-primary outline-herndon-law" id="user-settings-change-email-button" onclick="onChangeEmailClick()">Change Email</button>
                                 </div>
                                 
                                 <form class="d-none" id="user-settings-email-form">
@@ -44,7 +45,7 @@
                                     </div>
                                     
                                     <div class="d-flex flex-row justify-content-end mt-3">
-                                        <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onUsernameCancelClick()">Cancel</button>
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onChangeEmailCancel()">Cancel</button>
                                         <button class="btn btn-primary bg-herndon-law" type="button" onclick="onElaUsernameSave()">
                                             <div class="spinner-border spinner-border-sm text-white d-none" id="user-settings-email-spinner"></div> 
                                             Save
