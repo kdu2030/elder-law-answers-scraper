@@ -20,3 +20,11 @@ class WebsiteConfigurationForm(forms.Form):
             return
 
         self.fields["username"].widget.attrs["value"] = existing_config.username if existing_config else ""
+
+
+class UserSettingsForm(forms.Form):
+    email = forms.EmailField(widget=forms.EmailInput(
+        attrs={"placeholder": "Email", "class": "form-control", "id": "user-settings-email-input"}))
+
+    password = forms.CharField(widget=forms.PasswordInput(
+        attrs={"placeholder": "Email", "class": "form-control", "id": "user-settings-password-input"}))

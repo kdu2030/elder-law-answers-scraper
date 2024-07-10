@@ -1,6 +1,6 @@
 from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render
-from ..forms.setting_forms import WebsiteConfigurationForm
+from ..forms.setting_forms import WebsiteConfigurationForm, UserSettingsForm
 from ..models.setting_models import WebsiteConfiguration
 from typing import Union
 import json
@@ -50,3 +50,8 @@ def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]
         return JsonResponse({"isError": False})
     except Exception:
         return JsonResponse({"isError": True, "error": traceback.format_exc()})
+
+
+def user_settings_get(request: HttpRequest) -> HttpResponse:
+    form = UserSettingsForm()
+    return render(request, "scraper_manager/user-settings.html", {"form": form})

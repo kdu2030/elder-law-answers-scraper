@@ -4,10 +4,6 @@
 {% block page_title%} Settings {% endblock page_title %} 
 
 {% block head_content %} 
-    <script src="{% static 'scraper_manager/js/sign-in.js' %}"></script>
-    <script src="{% static 'scraper_manager/js/ela-settings.js' %}"></script>
-    <script src="{% static 'scraper_manager/js/api/post-ela-settings.js' %}"></script>
-    <script src="{% static 'scraper_manager/js/api/get-scrape-ela-article.js' %}"></script>
 {%endblock head_content %}
 
 {% block content %} 
@@ -17,11 +13,11 @@
             <div class="row h-100">
                 <div class="col-4">
                     <ul class="list-group">
-                        <a a href="{% url 'settings' %}" class="list-group-item list-group-item-action active bg-herndon-law">
+                        <a a href="{% url 'settings' %}" class="list-group-item list-group-item-action">
                             <i class="bi bi-globe-americas"></i>
                             Website Settings
                         </a>
-                        <a href="{% url 'user_settings' %}" class="list-group-item list-group-item-action">
+                        <a href="{% url 'user_settings' %}" class="list-group-item list-group-item-action active bg-herndon-law">
                             <i class="bi bi-gear-wide"></i>
                             User Settings
                         </a>
@@ -32,61 +28,55 @@
                     <div class="card h-100">
                         <div class="card-body">
                             <div class="mb-3">
-                                <div class="d-flex flex-row align-items-center justify-content-between mb-3">
-                                    <h5>Website Settings</h5>
-                                    <button class="btn btn-primary bg-herndon-law"  onclick="onTestElaScrapeClick()">
-                                        <div class="spinner-border spinner-border-sm text-white d-none" id="ela-test-scrape-spinner"></div>
-                                        Create Test Blog Post
-                                    </button>
-                                </div>
-                                <p class="fw-bold">Username</p>
+                                <h5 class="mb-3">User Settings</h5>
+                                <p class="fw-bold">Email</p>
 
-                                <div id="ela-change-username-read-mode">
-                                    <p id="ela-existing-username-value">{{ username | default:""}}</p>
-                                    <button class="btn btn-outline-primary outline-herndon-law" id="ela-change-username-button" onclick="onChangeUsernameClick()">Change Username</button>
+                                <div id="user-settings-change-email-read-mode">
+                                    <p id="user-settings-existing-email-value">{{ email | default:""}}</p>
+                                    <button class="btn btn-outline-primary outline-herndon-law" id="user-settings-change-email-button" onclick="onChangeUsernameClick()">Change Email</button>
                                 </div>
                                 
-                                <form class="d-none" id="ela-username-form">
+                                <form class="d-none" id="user-settings-email-form">
                                     {% csrf_token %}
-                                    <label for="{{ form.username.id_for_label }}" class="form-label">Username<span class="text-danger">*</span></label>
-                                    {{ form.username }}
-                                    <div class="invalid-feedback" id="ela-username-error-message">
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">Email<span class="text-danger">*</span></label>
+                                    {{ form.email }}
+                                    <div class="invalid-feedback" id="user-settings-email-error-message">
                                     </div>
                                     
                                     <div class="d-flex flex-row justify-content-end mt-3">
                                         <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onUsernameCancelClick()">Cancel</button>
                                         <button class="btn btn-primary bg-herndon-law" type="button" onclick="onElaUsernameSave()">
-                                            <div class="spinner-border spinner-border-sm text-white d-none" id="ela-username-spinner"></div> 
+                                            <div class="spinner-border spinner-border-sm text-white d-none" id="user-settings-email-spinner"></div> 
                                             Save
                                         </button>
                                     </div>
                                 </form>
                             </div>
                             <div>
-                                <p class="fw-bold">Change Password</p>
-                                <div id="ela-change-password-read-mode">
-                                    <p id="ela-password-message">{{ password_msg }}</p>
+                                <p class="fw-bold">Password</p>
+                                <div id="user-settings-change-password-read-mode">
+                                    <p id="user-settings-password-message">{{ password_msg }}</p>
                                     <button class="btn btn-outline-primary outline-herndon-law" type="button" onclick="onElaPasswordClick()">Change Password</button>
                                 </div>
 
-                                <form class="d-none" id="ela-password-form">
+                                <form class="d-none" id="user-settings-password-form">
                                     {% csrf_token %}
                                     <div class="mb-3">
                                         <label for="{{ form.password.id_for_label }}" class="form-label">Password<span class="text-danger">*</span></label>
                                         {{ form.password }}
-                                        <div class="invalid-feedback" id="ela-password-error-message">
+                                        <div class="invalid-feedback" id="user-settings-password-error-message">
                                         </div>
                                     </div>
 
                                     <label for="{{ form.confirm_password.id_for_label }}" class="form-label">Confirm Password<span class="text-danger">*</span></label>
                                     {{ form.confirm_password }}
-                                    <div class="invalid-feedback" id="ela-confirm-password-error-message">
+                                    <div class="invalid-feedback" id="user-settings-confirm-password-error-message">
                                     </div>
                                     
                                     <div class="d-flex flex-row justify-content-end mt-3">
                                         <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onElaPasswordCancel()">Cancel</button>
                                         <button class="btn btn-primary bg-herndon-law" type="button" onclick="onElaPasswordSave()">
-                                            <div class="spinner-border spinner-border-sm text-white d-none" id="ela-password-spinner"></div> 
+                                            <div class="spinner-border spinner-border-sm text-white d-none" id="user-settings-password-spinner"></div> 
                                             Save
                                         </button>
                                     </div>
