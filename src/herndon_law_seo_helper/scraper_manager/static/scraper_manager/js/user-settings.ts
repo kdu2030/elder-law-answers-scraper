@@ -18,6 +18,11 @@ enum UserSettingsId {
   existingPasswordValue = "user-settings-password-message",
 }
 
+interface FormField {
+  isValid: boolean;
+  value?: string;
+}
+
 const onChangeEmailClick = () => {
   const emailForm = document.getElementById(UserSettingsId.emailForm);
   const emailReadMode = document.getElementById(UserSettingsId.emailReadMode);
@@ -34,8 +39,10 @@ const onChangeEmailCancel = () => {
   emailReadMode?.classList.remove("d-none");
 };
 
-const onChangeEmailBlur = (event: FocusEvent) => {
-  const emailInput = event.target as HTMLInputElement;
+const onChangeEmailBlur = (): FormField => {
+  const emailInput = document.getElementById(
+    UserSettingsId.emailInput
+  ) as HTMLInputElement;
 
   const emailValue = emailInput.value;
   const emailErrorMessage = document.getElementById(
@@ -46,8 +53,17 @@ const onChangeEmailBlur = (event: FocusEvent) => {
 
   if (errorMessage) {
     addErrorMessage(emailInput, emailErrorMessage, errorMessage);
-    return;
+    return { isValid: false, value: emailValue };
   }
 
   removeErrorMessage(emailInput, emailErrorMessage);
+  return { isValid: true, value: emailValue };
+};
+
+const onChangeEmailSave = () => {
+  const { isValid, value } = onChangeEmailBlur();
+
+  if (!isValid) {
+    return;
+  }
 };

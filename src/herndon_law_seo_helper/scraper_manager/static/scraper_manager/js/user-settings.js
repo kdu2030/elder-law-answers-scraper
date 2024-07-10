@@ -30,14 +30,21 @@ const onChangeEmailCancel = () => {
     emailForm === null || emailForm === void 0 ? void 0 : emailForm.classList.add("d-none");
     emailReadMode === null || emailReadMode === void 0 ? void 0 : emailReadMode.classList.remove("d-none");
 };
-const onChangeEmailBlur = (event) => {
-    const emailInput = event.target;
+const onChangeEmailBlur = () => {
+    const emailInput = document.getElementById(UserSettingsId.emailInput);
     const emailValue = emailInput.value;
     const emailErrorMessage = document.getElementById(UserSettingsId.emailErrorMessage);
     const errorMessage = validateEmail(emailValue);
     if (errorMessage) {
         addErrorMessage(emailInput, emailErrorMessage, errorMessage);
-        return;
+        return { isValid: false, value: emailValue };
     }
     removeErrorMessage(emailInput, emailErrorMessage);
+    return { isValid: true, value: emailValue };
+};
+const onChangeEmailSave = () => {
+    const { isValid, value } = onChangeEmailBlur();
+    if (!isValid) {
+        return;
+    }
 };
