@@ -78,3 +78,13 @@ const onChangeEmailSave = () => {
   existingEmailValue.innerText = value;
   onChangeEmailCancel();
 };
+
+const onChangePasswordClick = () => {
+  const passwordReadMode = document.getElementById(
+    UserSettingsId.passwordReadMode
+  );
+  const passwordForm = document.getElementById(UserSettingsId.passwordForm);
+
+  passwordReadMode?.classList.add("d-none");
+  passwordForm?.classList.remove("d-none");
+};

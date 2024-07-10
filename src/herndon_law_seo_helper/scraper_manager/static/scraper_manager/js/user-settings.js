@@ -54,3 +54,9 @@ const onChangeEmailSave = () => {
     existingEmailValue.innerText = value;
     onChangeEmailCancel();
 };
+const onChangePasswordClick = () => {
+    const passwordReadMode = document.getElementById(UserSettingsId.passwordReadMode);
+    const passwordForm = document.getElementById(UserSettingsId.passwordForm);
+    passwordReadMode === null || passwordReadMode === void 0 ? void 0 : passwordReadMode.classList.add("d-none");
+    passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.remove("d-none");
+};
