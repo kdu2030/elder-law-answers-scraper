@@ -66,4 +66,15 @@ const onChangeEmailSave = () => {
   if (!isValid) {
     return;
   }
+
+  const existingEmailValue = document.getElementById(
+    UserSettingsId.existingEmailValue
+  );
+
+  if (!existingEmailValue || !value) {
+    return;
+  }
+
+  existingEmailValue.innerText = value;
+  onChangeEmailCancel();
 };
