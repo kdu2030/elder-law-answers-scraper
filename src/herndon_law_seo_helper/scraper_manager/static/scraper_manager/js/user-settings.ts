@@ -88,3 +88,13 @@ const onChangePasswordClick = () => {
   passwordReadMode?.classList.add("d-none");
   passwordForm?.classList.remove("d-none");
 };
+
+const onChangePasswordCancel = () => {
+  const passwordReadMode = document.getElementById(
+    UserSettingsId.passwordReadMode
+  );
+  const passwordForm = document.getElementById(UserSettingsId.passwordForm);
+
+  passwordReadMode?.classList.remove("d-none");
+  passwordForm?.classList.add("d-none");
+};
