@@ -89,11 +89,22 @@ const onChangePasswordBlur = () => {
         value: passwordValue,
     };
     const confirmPasswordField = {
-        isValid: !(passwordElements === null || passwordElements === void 0 ? void 0 : passwordElements.confirmPasswordInput),
+        isValid: !(passwordErrorMessages === null || passwordErrorMessages === void 0 ? void 0 : passwordErrorMessages.confirmPasswordError),
         value: confirmPasswordValue,
     };
     return {
         password: passwordField,
         confirmPassword: confirmPasswordField,
     };
+};
+const onChangePasswordSave = () => {
+    const { password, confirmPassword } = onChangePasswordBlur();
+    if (!password.isValid || !confirmPassword.isValid) {
+        return;
+    }
+    const existingPasswordValue = document.getElementById(UserSettingsId.existingPasswordValue);
+    if (existingPasswordValue) {
+        existingPasswordValue.innerText = "**********";
+    }
+    onChangePasswordCancel();
 };

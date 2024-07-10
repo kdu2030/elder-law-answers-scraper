@@ -147,7 +147,7 @@ const onChangePasswordBlur = (): UserSettingsPasswordForm => {
   };
 
   const confirmPasswordField: FormField = {
-    isValid: !passwordElements?.confirmPasswordInput,
+    isValid: !passwordErrorMessages?.confirmPasswordError,
     value: confirmPasswordValue,
   };
 
@@ -155,4 +155,21 @@ const onChangePasswordBlur = (): UserSettingsPasswordForm => {
     password: passwordField,
     confirmPassword: confirmPasswordField,
   };
+};
+
+const onChangePasswordSave = () => {
+  const { password, confirmPassword } = onChangePasswordBlur();
+
+  if (!password.isValid || !confirmPassword.isValid) {
+    return;
+  }
+
+  const existingPasswordValue = document.getElementById(
+    UserSettingsId.existingPasswordValue
+  );
+
+  if (existingPasswordValue) {
+    existingPasswordValue.innerText = "**********";
+  }
+  onChangePasswordCancel();
 };
