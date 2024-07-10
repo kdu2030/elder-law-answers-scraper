@@ -1,4 +1,5 @@
 "use strict";
+/// <reference path="./sign-in.ts">
 var UserSettingsId;
 (function (UserSettingsId) {
     UserSettingsId["emailForm"] = "user-settings-email-form";
@@ -28,4 +29,15 @@ const onChangeEmailCancel = () => {
     const emailReadMode = document.getElementById(UserSettingsId.emailReadMode);
     emailForm === null || emailForm === void 0 ? void 0 : emailForm.classList.add("d-none");
     emailReadMode === null || emailReadMode === void 0 ? void 0 : emailReadMode.classList.remove("d-none");
+};
+const onChangeEmailBlur = (event) => {
+    const emailInput = event.target;
+    const emailValue = emailInput.value;
+    const emailErrorMessage = document.getElementById(UserSettingsId.emailErrorMessage);
+    const errorMessage = validateEmail(emailValue);
+    if (errorMessage) {
+        addErrorMessage(emailInput, emailErrorMessage, errorMessage);
+        return;
+    }
+    removeErrorMessage(emailInput, emailErrorMessage);
 };

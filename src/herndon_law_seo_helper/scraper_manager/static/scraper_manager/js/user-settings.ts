@@ -1,3 +1,5 @@
+/// <reference path="./sign-in.ts">
+
 enum UserSettingsId {
   emailForm = "user-settings-email-form",
   changeEmailButton = "user-settings-change-email-button",
@@ -30,4 +32,22 @@ const onChangeEmailCancel = () => {
 
   emailForm?.classList.add("d-none");
   emailReadMode?.classList.remove("d-none");
+};
+
+const onChangeEmailBlur = (event: FocusEvent) => {
+  const emailInput = event.target as HTMLInputElement;
+
+  const emailValue = emailInput.value;
+  const emailErrorMessage = document.getElementById(
+    UserSettingsId.emailErrorMessage
+  ) as HTMLDivElement;
+
+  const errorMessage = validateEmail(emailValue);
+
+  if (errorMessage) {
+    addErrorMessage(emailInput, emailErrorMessage, errorMessage);
+    return;
+  }
+
+  removeErrorMessage(emailInput, emailErrorMessage);
 };

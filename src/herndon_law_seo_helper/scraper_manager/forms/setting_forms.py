@@ -24,7 +24,7 @@ class WebsiteConfigurationForm(forms.Form):
 
 class UserSettingsForm(forms.Form):
     email = forms.EmailField(widget=forms.EmailInput(
-        attrs={"placeholder": "Email", "class": "form-control", "id": "user-settings-email-input"}))
+        attrs={"placeholder": "Email", "class": "form-control", "id": "user-settings-email-input", "onblur": "onChangeEmailBlur(event)"}))
 
     password = forms.CharField(widget=forms.PasswordInput(
         attrs={"placeholder": "Email", "class": "form-control", "id": "user-settings-password-input"}))
