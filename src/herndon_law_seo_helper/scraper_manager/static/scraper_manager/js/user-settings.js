@@ -28,7 +28,7 @@ const onChangeUsernameEmailClick = () => {
     usernameEmailForm === null || usernameEmailForm === void 0 ? void 0 : usernameEmailForm.classList.remove("d-none");
     usernameEmailReadMode === null || usernameEmailReadMode === void 0 ? void 0 : usernameEmailReadMode.classList.add("d-none");
 };
-const onChangeEmailCancel = () => {
+const onChangeUsernameEmailCancel = () => {
     const usernameEmailForm = document.getElementById(UserSettingsId.usernameEmailForm);
     const readMode = document.getElementById(UserSettingsId.usernameEmailReadMode);
     usernameEmailForm === null || usernameEmailForm === void 0 ? void 0 : usernameEmailForm.classList.add("d-none");
@@ -77,7 +77,7 @@ const onUsernameEmailSave = () => {
     }
     existingEmailValue.innerText = emailValue !== null && emailValue !== void 0 ? emailValue : "";
     existingUsernameValue.innerText = usernameValue !== null && usernameValue !== void 0 ? usernameValue : "";
-    onChangeEmailCancel();
+    onChangeUsernameEmailCancel();
 };
 const onChangePasswordClick = () => {
     const passwordReadMode = document.getElementById(UserSettingsId.passwordReadMode);

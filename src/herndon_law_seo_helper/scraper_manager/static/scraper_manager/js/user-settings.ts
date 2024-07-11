@@ -44,7 +44,7 @@ const onChangeUsernameEmailClick = () => {
   usernameEmailReadMode?.classList.add("d-none");
 };
 
-const onChangeEmailCancel = () => {
+const onChangeUsernameEmailCancel = () => {
   const usernameEmailForm = document.getElementById(
     UserSettingsId.usernameEmailForm
   );
@@ -128,7 +128,7 @@ const onUsernameEmailSave = () => {
   existingEmailValue.innerText = emailValue ?? "";
   existingUsernameValue.innerText = usernameValue ?? "";
 
-  onChangeEmailCancel();
+  onChangeUsernameEmailCancel();
 };
 
 const onChangePasswordClick = () => {
