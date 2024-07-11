@@ -2,12 +2,12 @@
 /// <reference path="./ela-settings.ts">
 
 enum UserSettingsId {
-  emailForm = "user-settings-email-form",
-  changeEmailButton = "user-settings-change-email-button",
+  usernameEmailForm = "user-settings-username-email-form",
+  changeUsernameEmailButton = "user-settings-change-username-email-button",
   emailErrorMessage = "user-settings-email-error-message",
   emailInput = "user-settings-email-input",
   emailSpinner = "user-settings-email-spinner",
-  emailReadMode = "user-settings-change-email-read-mode",
+  usernameEmailReadMode = "user-settings-username-email-read-mode",
   existingEmailValue = "user-settings-existing-email-value",
   passwordReadMode = "user-settings-change-password-read-mode",
   passwordForm = "user-settings-password-form",
@@ -29,17 +29,21 @@ type UserSettingsPasswordForm = {
   confirmPassword: FormField;
 };
 
-const onChangeEmailClick = () => {
-  const emailForm = document.getElementById(UserSettingsId.emailForm);
-  const emailReadMode = document.getElementById(UserSettingsId.emailReadMode);
+const onChangeUsernameEmailClick = () => {
+  const emailForm = document.getElementById(UserSettingsId.usernameEmailForm);
+  const emailReadMode = document.getElementById(
+    UserSettingsId.usernameEmailReadMode
+  );
 
   emailForm?.classList.remove("d-none");
   emailReadMode?.classList.add("d-none");
 };
 
 const onChangeEmailCancel = () => {
-  const emailForm = document.getElementById(UserSettingsId.emailForm);
-  const emailReadMode = document.getElementById(UserSettingsId.emailReadMode);
+  const emailForm = document.getElementById(UserSettingsId.usernameEmailForm);
+  const emailReadMode = document.getElementById(
+    UserSettingsId.usernameEmailReadMode
+  );
 
   emailForm?.classList.add("d-none");
   emailReadMode?.classList.remove("d-none");
