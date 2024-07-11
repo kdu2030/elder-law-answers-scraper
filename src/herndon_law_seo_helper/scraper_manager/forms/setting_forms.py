@@ -23,6 +23,9 @@ class WebsiteConfigurationForm(forms.Form):
 
 
 class UserSettingsForm(forms.Form):
+    username = forms.CharField(widget=forms.TextInput(
+        attrs={"placeholder": "Username", "class": "form-control mb-3", "id": "user-settings-username-input", "onblur": "onChangeUsernameBlur()"}))
+
     email = forms.EmailField(widget=forms.EmailInput(
         attrs={"placeholder": "Email", "class": "form-control", "id": "user-settings-email-input", "onblur": "onChangeEmailBlur()"}))
 

@@ -1,5 +1,6 @@
 "use strict";
 /// <reference path="./sign-in.ts">
+/// <reference path="./ela-settings.ts">
 var UserSettingsId;
 (function (UserSettingsId) {
     UserSettingsId["emailForm"] = "user-settings-email-form";

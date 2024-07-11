@@ -1,55 +1,75 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 {% load i18n %}
-{% load static %} 
-{% block page_title%} Settings {% endblock page_title %} 
-
-{% block head_content %} 
+{% load static %}
+{% block page_title %}
+    Settings
+{% endblock page_title %}
+{% block head_content %}
     <script src="{% static 'scraper_manager/js/ela-settings.js' %}"></script>
     <script src="{% static 'scraper_manager/js/sign-in.js' %}"></script>
     <script src="{% static 'scraper_manager/js/user-settings.js' %}"></script>
-{%endblock head_content %}
-
-{% block content %} 
+{% endblock head_content %}
+{% block content %}
     <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
         <div class="w-75 h-75">
             <h4>Settings</h4>
             <div class="row h-100">
                 <div class="col-4">
                     <ul class="list-group">
-                        <a a href="{% url 'settings' %}" class="list-group-item list-group-item-action">
+                        <a a
+                           href="{% url 'settings' %}"
+                           class="list-group-item list-group-item-action">
                             <i class="bi bi-globe-americas"></i>
                             Website Settings
                         </a>
-                        <a href="{% url 'user_settings' %}" class="list-group-item list-group-item-action active bg-herndon-law">
+                        <a href="{% url 'user_settings' %}"
+                           class="list-group-item list-group-item-action active bg-herndon-law">
                             <i class="bi bi-gear-wide"></i>
                             User Settings
                         </a>
                     </ul>
                 </div>
-
                 <div class="col">
                     <div class="card h-100">
                         <div class="card-body">
+                            <h5 class="mb-3">User Settings</h5>
                             <div class="mb-3">
-                                <h5 class="mb-3">User Settings</h5>
-                                <p class="fw-bold">Email</p>
-
+                                <p class="fw-bold">Username and Email</p>
                                 <div id="user-settings-change-email-read-mode">
-                                    <p id="user-settings-existing-email-value">{{ email | default:""}}</p>
-                                    <button class="btn btn-outline-primary outline-herndon-law" id="user-settings-change-email-button" onclick="onChangeEmailClick()">Change Email</button>
+                                    <div class="mb-3">
+                                        <p class="mb-1 w-25">Username</p>
+                                        <p>{{ user.username }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="mb-1 w-25">Email</p>
+                                        <p id="user-settings-existing-email-value">{{ user.email }}</p>
+                                    </div>
+                                    <button class="btn btn-outline-primary outline-herndon-law"
+                                            id="user-settings-change-email-button"
+                                            onclick="onChangeEmailClick()">Change Email</button>
                                 </div>
-                                
                                 <form class="d-none" id="user-settings-email-form">
                                     {% csrf_token %}
-                                    <label for="{{ form.email.id_for_label }}" class="form-label">Email<span class="text-danger">*</span></label>
-                                    {{ form.email }}
-                                    <div class="invalid-feedback" id="user-settings-email-error-message">
-                                    </div>
+                                    <label for="{{ form.username.id_for_label }}" class="form-label">
+                                        Username<span class="text-danger">*</span>
+                                    </label>
+
+                                    {{ form.username }}
                                     
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">
+                                        Email<span class="text-danger">*</span>
+                                    </label>
+                                    {{ form.email }}
+                                    <div class="invalid-feedback" id="user-settings-email-error-message"></div>
                                     <div class="d-flex flex-row justify-content-end mt-3">
-                                        <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onChangeEmailCancel()">Cancel</button>
-                                        <button class="btn btn-primary bg-herndon-law" type="button" onclick="onChangeEmailSave()">
-                                            <div class="spinner-border spinner-border-sm text-white d-none" id="user-settings-email-spinner"></div> 
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3"
+                                                type="button"
+                                                onclick="onChangeEmailCancel()">Cancel</button>
+                                        <button class="btn btn-primary bg-herndon-law"
+                                                type="button"
+                                                onclick="onChangeEmailSave()">
+                                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                                 id="user-settings-email-spinner"></div>
                                             Save
                                         </button>
                                     </div>
@@ -59,37 +79,43 @@
                                 <p class="fw-bold">Password</p>
                                 <div id="user-settings-change-password-read-mode">
                                     <p id="user-settings-password-message">{{ password_msg }}</p>
-                                    <button class="btn btn-outline-primary outline-herndon-law" type="button" onclick="onChangePasswordClick()">Change Password</button>
+                                    <button class="btn btn-outline-primary outline-herndon-law"
+                                            type="button"
+                                            onclick="onChangePasswordClick()">Change Password</button>
                                 </div>
-
                                 <form class="d-none" id="user-settings-password-form">
                                     {% csrf_token %}
                                     <div class="mb-3">
-                                        <label for="{{ form.password.id_for_label }}" class="form-label">Password<span class="text-danger">*</span></label>
+                                        <label for="{{ form.password.id_for_label }}" class="form-label">
+                                            Password<span class="text-danger">*</span>
+                                        </label>
                                         {{ form.password }}
-                                        <div class="invalid-feedback" id="user-settings-password-error-message">
-                                        </div>
+                                        <div class="invalid-feedback" id="user-settings-password-error-message"></div>
                                     </div>
-
-                                    <label for="{{ form.confirm_password.id_for_label }}" class="form-label">Confirm Password<span class="text-danger">*</span></label>
+                                    <label for="{{ form.confirm_password.id_for_label }}" class="form-label">
+                                        Confirm Password<span class="text-danger">*</span>
+                                    </label>
                                     {{ form.confirm_password }}
-                                    <div class="invalid-feedback" id="user-settings-confirm-password-error-message">
-                                    </div>
-                                    
+                                    <div class="invalid-feedback"
+                                         id="user-settings-confirm-password-error-message"></div>
                                     <div class="d-flex flex-row justify-content-end mt-3">
-                                        <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onChangePasswordCancel()">Cancel</button>
-                                        <button class="btn btn-primary bg-herndon-law" type="button" onclick="onChangePasswordSave()">
-                                            <div class="spinner-border spinner-border-sm text-white d-none" id="user-settings-password-spinner"></div> 
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3"
+                                                type="button"
+                                                onclick="onChangePasswordCancel()">Cancel</button>
+                                        <button class="btn btn-primary bg-herndon-law"
+                                                type="button"
+                                                onclick="onChangePasswordSave()">
+                                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                                 id="user-settings-password-spinner"></div>
                                             Save
                                         </button>
                                     </div>
                                 </form>
                             </div>
                         </div>
-                        
                     </div>
                 </div>
             </div>
         </div>
     </div>
-{% endblock content%}
+{% endblock content %}

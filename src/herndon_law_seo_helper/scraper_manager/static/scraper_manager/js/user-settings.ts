@@ -1,4 +1,5 @@
 /// <reference path="./sign-in.ts">
+/// <reference path="./ela-settings.ts">
 
 enum UserSettingsId {
   emailForm = "user-settings-email-form",

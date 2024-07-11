@@ -6,6 +6,7 @@ from typing import Union
 import json
 import traceback
 from ..helpers.encryption_helpers import encrypt_string
+from django.contrib.auth.decorators import login_required
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
@@ -52,6 +53,14 @@ def ela_settings_post(request: HttpRequest) -> Union[HttpResponse, JsonResponse]
         return JsonResponse({"isError": True, "error": traceback.format_exc()})
 
 
+@login_required
 def user_settings_get(request: HttpRequest) -> HttpResponse:
-    form = UserSettingsForm()
-    return render(request, "scraper_manager/user-settings.html", {"form": form})
+    user = request.user
+    user_form_initial_data = {
+        "email": user.email,
+        "username": user.username,
+    }
+
+    password_read_mode = "**********"
+    form = UserSettingsForm(initial=user_form_initial_data)
+    return render(request, "scraper_manager/user-settings.html", {"form": form, "password": password_read_mode})
