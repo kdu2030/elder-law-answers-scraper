@@ -7,6 +7,9 @@ enum UserSettingsId {
   emailErrorMessage = "user-settings-email-error-message",
   emailInput = "user-settings-email-input",
   emailSpinner = "user-settings-email-spinner",
+  usernameInput = "user-settings-username-input",
+  usernameErrorMessage = "user-settings-username-error-message",
+  existingUsernameValue = "user-settings-existing-username-value",
   usernameEmailReadMode = "user-settings-username-email-read-mode",
   existingEmailValue = "user-settings-existing-email-value",
   passwordReadMode = "user-settings-change-password-read-mode",
@@ -30,23 +33,27 @@ type UserSettingsPasswordForm = {
 };
 
 const onChangeUsernameEmailClick = () => {
-  const emailForm = document.getElementById(UserSettingsId.usernameEmailForm);
-  const emailReadMode = document.getElementById(
+  const usernameEmailForm = document.getElementById(
+    UserSettingsId.usernameEmailForm
+  );
+  const usernameEmailReadMode = document.getElementById(
     UserSettingsId.usernameEmailReadMode
   );
 
-  emailForm?.classList.remove("d-none");
-  emailReadMode?.classList.add("d-none");
+  usernameEmailForm?.classList.remove("d-none");
+  usernameEmailReadMode?.classList.add("d-none");
 };
 
 const onChangeEmailCancel = () => {
-  const emailForm = document.getElementById(UserSettingsId.usernameEmailForm);
-  const emailReadMode = document.getElementById(
+  const usernameEmailForm = document.getElementById(
+    UserSettingsId.usernameEmailForm
+  );
+  const readMode = document.getElementById(
     UserSettingsId.usernameEmailReadMode
   );
 
-  emailForm?.classList.add("d-none");
-  emailReadMode?.classList.remove("d-none");
+  usernameEmailForm?.classList.add("d-none");
+  readMode?.classList.remove("d-none");
 };
 
 const onChangeEmailBlur = (): FormField => {
@@ -70,10 +77,39 @@ const onChangeEmailBlur = (): FormField => {
   return { isValid: true, value: emailValue };
 };
 
-const onChangeEmailSave = () => {
-  const { isValid, value } = onChangeEmailBlur();
+const onChangeUsernameBlur = (): FormField => {
+  const userInput = document.getElementById(
+    UserSettingsId.usernameInput
+  ) as HTMLInputElement | null;
 
-  if (!isValid) {
+  const userErrorMessageDiv = document.getElementById(
+    UserSettingsId.usernameErrorMessage
+  ) as HTMLDivElement | null;
+
+  if (!userInput || !userErrorMessageDiv) {
+    return { isValid: false };
+  }
+
+  const usernameErrorMessage = validateUsername(userInput.value);
+
+  if (usernameErrorMessage) {
+    addErrorMessage(userInput, userErrorMessageDiv, usernameErrorMessage);
+  } else {
+    removeErrorMessage(userInput, userErrorMessageDiv);
+  }
+
+  return {
+    isValid: usernameErrorMessage == null,
+    value: userInput.value,
+  };
+};
+
+const onUsernameEmailSave = () => {
+  const { isValid: isEmailValid, value: emailValue } = onChangeEmailBlur();
+  const { isValid: isUsernameValid, value: usernameValue } =
+    onChangeUsernameBlur();
+
+  if (!isEmailValid || !isUsernameValid) {
     return;
   }
 
@@ -81,11 +117,17 @@ const onChangeEmailSave = () => {
     UserSettingsId.existingEmailValue
   );
 
-  if (!existingEmailValue || !value) {
+  const existingUsernameValue = document.getElementById(
+    UserSettingsId.existingUsernameValue
+  );
+
+  if (!existingEmailValue || !existingUsernameValue) {
     return;
   }
 
-  existingEmailValue.innerText = value;
+  existingEmailValue.innerText = emailValue ?? "";
+  existingUsernameValue.innerText = usernameValue ?? "";
+
   onChangeEmailCancel();
 };
 

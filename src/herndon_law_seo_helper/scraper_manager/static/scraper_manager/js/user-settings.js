@@ -8,6 +8,9 @@ var UserSettingsId;
     UserSettingsId["emailErrorMessage"] = "user-settings-email-error-message";
     UserSettingsId["emailInput"] = "user-settings-email-input";
     UserSettingsId["emailSpinner"] = "user-settings-email-spinner";
+    UserSettingsId["usernameInput"] = "user-settings-username-input";
+    UserSettingsId["usernameErrorMessage"] = "user-settings-username-error-message";
+    UserSettingsId["existingUsernameValue"] = "user-settings-existing-username-value";
     UserSettingsId["usernameEmailReadMode"] = "user-settings-username-email-read-mode";
     UserSettingsId["existingEmailValue"] = "user-settings-existing-email-value";
     UserSettingsId["passwordReadMode"] = "user-settings-change-password-read-mode";
@@ -20,16 +23,16 @@ var UserSettingsId;
     UserSettingsId["existingPasswordValue"] = "user-settings-password-message";
 })(UserSettingsId || (UserSettingsId = {}));
 const onChangeUsernameEmailClick = () => {
-    const emailForm = document.getElementById(UserSettingsId.usernameEmailForm);
-    const emailReadMode = document.getElementById(UserSettingsId.usernameEmailReadMode);
-    emailForm === null || emailForm === void 0 ? void 0 : emailForm.classList.remove("d-none");
-    emailReadMode === null || emailReadMode === void 0 ? void 0 : emailReadMode.classList.add("d-none");
+    const usernameEmailForm = document.getElementById(UserSettingsId.usernameEmailForm);
+    const usernameEmailReadMode = document.getElementById(UserSettingsId.usernameEmailReadMode);
+    usernameEmailForm === null || usernameEmailForm === void 0 ? void 0 : usernameEmailForm.classList.remove("d-none");
+    usernameEmailReadMode === null || usernameEmailReadMode === void 0 ? void 0 : usernameEmailReadMode.classList.add("d-none");
 };
 const onChangeEmailCancel = () => {
-    const emailForm = document.getElementById(UserSettingsId.usernameEmailForm);
-    const emailReadMode = document.getElementById(UserSettingsId.usernameEmailReadMode);
-    emailForm === null || emailForm === void 0 ? void 0 : emailForm.classList.add("d-none");
-    emailReadMode === null || emailReadMode === void 0 ? void 0 : emailReadMode.classList.remove("d-none");
+    const usernameEmailForm = document.getElementById(UserSettingsId.usernameEmailForm);
+    const readMode = document.getElementById(UserSettingsId.usernameEmailReadMode);
+    usernameEmailForm === null || usernameEmailForm === void 0 ? void 0 : usernameEmailForm.classList.add("d-none");
+    readMode === null || readMode === void 0 ? void 0 : readMode.classList.remove("d-none");
 };
 const onChangeEmailBlur = () => {
     const emailInput = document.getElementById(UserSettingsId.emailInput);
@@ -43,16 +46,37 @@ const onChangeEmailBlur = () => {
     removeErrorMessage(emailInput, emailErrorMessage);
     return { isValid: true, value: emailValue };
 };
-const onChangeEmailSave = () => {
-    const { isValid, value } = onChangeEmailBlur();
-    if (!isValid) {
+const onChangeUsernameBlur = () => {
+    const userInput = document.getElementById(UserSettingsId.usernameInput);
+    const userErrorMessageDiv = document.getElementById(UserSettingsId.usernameErrorMessage);
+    if (!userInput || !userErrorMessageDiv) {
+        return { isValid: false };
+    }
+    const usernameErrorMessage = validateUsername(userInput.value);
+    if (usernameErrorMessage) {
+        addErrorMessage(userInput, userErrorMessageDiv, usernameErrorMessage);
+    }
+    else {
+        removeErrorMessage(userInput, userErrorMessageDiv);
+    }
+    return {
+        isValid: usernameErrorMessage == null,
+        value: userInput.value,
+    };
+};
+const onUsernameEmailSave = () => {
+    const { isValid: isEmailValid, value: emailValue } = onChangeEmailBlur();
+    const { isValid: isUsernameValid, value: usernameValue } = onChangeUsernameBlur();
+    if (!isEmailValid || !isUsernameValid) {
         return;
     }
     const existingEmailValue = document.getElementById(UserSettingsId.existingEmailValue);
-    if (!existingEmailValue || !value) {
+    const existingUsernameValue = document.getElementById(UserSettingsId.existingUsernameValue);
+    if (!existingEmailValue || !existingUsernameValue) {
         return;
     }
-    existingEmailValue.innerText = value;
+    existingEmailValue.innerText = emailValue !== null && emailValue !== void 0 ? emailValue : "";
+    existingUsernameValue.innerText = usernameValue !== null && usernameValue !== void 0 ? usernameValue : "";
     onChangeEmailCancel();
 };
 const onChangePasswordClick = () => {
