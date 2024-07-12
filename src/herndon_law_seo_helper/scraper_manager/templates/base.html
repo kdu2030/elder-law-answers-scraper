@@ -34,12 +34,13 @@
                 <a class="nav-link text-white" href={% url 'settings' %}>Settings</a>
               </li>
               <li></li>
-              <li class="nav-item dropdown align-items-center">
-                <a class="nav-link dropdown-toggle text-white"
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle text-white d-flex align-items-center"
                    href="#"
                    data-bs-toggle="dropdown">
                   {% if not user.profile %}
-                    <img src="https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
+                    <img class="me-1"
+                         src="https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
                          width="35px" />
                   {% endif %}
                   <span id="navbar-username">{{ user.username }}</span>
