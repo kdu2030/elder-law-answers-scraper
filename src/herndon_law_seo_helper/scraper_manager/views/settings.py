@@ -7,6 +7,7 @@ import json
 import traceback
 from ..helpers.encryption_helpers import encrypt_string
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
@@ -64,3 +65,22 @@ def user_settings_get(request: HttpRequest) -> HttpResponse:
     password_read_mode = "**********"
     form = UserSettingsForm(initial=user_form_initial_data)
     return render(request, "scraper_manager/user-settings.html", {"form": form, "password": password_read_mode})
+
+
+def user_settings_post(request: HttpRequest) -> HttpResponse:
+    if request.method != "POST" or not request.user:
+        return JsonResponse({"isError": True}, status=400)
+
+    user: User = request.user
+
+    try:
+        user.username = request.POST.get("username", default=user.username)
+        user.email = request.POST.get("email", default=user.email)
+        password = request.POST.get("password", default=user.password)
+
+        user.set_password(password)
+
+        user.save()
+        return JsonResponse({"isError": False})
+    except:
+        return JsonResponse({"isError": True, "error": traceback.format_exc()}, status=500)
