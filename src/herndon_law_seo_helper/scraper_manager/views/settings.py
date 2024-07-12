@@ -67,8 +67,8 @@ def user_settings_get(request: HttpRequest) -> HttpResponse:
     return render(request, "scraper_manager/user-settings.html", {"form": form, "password": password_read_mode})
 
 
-def user_settings_post(request: HttpRequest) -> HttpResponse:
-    if request.method != "POST" or not request.user:
+def user_settings_put(request: HttpRequest) -> HttpResponse:
+    if request.method != "PUT" or not request.user:
         return JsonResponse({"isError": True}, status=400)
 
     user: User = request.user
