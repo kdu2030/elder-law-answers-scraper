@@ -8,8 +8,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.putUserSettings = void 0;
 const putUserSettings = (request, csrfToken) => __awaiter(void 0, void 0, void 0, function* () {
     const url = "/api/user-settings";
     try {
@@ -27,4 +25,3 @@ const putUserSettings = (request, csrfToken) => __awaiter(void 0, void 0, void 0
         return { isError: true };
     }
 });
-exports.putUserSettings = putUserSettings;

@@ -1,6 +1,17 @@
 "use strict";
 /// <reference path="./sign-in.ts">
 /// <reference path="./ela-settings.ts">
+/// <reference path="./api/put-user-settings.ts">
+/// <reference path="./toaster.ts">
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var UserSettingsId;
 (function (UserSettingsId) {
     UserSettingsId["usernameEmailForm"] = "user-settings-username-email-form";
@@ -65,12 +76,25 @@ const onChangeUsernameBlur = () => {
         value: userInput.value,
     };
 };
-const onUsernameEmailSave = () => {
+const onUsernameEmailSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const { isValid: isEmailValid, value: emailValue } = onChangeEmailBlur();
     const { isValid: isUsernameValid, value: usernameValue } = onChangeUsernameBlur();
-    if (!isEmailValid || !isUsernameValid) {
+    const spinner = document.getElementById(UserSettingsId.usernameEmailSpinner);
+    const csrfToken = getCsrfToken();
+    if (!isEmailValid || !isUsernameValid || !csrfToken) {
         return;
     }
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+    const response = yield putUserSettings({
+        username: usernameValue,
+        email: emailValue,
+    }, csrfToken);
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    if (response.isError) {
+        createErrorToaster("Unable to save user data", "Unable to save username or email");
+        return;
+    }
+    createSuccessToaster("Successfully saved user data", "Saved updated username and email");
     const existingEmailValue = document.getElementById(UserSettingsId.existingEmailValue);
     const existingUsernameValue = document.getElementById(UserSettingsId.existingUsernameValue);
     const navbarUsername = document.getElementById(UserSettingsId.navbarUsername);
@@ -81,7 +105,7 @@ const onUsernameEmailSave = () => {
     existingUsernameValue.innerText = usernameValue !== null && usernameValue !== void 0 ? usernameValue : "";
     navbarUsername.innerText = usernameValue !== null && usernameValue !== void 0 ? usernameValue : "";
     onChangeUsernameEmailCancel();
-};
+});
 const onChangePasswordClick = () => {
     const passwordReadMode = document.getElementById(UserSettingsId.passwordReadMode);
     const passwordForm = document.getElementById(UserSettingsId.passwordForm);

@@ -90,6 +90,13 @@ const onElaUsernameBlur = (event: FocusEvent) => {
   }
 };
 
+const getCsrfToken = (): string | undefined => {
+  const csrfTokenInput = document.getElementsByName(
+    csrfTokenName
+  )[0] as HTMLInputElement;
+  return csrfTokenInput?.value;
+};
+
 const onElaUsernameSave = async () => {
   const userInput = document.getElementById(
     ElaSettingsIds.usernameInput
@@ -98,10 +105,7 @@ const onElaUsernameSave = async () => {
     ElaSettingsIds.usernameErrorMessage
   ) as HTMLDivElement;
 
-  const csrfTokenInput = document.getElementsByName(
-    csrfTokenName
-  )[0] as HTMLInputElement;
-  const csrfToken = csrfTokenInput?.value;
+  const csrfToken = getCsrfToken();
 
   if (!userInput || !userErrorMessageDiv || !csrfToken) {
     return;

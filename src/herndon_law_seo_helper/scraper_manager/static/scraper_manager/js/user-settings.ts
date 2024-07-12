@@ -1,5 +1,7 @@
 /// <reference path="./sign-in.ts">
 /// <reference path="./ela-settings.ts">
+/// <reference path="./api/put-user-settings.ts">
+/// <reference path="./toaster.ts">
 
 enum UserSettingsId {
   usernameEmailForm = "user-settings-username-email-form",
@@ -105,19 +107,46 @@ const onChangeUsernameBlur = (): FormField => {
   };
 };
 
-const onUsernameEmailSave = () => {
+const onUsernameEmailSave = async () => {
   const { isValid: isEmailValid, value: emailValue } = onChangeEmailBlur();
   const { isValid: isUsernameValid, value: usernameValue } =
     onChangeUsernameBlur();
+  const spinner = document.getElementById(UserSettingsId.usernameEmailSpinner);
+  const csrfToken = getCsrfToken();
 
-  if (!isEmailValid || !isUsernameValid) {
+  if (!isEmailValid || !isUsernameValid || !csrfToken) {
     return;
   }
+
+  spinner?.classList.remove("d-none");
+
+  const response = await putUserSettings(
+    {
+      username: usernameValue,
+      email: emailValue,
+    },
+    csrfToken
+  );
+
+  spinner?.classList.add("d-none");
+
+  if (response.isError) {
+    createErrorToaster(
+      "Unable to save user data",
+      "Unable to save username or email"
+    );
+
+    return;
+  }
+
+  createSuccessToaster(
+    "Successfully saved user data",
+    "Saved updated username and email"
+  );
 
   const existingEmailValue = document.getElementById(
     UserSettingsId.existingEmailValue
   );
-
   const existingUsernameValue = document.getElementById(
     UserSettingsId.existingUsernameValue
   );

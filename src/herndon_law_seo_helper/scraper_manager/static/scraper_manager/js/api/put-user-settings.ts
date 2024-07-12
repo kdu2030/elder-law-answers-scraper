@@ -8,7 +8,7 @@ type PutUserSettingsResponse = {
   isError: boolean;
 };
 
-export const putUserSettings = async (
+const putUserSettings = async (
   request: PutUserSettingsRequest,
   csrfToken: string
 ): Promise<PutUserSettingsResponse> => {
