@@ -6,7 +6,7 @@ enum UserSettingsId {
   changeUsernameEmailButton = "user-settings-change-username-email-button",
   emailErrorMessage = "user-settings-email-error-message",
   emailInput = "user-settings-email-input",
-  emailSpinner = "user-settings-email-spinner",
+  usernameEmailSpinner = "user-settings-username-email-spinner",
   usernameInput = "user-settings-username-input",
   usernameErrorMessage = "user-settings-username-error-message",
   existingUsernameValue = "user-settings-existing-username-value",
@@ -20,6 +20,7 @@ enum UserSettingsId {
   confirmPasswordErrorMessage = "user-settings-confirm-password-error-message",
   passwordSpinner = "user-settings-password-spinner",
   existingPasswordValue = "user-settings-password-message",
+  navbarUsername = "navbar-username",
 }
 
 type FormField = {
@@ -121,12 +122,15 @@ const onUsernameEmailSave = () => {
     UserSettingsId.existingUsernameValue
   );
 
-  if (!existingEmailValue || !existingUsernameValue) {
+  const navbarUsername = document.getElementById(UserSettingsId.navbarUsername);
+
+  if (!existingEmailValue || !existingUsernameValue || !navbarUsername) {
     return;
   }
 
   existingEmailValue.innerText = emailValue ?? "";
   existingUsernameValue.innerText = usernameValue ?? "";
+  navbarUsername.innerText = usernameValue ?? "";
 
   onChangeUsernameEmailCancel();
 };

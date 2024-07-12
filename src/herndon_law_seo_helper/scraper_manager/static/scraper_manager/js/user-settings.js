@@ -7,7 +7,7 @@ var UserSettingsId;
     UserSettingsId["changeUsernameEmailButton"] = "user-settings-change-username-email-button";
     UserSettingsId["emailErrorMessage"] = "user-settings-email-error-message";
     UserSettingsId["emailInput"] = "user-settings-email-input";
-    UserSettingsId["emailSpinner"] = "user-settings-email-spinner";
+    UserSettingsId["usernameEmailSpinner"] = "user-settings-username-email-spinner";
     UserSettingsId["usernameInput"] = "user-settings-username-input";
     UserSettingsId["usernameErrorMessage"] = "user-settings-username-error-message";
     UserSettingsId["existingUsernameValue"] = "user-settings-existing-username-value";
@@ -21,6 +21,7 @@ var UserSettingsId;
     UserSettingsId["confirmPasswordErrorMessage"] = "user-settings-confirm-password-error-message";
     UserSettingsId["passwordSpinner"] = "user-settings-password-spinner";
     UserSettingsId["existingPasswordValue"] = "user-settings-password-message";
+    UserSettingsId["navbarUsername"] = "navbar-username";
 })(UserSettingsId || (UserSettingsId = {}));
 const onChangeUsernameEmailClick = () => {
     const usernameEmailForm = document.getElementById(UserSettingsId.usernameEmailForm);
@@ -72,11 +73,13 @@ const onUsernameEmailSave = () => {
     }
     const existingEmailValue = document.getElementById(UserSettingsId.existingEmailValue);
     const existingUsernameValue = document.getElementById(UserSettingsId.existingUsernameValue);
-    if (!existingEmailValue || !existingUsernameValue) {
+    const navbarUsername = document.getElementById(UserSettingsId.navbarUsername);
+    if (!existingEmailValue || !existingUsernameValue || !navbarUsername) {
         return;
     }
     existingEmailValue.innerText = emailValue !== null && emailValue !== void 0 ? emailValue : "";
     existingUsernameValue.innerText = usernameValue !== null && usernameValue !== void 0 ? usernameValue : "";
+    navbarUsername.innerText = usernameValue !== null && usernameValue !== void 0 ? usernameValue : "";
     onChangeUsernameEmailCancel();
 };
 const onChangePasswordClick = () => {
