@@ -76,6 +76,18 @@ const onChangeUsernameBlur = () => {
         value: userInput.value,
     };
 };
+const addFormErrorsFromApi = (formErrors) => {
+    const usernameInput = document.getElementById(UserSettingsId.usernameInput);
+    const usernameErrorDiv = document.getElementById(UserSettingsId.usernameErrorMessage);
+    const emailInput = document.getElementById(UserSettingsId.emailInput);
+    const emailErrorDiv = document.getElementById(UserSettingsId.emailErrorMessage);
+    if (formErrors.username) {
+        addErrorMessage(usernameInput, usernameErrorDiv, formErrors.username);
+    }
+    if (formErrors.email) {
+        addErrorMessage(emailInput, emailErrorDiv, formErrors.email);
+    }
+};
 const onUsernameEmailSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const { isValid: isEmailValid, value: emailValue } = onChangeEmailBlur();
     const { isValid: isUsernameValid, value: usernameValue } = onChangeUsernameBlur();
@@ -92,6 +104,7 @@ const onUsernameEmailSave = () => __awaiter(void 0, void 0, void 0, function* ()
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
     if (response.isError) {
         createErrorToaster("Unable to save user data", "Unable to save username or email");
+        response.formErrors && addFormErrorsFromApi(response.formErrors);
         return;
     }
     createSuccessToaster("Successfully saved user data", "Saved updated username and email");

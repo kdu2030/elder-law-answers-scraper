@@ -107,6 +107,30 @@ const onChangeUsernameBlur = (): FormField => {
   };
 };
 
+const addFormErrorsFromApi = (formErrors: UserSettingsFormErrors) => {
+  const usernameInput = document.getElementById(
+    UserSettingsId.usernameInput
+  ) as HTMLInputElement;
+  const usernameErrorDiv = document.getElementById(
+    UserSettingsId.usernameErrorMessage
+  ) as HTMLDivElement;
+
+  const emailInput = document.getElementById(
+    UserSettingsId.emailInput
+  ) as HTMLInputElement;
+  const emailErrorDiv = document.getElementById(
+    UserSettingsId.emailErrorMessage
+  ) as HTMLDivElement;
+
+  if (formErrors.username) {
+    addErrorMessage(usernameInput, usernameErrorDiv, formErrors.username);
+  }
+
+  if (formErrors.email) {
+    addErrorMessage(emailInput, emailErrorDiv, formErrors.email);
+  }
+};
+
 const onUsernameEmailSave = async () => {
   const { isValid: isEmailValid, value: emailValue } = onChangeEmailBlur();
   const { isValid: isUsernameValid, value: usernameValue } =
@@ -135,7 +159,7 @@ const onUsernameEmailSave = async () => {
       "Unable to save user data",
       "Unable to save username or email"
     );
-
+    response.formErrors && addFormErrorsFromApi(response.formErrors);
     return;
   }
 

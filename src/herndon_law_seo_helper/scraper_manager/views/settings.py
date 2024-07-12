@@ -8,6 +8,8 @@ import traceback
 from ..helpers.encryption_helpers import encrypt_string
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
+from django.contrib.auth import update_session_auth_hash
+from typing import Dict
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
@@ -72,15 +74,46 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
         return JsonResponse({"isError": True}, status=400)
 
     user: User = request.user
+    existing_username = request.user.username
+    existing_email = request.user.email
 
     try:
-        user.username = request.POST.get("username", default=user.username)
-        user.email = request.POST.get("email", default=user.email)
-        password = request.POST.get("password", default=user.password)
+        request_body: Dict = json.loads(request.body.decode())
+        is_form_valid = True
+        form_errors = {}
 
-        user.set_password(password)
+        user.username = request_body.get("username", user.username)
+        user.email = request_body.get("email", user.email)
+
+        usernames = list(User.objects.values_list(
+            "username", flat=True))
+        usernames.remove(existing_username)
+
+        emails = list(User.objects.values_list("email", flat=True))
+        emails.remove(existing_email)
+
+        if user.username in usernames:
+            is_form_valid = False
+            form_errors["username"] = "A user with this username already exists."
+
+        if user.email in emails:
+            is_form_valid = False
+            form_errors["email"] = "A user with this email already exists."
+
+        if not is_form_valid:
+            return JsonResponse({"isError": True, "formErrors": form_errors}, status=400)
+
+        password = request_body.get("password")
+
+        if password:
+            user.set_password(password)
 
         user.save()
+
+        user = User.objects.get(id=user.id)
+        update_session_auth_hash(request, user)
+
         return JsonResponse({"isError": False})
     except:
+        print(traceback.format_exc())
         return JsonResponse({"isError": True, "error": traceback.format_exc()}, status=500)

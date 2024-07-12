@@ -4,8 +4,11 @@ type PutUserSettingsRequest = {
   password?: string;
 };
 
+type UserSettingsFormErrors = PutUserSettingsRequest;
+
 type PutUserSettingsResponse = {
   isError: boolean;
+  formErrors?: UserSettingsFormErrors;
 };
 
 const putUserSettings = async (
