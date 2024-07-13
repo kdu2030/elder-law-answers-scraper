@@ -24,6 +24,7 @@ enum UserSettingsId {
   existingPasswordValue = "user-settings-password-message",
   navbarUsername = "navbar-username",
   uploadUserProfile = "user-settings-upload-profile-image",
+  uploadErrorMessage = "user-settings-upload-error",
 }
 
 const MAX_PROFILE_PICTURE_BYTES = 2 * 1024 * 1024;
@@ -312,7 +313,31 @@ const onChangeProfileImageClick = () => {
   profileInput?.click();
 };
 
+const updateProfileImageErrorMessage = (errorMessage: string | undefined) => {
+  const errorMessageElement = document.getElementById(
+    UserSettingsId.uploadErrorMessage
+  ) as HTMLParagraphElement | null;
+
+  if (!errorMessageElement) {
+    return;
+  }
+
+  errorMessageElement.innerText = errorMessage ?? "";
+
+  if (errorMessage) {
+    errorMessageElement.classList.remove("d-none");
+  } else {
+    errorMessageElement.classList.add("d-none");
+  }
+};
+
 const onUploadProfileImage = (event: Event) => {
   const eventTarget = event.target as HTMLInputElement;
-  const profileImage = eventTarget.files;
+  const files = eventTarget.files;
+
+  if (!files || files.length < 1) {
+    updateProfileImageErrorMessage(
+      "An image is required to change your profile picture."
+    );
+  }
 };

@@ -34,6 +34,7 @@ var UserSettingsId;
     UserSettingsId["existingPasswordValue"] = "user-settings-password-message";
     UserSettingsId["navbarUsername"] = "navbar-username";
     UserSettingsId["uploadUserProfile"] = "user-settings-upload-profile-image";
+    UserSettingsId["uploadErrorMessage"] = "user-settings-upload-error";
 })(UserSettingsId || (UserSettingsId = {}));
 const MAX_PROFILE_PICTURE_BYTES = 2 * 1024 * 1024;
 const onChangeUsernameEmailClick = () => {
@@ -190,7 +191,23 @@ const onChangeProfileImageClick = () => {
     const profileInput = document.getElementById(UserSettingsId.uploadUserProfile);
     profileInput === null || profileInput === void 0 ? void 0 : profileInput.click();
 };
+const updateProfileImageErrorMessage = (errorMessage) => {
+    const errorMessageElement = document.getElementById(UserSettingsId.uploadErrorMessage);
+    if (!errorMessageElement) {
+        return;
+    }
+    errorMessageElement.innerText = errorMessage !== null && errorMessage !== void 0 ? errorMessage : "";
+    if (errorMessage) {
+        errorMessageElement.classList.remove("d-none");
+    }
+    else {
+        errorMessageElement.classList.add("d-none");
+    }
+};
 const onUploadProfileImage = (event) => {
     const eventTarget = event.target;
-    const profileImage = eventTarget.files;
+    const files = eventTarget.files;
+    if (!files || files.length < 1) {
+        updateProfileImageErrorMessage("An image is required to change your profile picture.");
+    }
 };
