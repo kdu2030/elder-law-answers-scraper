@@ -41,16 +41,18 @@
                                         <img class="me-4"
                                              src="https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
                                              width="64px"
-                                             height="auto"
+                                             height="64px"
                                              alt="default profile picture" />
                                     {% endif %}
-                                    <div>
+                                    <div class="align-self-start" style="margin-top:13px">
                                         <input class="d-none"
                                                type="file"
                                                id="user-settings-upload-profile-image"
-                                               accept="image/jpeg,image/png" />
+                                               accept="image/jpeg,image/png"
+                                               onchange="onUploadProfileImage(event)" />
                                         <button class="btn btn-primary bg-herndon-law me-3"
                                                 onclick="onChangeProfileImageClick()">Change Profile Picture</button>
+                                        <p class="text-danger">Error</p>
                                     </div>
                                 </div>
                             </div>

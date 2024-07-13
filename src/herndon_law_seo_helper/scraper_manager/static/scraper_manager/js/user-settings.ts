@@ -26,6 +26,8 @@ enum UserSettingsId {
   uploadUserProfile = "user-settings-upload-profile-image",
 }
 
+const MAX_PROFILE_PICTURE_BYTES = 2 * 1024 * 1024;
+
 type FormField = {
   isValid: boolean;
   value?: string;
@@ -308,4 +310,9 @@ const onChangeProfileImageClick = () => {
     UserSettingsId.uploadUserProfile
   );
   profileInput?.click();
+};
+
+const onUploadProfileImage = (event: Event) => {
+  const eventTarget = event.target as HTMLInputElement;
+  const profileImage = eventTarget.files;
 };

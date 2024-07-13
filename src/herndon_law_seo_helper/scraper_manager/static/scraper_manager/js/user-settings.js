@@ -35,6 +35,7 @@ var UserSettingsId;
     UserSettingsId["navbarUsername"] = "navbar-username";
     UserSettingsId["uploadUserProfile"] = "user-settings-upload-profile-image";
 })(UserSettingsId || (UserSettingsId = {}));
+const MAX_PROFILE_PICTURE_BYTES = 2 * 1024 * 1024;
 const onChangeUsernameEmailClick = () => {
     const usernameEmailForm = document.getElementById(UserSettingsId.usernameEmailForm);
     const usernameEmailReadMode = document.getElementById(UserSettingsId.usernameEmailReadMode);
@@ -188,4 +189,8 @@ const onChangePasswordSave = () => __awaiter(void 0, void 0, void 0, function* (
 const onChangeProfileImageClick = () => {
     const profileInput = document.getElementById(UserSettingsId.uploadUserProfile);
     profileInput === null || profileInput === void 0 ? void 0 : profileInput.click();
+};
+const onUploadProfileImage = (event) => {
+    const eventTarget = event.target;
+    const profileImage = eventTarget.files;
 };
