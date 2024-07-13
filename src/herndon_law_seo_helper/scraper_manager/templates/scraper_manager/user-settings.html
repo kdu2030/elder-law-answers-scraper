@@ -18,8 +18,7 @@
             <div class="row h-100">
                 <div class="col-4">
                     <ul class="list-group">
-                        <a a
-                           href="{% url 'settings' %}"
+                        <a href="{% url 'settings' %}"
                            class="list-group-item list-group-item-action">
                             <i class="bi bi-globe-americas"></i>
                             Website Settings
@@ -35,6 +34,21 @@
                     <div class="card h-100">
                         <div class="card-body">
                             <h5 class="mb-3">User Settings</h5>
+                            <div class="mb-4">
+                                <p class="fw-bold">Profile Picture</p>
+                                <div class="d-flex flex-row align-items-center">
+                                    {% if not user.profile %}
+                                        <img class="me-4"
+                                             src="https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
+                                             width="64px"
+                                             height="auto"
+                                             alt="default profile picture" />
+                                    {% endif %}
+                                    <div>
+                                        <button class="btn btn-outline-primary outline-herndon-law">Change Profile Picture</button>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="mb-4">
                                 <p class="fw-bold">Username and Email</p>
                                 <div id="user-settings-username-email-read-mode">
