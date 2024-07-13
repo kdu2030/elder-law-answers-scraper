@@ -162,14 +162,25 @@ const onChangePasswordBlur = () => {
         confirmPassword: confirmPasswordField,
     };
 };
-const onChangePasswordSave = () => {
+const onChangePasswordSave = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
     const { password, confirmPassword } = onChangePasswordBlur();
-    if (!password.isValid || !confirmPassword.isValid) {
+    const csrfToken = getCsrfToken();
+    if (!password.isValid || !confirmPassword.isValid || !csrfToken) {
         return;
     }
+    const spinner = document.getElementById(UserSettingsId.passwordSpinner);
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+    const response = yield putUserSettings({ password: (_a = password.value) !== null && _a !== void 0 ? _a : "" }, csrfToken);
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    if (response.isError) {
+        createErrorToaster("Unable to save user data", "Unable to save updated password.");
+        return;
+    }
+    createSuccessToaster("User data saved successfully", "Updated password saved successfully.");
     const existingPasswordValue = document.getElementById(UserSettingsId.existingPasswordValue);
     if (existingPasswordValue) {
         existingPasswordValue.innerText = "**********";
     }
     onChangePasswordCancel();
-};
+});

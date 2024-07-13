@@ -261,12 +261,36 @@ const onChangePasswordBlur = (): UserSettingsPasswordForm => {
   };
 };
 
-const onChangePasswordSave = () => {
+const onChangePasswordSave = async () => {
   const { password, confirmPassword } = onChangePasswordBlur();
+  const csrfToken = getCsrfToken();
 
-  if (!password.isValid || !confirmPassword.isValid) {
+  if (!password.isValid || !confirmPassword.isValid || !csrfToken) {
     return;
   }
+
+  const spinner = document.getElementById(UserSettingsId.passwordSpinner);
+  spinner?.classList.remove("d-none");
+
+  const response = await putUserSettings(
+    { password: password.value ?? "" },
+    csrfToken
+  );
+
+  spinner?.classList.add("d-none");
+
+  if (response.isError) {
+    createErrorToaster(
+      "Unable to save user data",
+      "Unable to save updated password."
+    );
+    return;
+  }
+
+  createSuccessToaster(
+    "User data saved successfully",
+    "Updated password saved successfully."
+  );
 
   const existingPasswordValue = document.getElementById(
     UserSettingsId.existingPasswordValue
