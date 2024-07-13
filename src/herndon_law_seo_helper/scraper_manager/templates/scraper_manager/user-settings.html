@@ -45,7 +45,12 @@
                                              alt="default profile picture" />
                                     {% endif %}
                                     <div>
-                                        <button class="btn btn-outline-primary outline-herndon-law">Change Profile Picture</button>
+                                        <input class="d-none"
+                                               type="file"
+                                               id="user-settings-upload-profile-image"
+                                               accept="image/jpeg,image/png" />
+                                        <button class="btn btn-primary bg-herndon-law me-3"
+                                                onclick="onChangeProfileImageClick()">Change Profile Picture</button>
                                     </div>
                                 </div>
                             </div>

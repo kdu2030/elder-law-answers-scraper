@@ -33,6 +33,7 @@ var UserSettingsId;
     UserSettingsId["passwordSpinner"] = "user-settings-password-spinner";
     UserSettingsId["existingPasswordValue"] = "user-settings-password-message";
     UserSettingsId["navbarUsername"] = "navbar-username";
+    UserSettingsId["uploadUserProfile"] = "user-settings-upload-profile-image";
 })(UserSettingsId || (UserSettingsId = {}));
 const onChangeUsernameEmailClick = () => {
     const usernameEmailForm = document.getElementById(UserSettingsId.usernameEmailForm);
@@ -184,3 +185,7 @@ const onChangePasswordSave = () => __awaiter(void 0, void 0, void 0, function* (
     }
     onChangePasswordCancel();
 });
+const onChangeProfileImageClick = () => {
+    const profileInput = document.getElementById(UserSettingsId.uploadUserProfile);
+    profileInput === null || profileInput === void 0 ? void 0 : profileInput.click();
+};

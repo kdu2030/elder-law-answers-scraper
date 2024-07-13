@@ -23,6 +23,7 @@ enum UserSettingsId {
   passwordSpinner = "user-settings-password-spinner",
   existingPasswordValue = "user-settings-password-message",
   navbarUsername = "navbar-username",
+  uploadUserProfile = "user-settings-upload-profile-image",
 }
 
 type FormField = {
@@ -300,4 +301,11 @@ const onChangePasswordSave = async () => {
     existingPasswordValue.innerText = "**********";
   }
   onChangePasswordCancel();
+};
+
+const onChangeProfileImageClick = () => {
+  const profileInput = document.getElementById(
+    UserSettingsId.uploadUserProfile
+  );
+  profileInput?.click();
 };
