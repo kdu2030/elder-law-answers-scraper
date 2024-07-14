@@ -1,6 +1,7 @@
 /// <reference path="./sign-in.ts">
 /// <reference path="./ela-settings.ts">
 /// <reference path="./api/put-user-settings.ts">
+/// <reference path="./api/post-profile-image.ts">
 /// <reference path="./toaster.ts">
 
 enum UserSettingsId {
@@ -331,7 +332,7 @@ const updateProfileImageErrorMessage = (errorMessage: string | undefined) => {
   }
 };
 
-const onUploadProfileImage = (event: Event) => {
+const onUploadProfileImage = async (event: Event) => {
   const eventTarget = event.target as HTMLInputElement;
   const files = eventTarget.files;
 
@@ -339,5 +340,15 @@ const onUploadProfileImage = (event: Event) => {
     updateProfileImageErrorMessage(
       "An image is required to change your profile picture."
     );
+    return;
   }
+
+  const csrfToken = getCsrfToken();
+  const profileImage = files[0];
+
+  if (!csrfToken) {
+    return;
+  }
+
+  await postProfileImage(csrfToken, profileImage);
 };

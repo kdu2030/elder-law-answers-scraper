@@ -11,5 +11,7 @@ urlpatterns = [
     path("api/scrape-ela-article", scraper_view.scrape_ela_article_get,
          name="scrape_ela_article"),
     path("api/user-settings", settings.user_settings_put,
-         name="user_settings_put")
+         name="user_settings_put"),
+    path("api/profile-image", settings.profile_image_post,
+         name="profile_image_post")
 ]

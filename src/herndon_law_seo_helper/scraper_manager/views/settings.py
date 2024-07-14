@@ -10,6 +10,9 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from typing import Dict
+import requests
+from PIL import Image
+import io
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
@@ -117,3 +120,22 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
     except:
         print(traceback.format_exc())
         return JsonResponse({"isError": True, "error": traceback.format_exc()}, status=500)
+
+
+def profile_image_post(request: HttpRequest) -> HttpResponse:
+    if request.method != "POST":
+        return JsonResponse({"isError": True}, status=400)
+
+    if request.user is None:
+        return JsonResponse({"isError": True}, status=400)
+
+    content_type = request.content_type
+    if "image" not in content_type:
+        return JsonResponse({"isError": True}, status=400)
+
+    filename = f"{request.user.username}_profile_image.{content_type.replace('image/', '')}"
+    files = {"file": request.body}
+    requests.post("http://127.0.0.1:5000/file-upload",
+                  files=files, headers={"Content-Type": "multipart/form-data"})
+
+    return JsonResponse({"isError": False})

@@ -2,6 +2,7 @@
 /// <reference path="./sign-in.ts">
 /// <reference path="./ela-settings.ts">
 /// <reference path="./api/put-user-settings.ts">
+/// <reference path="./api/post-profile-image.ts">
 /// <reference path="./toaster.ts">
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -204,10 +205,17 @@ const updateProfileImageErrorMessage = (errorMessage) => {
         errorMessageElement.classList.add("d-none");
     }
 };
-const onUploadProfileImage = (event) => {
+const onUploadProfileImage = (event) => __awaiter(void 0, void 0, void 0, function* () {
     const eventTarget = event.target;
     const files = eventTarget.files;
     if (!files || files.length < 1) {
         updateProfileImageErrorMessage("An image is required to change your profile picture.");
+        return;
     }
-};
+    const csrfToken = getCsrfToken();
+    const profileImage = files[0];
+    if (!csrfToken) {
+        return;
+    }
+    yield postProfileImage(csrfToken, profileImage);
+});
