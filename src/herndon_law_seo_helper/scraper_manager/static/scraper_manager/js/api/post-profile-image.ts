@@ -2,13 +2,15 @@ type PostProfileImageResponse =
   | {
       isError: true;
     }
-  | { isError: false; profileImageUrl: string };
+  | { isError: false; url: string };
 
 const postProfileImage = async (
   csrfToken: string,
   imageFile: File
 ): Promise<PostProfileImageResponse> => {
-  const url = "/api/profile-image";
+  const url = "https://herndonlawfileservice.pythonanywhere.com/file-upload";
+  const formData = new FormData();
+  formData.append("file", imageFile);
 
   try {
     const response = await fetch(url, {
@@ -16,7 +18,7 @@ const postProfileImage = async (
       headers: {
         "X-CSRFToken": csrfToken,
       },
-      body: imageFile,
+      body: formData,
     });
 
     return response.json() as Promise<PostProfileImageResponse>;

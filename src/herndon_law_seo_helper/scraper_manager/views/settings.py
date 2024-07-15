@@ -13,6 +13,7 @@ from typing import Dict
 import requests
 from PIL import Image
 import io
+import copy
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
@@ -123,19 +124,20 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
 
 
 def profile_image_post(request: HttpRequest) -> HttpResponse:
+    request_body = copy.deepcopy(request.body)
     if request.method != "POST":
         return JsonResponse({"isError": True}, status=400)
 
     if request.user is None:
         return JsonResponse({"isError": True}, status=400)
 
-    content_type = request.content_type
-    if "image" not in content_type:
-        return JsonResponse({"isError": True}, status=400)
+    # content_type = request.content_type
+    # if "image" not in content_type:
+    #     return JsonResponse({"isError": True}, status=400)
 
-    filename = f"{request.user.username}_profile_image.{content_type.replace('image/', '')}"
-    files = {"file": request.body}
+    # filename = f"{request.user.username}_profile_image.{content_type.replace('image/', '')}"
+    # files = {"file": request.body}
     requests.post("http://127.0.0.1:5000/file-upload",
-                  files=files, headers={"Content-Type": "multipart/form-data"})
+                  data=request_body, headers={"Content-Type": "multipart/form-data"})
 
     return JsonResponse({"isError": False})

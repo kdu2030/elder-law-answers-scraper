@@ -346,9 +346,19 @@ const onUploadProfileImage = async (event: Event) => {
   const csrfToken = getCsrfToken();
   const profileImage = files[0];
 
+  if (profileImage.size > MAX_PROFILE_PICTURE_BYTES) {
+    updateProfileImageErrorMessage(
+      "The image you selected exceeds the max profile image size of 2 MB."
+    );
+    return;
+  }
+
+  updateProfileImageErrorMessage(undefined);
+
   if (!csrfToken) {
     return;
   }
 
-  await postProfileImage(csrfToken, profileImage);
+  const response = await postProfileImage(csrfToken, profileImage);
+  console.log(response);
 };

@@ -214,8 +214,14 @@ const onUploadProfileImage = (event) => __awaiter(void 0, void 0, void 0, functi
     }
     const csrfToken = getCsrfToken();
     const profileImage = files[0];
+    if (profileImage.size > MAX_PROFILE_PICTURE_BYTES) {
+        updateProfileImageErrorMessage("The image you selected exceeds the max profile image size of 2 MB.");
+        return;
+    }
+    updateProfileImageErrorMessage(undefined);
     if (!csrfToken) {
         return;
     }
-    yield postProfileImage(csrfToken, profileImage);
+    const response = yield postProfileImage(csrfToken, profileImage);
+    console.log(response);
 });

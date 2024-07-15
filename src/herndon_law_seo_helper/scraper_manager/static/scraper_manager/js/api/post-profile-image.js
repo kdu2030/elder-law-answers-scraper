@@ -9,14 +9,16 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 const postProfileImage = (csrfToken, imageFile) => __awaiter(void 0, void 0, void 0, function* () {
-    const url = "/api/profile-image";
+    const url = "https://herndonlawfileservice.pythonanywhere.com/file-upload";
+    const formData = new FormData();
+    formData.append("file", imageFile);
     try {
         const response = yield fetch(url, {
             method: "POST",
             headers: {
                 "X-CSRFToken": csrfToken,
             },
-            body: imageFile,
+            body: formData,
         });
         return response.json();
     }
