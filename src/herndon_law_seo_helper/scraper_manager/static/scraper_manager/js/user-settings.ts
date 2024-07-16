@@ -376,6 +376,13 @@ const onUploadProfileImage = async (event: Event) => {
     return;
   }
 
+  if (profileImage.type !== "image/jpeg" && profileImage.type !== "image/png") {
+    updateProfileImageErrorMessage(
+      "Profile images can only be JPG or PNG files."
+    );
+    return;
+  }
+
   updateProfileImageErrorMessage(undefined);
 
   if (!csrfToken) {

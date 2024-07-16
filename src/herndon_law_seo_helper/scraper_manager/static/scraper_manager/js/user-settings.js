@@ -232,6 +232,10 @@ const onUploadProfileImage = (event) => __awaiter(void 0, void 0, void 0, functi
         updateProfileImageErrorMessage("The image you selected exceeds the max profile image size of 2 MB.");
         return;
     }
+    if (profileImage.type !== "image/jpeg" && profileImage.type !== "image/png") {
+        updateProfileImageErrorMessage("Profile images can only be JPG or PNG files.");
+        return;
+    }
     updateProfileImageErrorMessage(undefined);
     if (!csrfToken) {
         return;
