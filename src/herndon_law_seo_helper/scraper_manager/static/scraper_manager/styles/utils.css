@@ -51,3 +51,7 @@ button.outline-herndon-law:active {
     background-color: #083360 !important;
     border-color: #083360 !important; 
 }
+
+.rounded-50 {
+    border-radius: 50%;
+}
