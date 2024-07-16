@@ -3,6 +3,7 @@
 /// <reference path="./api/put-user-settings.ts">
 /// <reference path="./api/post-profile-image.ts">
 /// <reference path="./toaster.ts">
+/// <reference path="./api/put-profile-image-setting.ts">
 
 enum UserSettingsId {
   usernameEmailForm = "user-settings-username-email-form",
@@ -26,6 +27,9 @@ enum UserSettingsId {
   navbarUsername = "navbar-username",
   uploadUserProfile = "user-settings-upload-profile-image",
   uploadErrorMessage = "user-settings-upload-error",
+  profilePictureSpinner = "user-settings-profile-picture-spinner",
+  existingProfilePicture = "user-settings-existing-profile-picture",
+  navbarProfilePicture = "navbar-profile-picture",
 }
 
 const MAX_PROFILE_PICTURE_BYTES = 2 * 1024 * 1024;
@@ -332,6 +336,23 @@ const updateProfileImageErrorMessage = (errorMessage: string | undefined) => {
   }
 };
 
+const updateProfilePicture = (imageUrl: string) => {
+  const userSettingsProfilePicture = document.getElementById(
+    UserSettingsId.existingProfilePicture
+  ) as HTMLImageElement | null;
+
+  const navbarProfilePicture = document.getElementById(
+    UserSettingsId.navbarProfilePicture
+  ) as HTMLImageElement | null;
+
+  if (!userSettingsProfilePicture || !navbarProfilePicture) {
+    return;
+  }
+
+  userSettingsProfilePicture.src = imageUrl;
+  navbarProfilePicture.src = imageUrl;
+};
+
 const onUploadProfileImage = async (event: Event) => {
   const eventTarget = event.target as HTMLInputElement;
   const files = eventTarget.files;
@@ -342,6 +363,8 @@ const onUploadProfileImage = async (event: Event) => {
     );
     return;
   }
+
+  const spinner = document.getElementById(UserSettingsId.passwordSpinner);
 
   const csrfToken = getCsrfToken();
   const profileImage = files[0];
@@ -359,6 +382,37 @@ const onUploadProfileImage = async (event: Event) => {
     return;
   }
 
+  spinner?.classList.remove("d-none");
   const response = await postProfileImage(csrfToken, profileImage);
-  console.log(response);
+
+  if (response.isError) {
+    spinner?.classList.add("d-none");
+    createErrorToaster(
+      "Unable to save user data",
+      "Unable to save profile picture"
+    );
+    return;
+  }
+
+  const profileImageSettingsResponse = await putProfileImageSetting(
+    { imageUrl: response.url, fileName: profileImage.name },
+    csrfToken
+  );
+
+  spinner?.classList.add("d-none");
+
+  if (profileImageSettingsResponse.isError) {
+    createErrorToaster(
+      "Unable to save user data",
+      "Unable to save profile picture"
+    );
+    return;
+  }
+
+  createSuccessToaster(
+    "Successfully saved user data",
+    "Successfully saved profile picture."
+  );
+
+  updateProfilePicture(response.url);
 };

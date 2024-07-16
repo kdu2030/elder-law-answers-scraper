@@ -11,6 +11,7 @@
     <script src="{% static 'scraper_manager/js/api/put-user-settings.js' %}"></script>
     <script src="{% static 'scraper_manager/js/toaster.js' %}"></script>
     <script src="{% static 'scraper_manager/js/api/post-profile-image.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/put-profile-image-setting.js' %}"></script>
 {% endblock head_content %}
 {% block content %}
     <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
@@ -43,7 +44,7 @@
                                              src="https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
                                              width="64px"
                                              height="64px"
-                                             alt="default profile picture" />
+                                             alt="default profile picture" id="user-settings-existing-profile-picture" />
                                     {% endif %}
                                     <div class="align-self-start" style="margin-top:13px">
                                         <input class="d-none"
@@ -52,7 +53,11 @@
                                                accept="image/jpeg,image/png"
                                                onchange="onUploadProfileImage(event)" />
                                         <button class="btn btn-primary bg-herndon-law me-3"
-                                                onclick="onChangeProfileImageClick()">Change Profile Picture</button>
+                                                onclick="onChangeProfileImageClick()">
+                                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                                 id="user-settings-profile-picture-spinner"></div>
+                                            Change Profile Picture
+                                        </button>
                                         <p class="text-danger d-none" id="user-settings-upload-error"></p>
                                     </div>
                                 </div>

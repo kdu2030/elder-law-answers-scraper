@@ -2,6 +2,7 @@ from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render
 from ..forms.setting_forms import WebsiteConfigurationForm, UserSettingsForm
 from ..models.setting_models import WebsiteConfiguration
+from ..models.user_models import UserProfilePicture
 from typing import Union
 import json
 import traceback
@@ -123,21 +124,24 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
         return JsonResponse({"isError": True, "error": traceback.format_exc()}, status=500)
 
 
-def profile_image_post(request: HttpRequest) -> HttpResponse:
-    request_body = copy.deepcopy(request.body)
-    if request.method != "POST":
+def profile_image_put(request: HttpRequest) -> HttpResponse:
+    if request.method != "PUT" or request.user is None:
         return JsonResponse({"isError": True}, status=400)
 
-    if request.user is None:
-        return JsonResponse({"isError": True}, status=400)
+    request_body = json.loads(request.body.decode())
+    file_name = request_body.get("fileName")
+    image_url = request_body.get("imageUrl")
 
-    # content_type = request.content_type
-    # if "image" not in content_type:
-    #     return JsonResponse({"isError": True}, status=400)
+    existing_profile_picture = UserProfilePicture.objects.filter(
+        user=request.user).first()
 
-    # filename = f"{request.user.username}_profile_image.{content_type.replace('image/', '')}"
-    # files = {"file": request.body}
-    requests.post("http://127.0.0.1:5000/file-upload",
-                  data=request_body, headers={"Content-Type": "multipart/form-data"})
+    if existing_profile_picture:
+        existing_profile_picture.file_name = file_name
+        existing_profile_picture.image_url = image_url
+        existing_profile_picture.save()
+        return JsonResponse({"isError": False})
+
+    UserProfilePicture.objects.create(
+        user=request.user, file_name=file_name, image_url=image_url)
 
     return JsonResponse({"isError": False})

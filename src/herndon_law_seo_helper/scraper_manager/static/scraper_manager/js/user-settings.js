@@ -4,6 +4,7 @@
 /// <reference path="./api/put-user-settings.ts">
 /// <reference path="./api/post-profile-image.ts">
 /// <reference path="./toaster.ts">
+/// <reference path="./api/put-profile-image-setting.ts">
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -36,6 +37,9 @@ var UserSettingsId;
     UserSettingsId["navbarUsername"] = "navbar-username";
     UserSettingsId["uploadUserProfile"] = "user-settings-upload-profile-image";
     UserSettingsId["uploadErrorMessage"] = "user-settings-upload-error";
+    UserSettingsId["profilePictureSpinner"] = "user-settings-profile-picture-spinner";
+    UserSettingsId["existingProfilePicture"] = "user-settings-existing-profile-picture";
+    UserSettingsId["navbarProfilePicture"] = "navbar-profile-picture";
 })(UserSettingsId || (UserSettingsId = {}));
 const MAX_PROFILE_PICTURE_BYTES = 2 * 1024 * 1024;
 const onChangeUsernameEmailClick = () => {
@@ -205,6 +209,15 @@ const updateProfileImageErrorMessage = (errorMessage) => {
         errorMessageElement.classList.add("d-none");
     }
 };
+const updateProfilePicture = (imageUrl) => {
+    const userSettingsProfilePicture = document.getElementById(UserSettingsId.existingProfilePicture);
+    const navbarProfilePicture = document.getElementById(UserSettingsId.navbarProfilePicture);
+    if (!userSettingsProfilePicture || !navbarProfilePicture) {
+        return;
+    }
+    userSettingsProfilePicture.src = imageUrl;
+    navbarProfilePicture.src = imageUrl;
+};
 const onUploadProfileImage = (event) => __awaiter(void 0, void 0, void 0, function* () {
     const eventTarget = event.target;
     const files = eventTarget.files;
@@ -212,6 +225,7 @@ const onUploadProfileImage = (event) => __awaiter(void 0, void 0, void 0, functi
         updateProfileImageErrorMessage("An image is required to change your profile picture.");
         return;
     }
+    const spinner = document.getElementById(UserSettingsId.passwordSpinner);
     const csrfToken = getCsrfToken();
     const profileImage = files[0];
     if (profileImage.size > MAX_PROFILE_PICTURE_BYTES) {
@@ -222,6 +236,19 @@ const onUploadProfileImage = (event) => __awaiter(void 0, void 0, void 0, functi
     if (!csrfToken) {
         return;
     }
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
     const response = yield postProfileImage(csrfToken, profileImage);
-    console.log(response);
+    if (response.isError) {
+        spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+        createErrorToaster("Unable to save user data", "Unable to save profile picture");
+        return;
+    }
+    const profileImageSettingsResponse = yield putProfileImageSetting({ imageUrl: response.url, fileName: profileImage.name }, csrfToken);
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    if (profileImageSettingsResponse.isError) {
+        createErrorToaster("Unable to save user data", "Unable to save profile picture");
+        return;
+    }
+    createSuccessToaster("Successfully saved user data", "Successfully saved profile picture.");
+    updateProfilePicture(response.url);
 });
