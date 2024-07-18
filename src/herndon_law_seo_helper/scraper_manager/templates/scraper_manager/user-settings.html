@@ -39,14 +39,12 @@
                             <div class="mb-4">
                                 <p class="fw-bold">Profile Picture</p>
                                 <div class="d-flex flex-row">
-                                    {% if not user.profile %}
-                                        <img class="me-4 rounded-50"
-                                             src="https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
-                                             width="64px"
-                                             height="64px"
-                                             alt="default profile picture"
-                                             id="user-settings-existing-profile-picture" />
-                                    {% endif %}
+                                    <img class="me-4 rounded-50"
+                                         src="{{ profile_image }}"
+                                         width="64px"
+                                         height="64px"
+                                         alt="default profile picture"
+                                         id="user-settings-existing-profile-picture" />
                                     <div class="align-self-start" style="margin-top:13px">
                                         <input class="d-none"
                                                type="file"

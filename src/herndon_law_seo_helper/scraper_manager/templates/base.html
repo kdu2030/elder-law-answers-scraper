@@ -38,12 +38,10 @@
                 <a class="nav-link dropdown-toggle text-white d-flex align-items-center"
                    href="#"
                    data-bs-toggle="dropdown">
-                  {% if not user.profile %}
-                    <img class="me-1 rounded-50"
-                         src="https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
-                         width="35px"
-                         id="navbar-profile-picture" />
-                  {% endif %}
+                  <img class="me-1 rounded-50"
+                       src="{{ profile_image }}"
+                       width="35px"
+                       id="navbar-profile-picture" />
                   <span id="navbar-username">{{ user.username }}</span>
                 </a>
                 <ul class="dropdown-menu start-auto end-0">
