@@ -25,6 +25,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["*"]
 
+LOGIN_URL = "/signin"
+
 CSRF_TRUSTED_ORIGINS = [
     "https://herndonlawmanager.adaptable.app", "https://herndonlawmanager.onrender.com"]
 
@@ -66,6 +68,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'scraper_manager.context_processors.profile_image.get_profile_image'
             ],
         },
     },

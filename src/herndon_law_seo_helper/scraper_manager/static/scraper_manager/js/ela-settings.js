@@ -71,11 +71,14 @@ const onElaUsernameBlur = (event) => {
         removeErrorMessage(usernameInput, errorMessageDiv);
     }
 };
+const getCsrfToken = () => {
+    const csrfTokenInput = document.getElementsByName(csrfTokenName)[0];
+    return csrfTokenInput === null || csrfTokenInput === void 0 ? void 0 : csrfTokenInput.value;
+};
 const onElaUsernameSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const userInput = document.getElementById(ElaSettingsIds.usernameInput);
     const userErrorMessageDiv = document.getElementById(ElaSettingsIds.usernameErrorMessage);
-    const csrfTokenInput = document.getElementsByName(csrfTokenName)[0];
-    const csrfToken = csrfTokenInput === null || csrfTokenInput === void 0 ? void 0 : csrfTokenInput.value;
+    const csrfToken = getCsrfToken();
     if (!userInput || !userErrorMessageDiv || !csrfToken) {
         return;
     }

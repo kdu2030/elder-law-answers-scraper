@@ -1,0 +1,150 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block page_title %}
+    Settings
+{% endblock page_title %}
+{% block head_content %}
+    <script src="{% static 'scraper_manager/js/ela-settings.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/sign-in.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/user-settings.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/put-user-settings.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/toaster.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/post-profile-image.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/put-profile-image-setting.js' %}"></script>
+{% endblock head_content %}
+{% block content %}
+    <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
+        <div class="w-75 h-75">
+            <h4>Settings</h4>
+            <div class="row h-100">
+                <div class="col-4">
+                    <ul class="list-group">
+                        <a href="{% url 'settings' %}"
+                           class="list-group-item list-group-item-action">
+                            <i class="bi bi-globe-americas"></i>
+                            Website Settings
+                        </a>
+                        <a href="{% url 'user_settings' %}"
+                           class="list-group-item list-group-item-action active bg-herndon-law">
+                            <i class="bi bi-gear-wide"></i>
+                            User Settings
+                        </a>
+                    </ul>
+                </div>
+                <div class="col">
+                    <div class="card h-100">
+                        <div class="card-body">
+                            <h5 class="mb-3">User Settings</h5>
+                            <div class="mb-4">
+                                <p class="fw-bold">Profile Picture</p>
+                                <div class="d-flex flex-row">
+                                    <img class="me-4 rounded-50"
+                                         src="{{ profile_image }}"
+                                         width="64px"
+                                         height="64px"
+                                         alt="default profile picture"
+                                         id="user-settings-existing-profile-picture" />
+                                    <div class="align-self-start" style="margin-top:13px">
+                                        <input class="d-none"
+                                               type="file"
+                                               id="user-settings-upload-profile-image"
+                                               accept="image/jpeg,image/png"
+                                               onchange="onUploadProfileImage(event)" />
+                                        <button class="btn btn-primary bg-herndon-law me-3"
+                                                onclick="onChangeProfileImageClick()">
+                                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                                 id="user-settings-profile-picture-spinner"></div>
+                                            Change Profile Picture
+                                        </button>
+                                        <p class="text-danger d-none" id="user-settings-upload-error"></p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="mb-4">
+                                <p class="fw-bold">Username and Email</p>
+                                <div id="user-settings-username-email-read-mode">
+                                    <div class="mb-3">
+                                        <p class="mb-1 w-25">Username</p>
+                                        <p id="user-settings-existing-username-value">{{ user.username }}</p>
+                                    </div>
+                                    <div>
+                                        <p class="mb-1 w-25">Email</p>
+                                        <p id="user-settings-existing-email-value">{{ user.email }}</p>
+                                    </div>
+                                    <button class="btn btn-outline-primary outline-herndon-law"
+                                            id="user-settings-change-username-email-button"
+                                            onclick="onChangeUsernameEmailClick()">Change Email or Username</button>
+                                </div>
+                                <form class="d-none" id="user-settings-username-email-form">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="{{ form.username.id_for_label }}" class="form-label">
+                                            Username<span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.username }}
+                                        <div class="invalid-feedback" id="user-settings-username-error-message"></div>
+                                    </div>
+                                    <label for="{{ form.email.id_for_label }}" class="form-label">
+                                        Email<span class="text-danger">*</span>
+                                    </label>
+                                    {{ form.email }}
+                                    <div class="invalid-feedback" id="user-settings-email-error-message"></div>
+                                    <div class="d-flex flex-row justify-content-end mt-3">
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3"
+                                                type="button"
+                                                onclick="onChangeUsernameEmailCancel()">Cancel</button>
+                                        <button class="btn btn-primary bg-herndon-law"
+                                                type="button"
+                                                onclick="onUsernameEmailSave()">
+                                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                                 id="user-settings-username-email-spinner"></div>
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                            <div>
+                                <p class="fw-bold">Password</p>
+                                <div id="user-settings-change-password-read-mode">
+                                    <p id="user-settings-password-message">{{ password }}</p>
+                                    <button class="btn btn-outline-primary outline-herndon-law"
+                                            type="button"
+                                            onclick="onChangePasswordClick()">Change Password</button>
+                                </div>
+                                <form class="d-none" id="user-settings-password-form">
+                                    {% csrf_token %}
+                                    <div class="mb-3">
+                                        <label for="{{ form.password.id_for_label }}" class="form-label">
+                                            Password<span class="text-danger">*</span>
+                                        </label>
+                                        {{ form.password }}
+                                        <div class="invalid-feedback" id="user-settings-password-error-message"></div>
+                                    </div>
+                                    <label for="{{ form.confirm_password.id_for_label }}" class="form-label">
+                                        Confirm Password<span class="text-danger">*</span>
+                                    </label>
+                                    {{ form.confirm_password }}
+                                    <div class="invalid-feedback"
+                                         id="user-settings-confirm-password-error-message"></div>
+                                    <div class="d-flex flex-row justify-content-end mt-3">
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3"
+                                                type="button"
+                                                onclick="onChangePasswordCancel()">Cancel</button>
+                                        <button class="btn btn-primary bg-herndon-law"
+                                                type="button"
+                                                onclick="onChangePasswordSave()">
+                                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                                 id="user-settings-password-spinner"></div>
+                                            Save
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

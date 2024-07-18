@@ -17,14 +17,14 @@
             <div class="row h-100">
                 <div class="col-4">
                     <ul class="list-group">
-                        <li class="list-group-item active bg-herndon-law">
+                        <a a href="{% url 'settings' %}" class="list-group-item list-group-item-action active bg-herndon-law">
                             <i class="bi bi-globe-americas"></i>
                             Website Settings
-                        </li>
-                        <li class="list-group-item">
+                        </a>
+                        <a href="{% url 'user_settings' %}" class="list-group-item list-group-item-action">
                             <i class="bi bi-gear-wide"></i>
                             User Settings
-                        </li>
+                        </a>
                     </ul>
                 </div>
 
