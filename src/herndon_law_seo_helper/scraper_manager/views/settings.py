@@ -11,10 +11,6 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from typing import Dict
-import requests
-from PIL import Image
-import io
-import copy
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
