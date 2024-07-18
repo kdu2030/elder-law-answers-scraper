@@ -75,7 +75,7 @@ def user_settings_get(request: HttpRequest) -> HttpResponse:
 
 
 def user_settings_put(request: HttpRequest) -> HttpResponse:
-    if request.method != "PUT" or not request.user:
+    if request.method != "PUT" or not request.user.is_authenticated:
         return JsonResponse({"isError": True}, status=400)
 
     user: User = request.user
@@ -125,7 +125,7 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
 
 
 def profile_image_put(request: HttpRequest) -> HttpResponse:
-    if request.method != "PUT" or request.user is None:
+    if request.method != "PUT" or not request.user.is_authenticated:
         return JsonResponse({"isError": True}, status=400)
 
     request_body = json.loads(request.body.decode())

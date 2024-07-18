@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 
 def get_profile_image(request: HttpResponse):
-    if not request.user:
+    if not request.user.is_authenticated:
         return {}
     profile_picture = UserProfilePicture.objects.filter(
         user=request.user).first()
