@@ -24,7 +24,19 @@
                             {% for attempt_row in attempt_rows %}
                                 <tr>
                                     <td>{{ attempt_row.date_attempted | date:"SHORT_DATE_FORMAT" }}</td>
-                                    <td>{{ attempt_row.status }}</td>
+                                    <td>
+                                        {% if attempt_row.status == "Success" %}
+                                            <div class="d-flex flex-row text-success">
+                                                <i class="bi bi-check-lg me-3"></i>
+                                                <span>Success</span>
+                                            </div>
+                                        {% elif attempt_row.status == "Failure" %}
+                                            <div class="d-flex flex-row text-danger">
+                                                <i class="bi bi-exclamation-circle me-3"></i>
+                                                <span>Failure</span>
+                                            </div>
+                                        {% endif %}
+                                    </td>
                                     <td>{{ attempt_row.status_info }}</td>
                                 </tr>
                             {% endfor %}
