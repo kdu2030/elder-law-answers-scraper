@@ -20,6 +20,15 @@
                                 <th scope="col">Failure Reason / Article Posted</th>
                             </tr>
                         </thead>
+                        <tbody>
+                            {% for attempt_row in attempt_rows %}
+                                <tr>
+                                    <td>{{ attempt_row.date_attempted }}</td>
+                                    <td>{{ attempt_row.status }}</td>
+                                    <td>{{ attempt_row.status_info }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
                     </table>
                 </div>
             </div>
