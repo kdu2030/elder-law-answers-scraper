@@ -11,7 +11,7 @@ def format_status_info(error_code: ScraperErrorCode):
         return "Website login failed"
     if error_code == ScraperErrorCode.ARTICLE_POST_FAILED.value:
         return "An article was found, but was unable to be posted to the website."
-    if error_code == ScraperErrorCode.UNABLE_TO_FIND_ARTICLE:
+    if error_code == ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value:
         return "Unable to find new article"
     return "An unknown error occured"
 
