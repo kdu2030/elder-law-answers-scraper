@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block page_title %}
+    Admin
+{% endblock page_title %}
+{% block head_content %}
+    <script src="{% static 'scraper_manager/js/admin.js' %}"></script>
+{% endblock head_content %}
+{% block content %}
+    <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
+        <div class="w-75">
+            <h5>Admin Dashboard</h5>
+            <hl-admin-mfe />
+        </div>
+    </div>
+{% endblock content %}
