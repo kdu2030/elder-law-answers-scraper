@@ -4,13 +4,16 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.views.decorators.csrf import csrf_exempt
 from ..helpers.encryption_helpers import decrypt_string
 import traceback
-from ..models.blog_posts import BlogPost
+from ..models.blog_posts import BlogPost, PostFailureLog
 from typing import List
 from datetime import datetime
 from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper, ScraperErrorCode, ScraperException
 
 
 def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
+    PostFailureLog.objects.create(date_attempted=datetime.now(
+    ), error_code=exception.error_code, exception=traceback.format_exc())
+
     if exception.error_code == ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value:
         return JsonResponse({"isWarning": True, "warning": "Unable to find an article to post."}, status=400)
     if exception.error_code == ScraperErrorCode.LOGIN_FAILED.value:
@@ -61,4 +64,6 @@ def scrape_ela_article_get(request: HttpRequest) -> JsonResponse:
         return handle_scraper_exception(e)
     except Exception as e:
         print(traceback.format_exc())
+        PostFailureLog.objects.create(date_attempted=datetime.now(
+        ), error_code=ScraperErrorCode.UNKNOWN.value, exception=traceback.format_exc())
         return JsonResponse({"isError": True}, status=500)
