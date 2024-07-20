@@ -2,12 +2,14 @@ import requests
 from typing import List
 from bs4 import BeautifulSoup, Tag
 from enum import Enum
+import json
 
 
 class ScraperErrorCode(Enum):
     UNKNOWN = 0
     UNABLE_TO_FIND_ARTICLE = 1
     ARTICLE_POST_FAILED = 2
+    LOGIN_FAILED = 3
 
 
 class ScraperException(Exception):
@@ -79,6 +81,9 @@ class ElderLawAnswersScraper:
 
         response = requests.post(post_endpoint, json=post_data,
                                  auth=requests.auth.HTTPBasicAuth(self.website_username, self.website_password))
+
+        if response.status_code == 400:
+            raise ScraperException(ScraperErrorCode.LOGIN_FAILED.value)
 
         if not response.ok:
             raise ScraperException(ScraperErrorCode.ARTICLE_POST_FAILED.value)

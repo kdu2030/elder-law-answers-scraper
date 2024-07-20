@@ -1,0 +1,64 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block page_title %}
+    Dashboard
+{% endblock page_title %}
+{% block head_content %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{% static 'scraper_manager/js/dashboard.js' %}"></script>
+{% endblock head_content %}
+{% block content %}
+    <div class="d-none" id="dashboard-chart-data">{{ chart_data }}</div>
+    <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
+        <div class="w-75">
+            <h4 class="mb-3">Dashboard</h4>
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Attempts to Create Blog Posts</h5>
+                    <canvas id="dashboard-blog-post-status-chart"></canvas>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">This Month's Blog Post Attempts</h5>
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">Date Attempted</th>
+                                <th scope="col">Status</th>
+                                <th scope="col">Failure Reason / Article Posted</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for attempt_row in attempt_rows %}
+                                <tr>
+                                    <td>{{ attempt_row.date_attempted | date:"SHORT_DATE_FORMAT" }}</td>
+                                    <td>
+                                        {% if attempt_row.status == "Success" %}
+                                            <div class="d-flex flex-row text-success">
+                                                <i class="bi bi-check-lg me-3"></i>
+                                                <span>Success</span>
+                                            </div>
+                                        {% elif attempt_row.status == "Failure" %}
+                                            <div class="d-flex flex-row text-danger">
+                                                <i class="bi bi-exclamation-circle-fill me-3"></i>
+                                                <span>Failure</span>
+                                            </div>
+                                        {% else %}
+                                            <div class="d-flex flex-row text-warning">
+                                                <i class="bi bi-exclamation-triangle-fill me-3"></i>
+                                                <span>Warning</span>
+                                            </div>
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ attempt_row.status_info }}</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
