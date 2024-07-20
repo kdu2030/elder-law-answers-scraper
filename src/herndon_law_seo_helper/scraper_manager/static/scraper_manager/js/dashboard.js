@@ -61,7 +61,6 @@ const loadStatusChart = () => {
         },
     };
     const canvas = document.getElementById(DashboardId.statusChart);
-    console.log(canvas);
     if (!canvas) {
         return;
     }

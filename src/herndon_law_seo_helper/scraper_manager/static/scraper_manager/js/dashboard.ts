@@ -80,8 +80,6 @@ const loadStatusChart = () => {
     DashboardId.statusChart
   ) as HTMLCanvasElement | null;
 
-  console.log(canvas);
-
   if (!canvas) {
     return;
   }
