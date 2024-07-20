@@ -1,8 +1,9 @@
 from django.urls import path
-from .views import authentication, settings, scraper_view
+from .views import authentication, settings, scraper_view, dashboard
 
 urlpatterns = [
     path("", authentication.index, name="index"),
+    path("dashboard/", dashboard.dashboard_get, name="dashboard"),
     path("settings/", settings.ela_settings_get, name="settings"),
     path("user-settings/", settings.user_settings_get, name="user_settings"),
     path("signin/", authentication.sign_in, name="sign_in"),
