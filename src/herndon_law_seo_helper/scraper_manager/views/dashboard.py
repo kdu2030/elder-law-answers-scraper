@@ -6,6 +6,26 @@ from dateutil.relativedelta import relativedelta
 from ..scraper.elder_law_answers_scraper import ScraperErrorCode
 
 
+class MonthData:
+    def __init__(self, month_label: str, succcess_count: int, warning_count: int, failure_count: int):
+        self.success_count = succcess_count
+        self.warning_count = warning_count
+        self.failure_count = failure_count
+
+
+def get_attempt_data_for_month(start_date: datetime):
+    end_date = start_date + relativedelta(months=1) - relativedelta(day=1)
+    success_count = BlogPost.objects.filter(
+        date_posted__range=(start_date, end_date)).count()
+    warning_count = PostFailureLog.objects.filter(
+        error_code=ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value, date_attempted__range=(start_date, end_date)).count()
+    failure_count = PostFailureLog.objects.filter(
+        date_attempted__range=(start_date, end_date)).exclude(error_code=ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value).count()
+
+    month_label = start_date.strftime("%B")
+    return MonthData(month_label, success_count, warning_count, failure_count)
+
+
 def get_chart_data(current_month: int, current_year: int):
     current_month_start = datetime(
         year=current_year, month=current_month, day=1)
@@ -16,7 +36,16 @@ def get_chart_data(current_month: int, current_year: int):
     for i in range(0, months_to_add):
         new_month = current_month_start - relativedelta(months=(i + 1))
         month_start_dates.insert(0, new_month)
-    print(month_start_dates)
+
+    month_data = list(map(lambda start_date: get_attempt_data_for_month(
+        start_date), month_start_dates))
+
+    chart_data = {
+        "month_labels": [],
+        "success_count": [],
+        "warning_count": [],
+        "failure_count": []
+    }
 
 
 def format_status_info(error_code: ScraperErrorCode):
@@ -31,7 +60,7 @@ def format_status_info(error_code: ScraperErrorCode):
 
 def get_blog_post_attempts(current_month: int, current_year: int):
     start_date = datetime(year=current_year, month=current_month, day=1)
-    end_date = start_date + relativedelta(months=1)
+    end_date = start_date + relativedelta(months=1) - relativedelta(day=1)
 
     successful_posts = BlogPost.objects.filter(
         date_posted__range=(start_date, end_date))
