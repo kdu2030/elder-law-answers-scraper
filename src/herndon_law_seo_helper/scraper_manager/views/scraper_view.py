@@ -13,8 +13,10 @@ from ..scraper.elder_law_answers_scraper import ElderLawAnswersScraper, ScraperE
 def handle_scraper_exception(exception: ScraperException) -> JsonResponse:
     if exception.error_code == ScraperErrorCode.UNABLE_TO_FIND_ARTICLE.value:
         return JsonResponse({"isWarning": True, "warning": "Unable to find an article to post."}, status=400)
+    if exception.error_code == ScraperErrorCode.LOGIN_FAILED.value:
+        return JsonResponse({"isError": True, "error": "Website login failed. Please update the website username or password."}, status=400)
 
-    return JsonResponse({"isError": True}, status=400)
+    return JsonResponse({"isError": True}, status=500)
 
 
 def get_posted_articles() -> List[BlogPost]:
