@@ -4,10 +4,12 @@ from datetime import datetime
 from ..models.blog_posts import BlogPost, PostFailureLog
 from dateutil.relativedelta import relativedelta
 from ..scraper.elder_law_answers_scraper import ScraperErrorCode
+import json
 
 
 class MonthData:
     def __init__(self, month_label: str, succcess_count: int, warning_count: int, failure_count: int):
+        self.month_label = month_label
         self.success_count = succcess_count
         self.warning_count = warning_count
         self.failure_count = failure_count
@@ -37,7 +39,7 @@ def get_chart_data(current_month: int, current_year: int):
         new_month = current_month_start - relativedelta(months=(i + 1))
         month_start_dates.insert(0, new_month)
 
-    month_data = list(map(lambda start_date: get_attempt_data_for_month(
+    month_data_pts = list(map(lambda start_date: get_attempt_data_for_month(
         start_date), month_start_dates))
 
     chart_data = {
@@ -46,6 +48,14 @@ def get_chart_data(current_month: int, current_year: int):
         "warning_count": [],
         "failure_count": []
     }
+
+    for month_data_pt in month_data_pts:
+        chart_data["month_labels"].append(month_data_pt.month_label)
+        chart_data["success_count"].append(month_data_pt.success_count)
+        chart_data["warning_count"].append(month_data_pt.warning_count)
+        chart_data["failure_count"].append(month_data_pt.failure_count)
+
+    return chart_data
 
 
 def format_status_info(error_code: ScraperErrorCode):
@@ -97,5 +107,5 @@ def dashboard_get(request: HttpRequest) -> HttpResponse:
     current_year = current_date.year
 
     post_attempt_rows = get_blog_post_attempts(current_month, current_year)
-    get_chart_data(current_month, current_year)
-    return render(request, "scraper_manager/dashboard.html", {"attempt_rows": post_attempt_rows})
+    chart_data = get_chart_data(current_month, current_year)
+    return render(request, "scraper_manager/dashboard.html", {"attempt_rows": post_attempt_rows, "chart_data": json.dumps(chart_data)})

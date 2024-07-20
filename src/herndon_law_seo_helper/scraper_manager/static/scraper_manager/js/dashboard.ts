@@ -1,28 +1,50 @@
 enum DashboardId {
+  dashboardChartData = "dashboard-chart-data",
   statusChart = "dashboard-blog-post-status-chart",
 }
 
+type BlogPostStatusChartData = {
+  month_labels: number[];
+  success_count: number[];
+  warning_count: number[];
+  failure_count: number[];
+};
+
 const loadStatusChart = () => {
+  const dashboardChartDataElement = document.getElementById(
+    DashboardId.dashboardChartData
+  );
+
+  const dashboardChartDataStr = dashboardChartDataElement?.innerText;
+
+  if (!dashboardChartDataStr) {
+    return;
+  }
+
+  const dashboardChartData: BlogPostStatusChartData = JSON.parse(
+    dashboardChartDataStr
+  );
+
   const chartData = {
-    labels: ["January", "Februrary", "March", "April", "June"],
+    labels: dashboardChartData.month_labels,
     datasets: [
       {
         label: "Successes",
         backgroundColor: "rgb(25,135,84)",
         borderColor: "rgb(25,135,84)",
-        data: [5, 6, 2, 3, 1],
+        data: dashboardChartData.success_count,
       },
       {
         label: "Failures",
         backgroundColor: "rgb(220,53,69)",
         borderColor: "rgb(220,53,69)",
-        data: [1, 0, 0, 0, 2],
+        data: dashboardChartData.failure_count,
       },
       {
         label: "Warnings",
         backgroundColor: "rgb(255,193,7)",
         borderColor: "rgb(255,193,7)",
-        data: [1, 0, 1, 0, 0],
+        data: dashboardChartData.warning_count,
       },
     ],
   };
