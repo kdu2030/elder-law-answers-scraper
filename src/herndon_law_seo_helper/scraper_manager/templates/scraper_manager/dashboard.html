@@ -23,7 +23,7 @@
                         <tbody>
                             {% for attempt_row in attempt_rows %}
                                 <tr>
-                                    <td>{{ attempt_row.date_attempted }}</td>
+                                    <td>{{ attempt_row.date_attempted | date:"SHORT_DATE_FORMAT" }}</td>
                                     <td>{{ attempt_row.status }}</td>
                                     <td>{{ attempt_row.status_info }}</td>
                                 </tr>
