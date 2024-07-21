@@ -34,7 +34,9 @@
                                     <td style="vertical-align: middle">{{ row.email }}</td>
                                     <td style="vertical-align: middle">
                                         <button class="btn btn-outline-primary outline-herndon-law me-3"
-                                                type="button">Update User</button>
+                                                type="button"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#admin-edit-user-modal-{{ row.id }}">Edit User</button>
                                         <button class="btn btn-outline-danger">Delete User</button>
                                     </td>
                                 </tr>
@@ -45,4 +47,31 @@
             </div>
         </div>
     </div>
+    {% for row in table_data %}
+        <div class="modal fade"
+             id="admin-edit-user-modal-{{ row.id }}"
+             tabindex="-1"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit User {{ row.username }}</h5>
+                        <button type="button"
+                                data-bs-dismiss="modal"
+                                class="btn-close"
+                                aria-label="close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form>
+                            <label class="form-label">
+                                Username<span class="text-danger">*</span>
+                            </label>
+                            <input class="form-control" type="text" value="{{ row.username }}" />
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endfor %}
 {% endblock content %}

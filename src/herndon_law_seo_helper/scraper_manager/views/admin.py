@@ -12,7 +12,7 @@ def get_table_row_for_user(user: User) -> Dict[str, str]:
     image_src = "https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
     if profile_picture:
         image_src = profile_picture.image_url
-    return {"email": email, "username": username, "image_src": image_src}
+    return {"id": user.id, "email": email, "username": username, "image_src": image_src}
 
 
 def get_admin_data() -> List[Dict[str, str]]:
