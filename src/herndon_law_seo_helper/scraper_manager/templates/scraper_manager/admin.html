@@ -11,7 +11,38 @@
     <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
         <div class="w-75">
             <h5>Admin Dashboard</h5>
-            <hl-admin-mfe />
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w-25">User</th>
+                                <th scope="col" class="w-50">Email</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in table_data %}
+                                <tr>
+                                    <td style="vertical-align: middle">
+                                        <image class="me-3 rounded-50"
+                                               src="{{ row.image_src }}"
+                                               width="48px"
+                                               height="48px" />
+                                        {{ row.username }}
+                                    </td>
+                                    <td style="vertical-align: middle">{{ row.email }}</td>
+                                    <td style="vertical-align: middle">
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3"
+                                                type="button">Update User</button>
+                                        <button class="btn btn-outline-danger">Delete User</button>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 {% endblock content %}

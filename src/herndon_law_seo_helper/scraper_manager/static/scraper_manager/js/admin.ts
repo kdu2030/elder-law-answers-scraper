@@ -3,7 +3,7 @@ class AdminMFE extends HTMLElement {
     super();
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     console.log("Admin MFE connected!");
   }
 }
