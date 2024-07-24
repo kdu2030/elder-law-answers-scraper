@@ -2,21 +2,39 @@ enum AdminBaseIds {
   passwordForm = "admin-password-form",
 }
 
-let isPasswordVisible = false;
+type EditUserForm = {
+  userId?: string;
+  username?: string;
+  email?: string;
+  password?: string;
+  confirmPassword?: string;
+  isPasswordVisible: boolean;
+};
 
-const onChangeEditPassword = (event: Event, userId: number) => {
+type EditUserFormErrors = {
+  [K in keyof EditUserForm]?: string;
+};
+
+const editUserForm: EditUserForm = { isPasswordVisible: false };
+const editUserErrors: EditUserFormErrors = {};
+
+const onClickUserEdit = (userId: string) => {
+  editUserForm.userId = userId;
+};
+
+const onChangeEditPassword = (event: Event) => {
   const eventTarget = event.target as HTMLInputElement;
   const shouldChangePassword = eventTarget.value === "true";
   const passwordForm = document.getElementById(
-    `${AdminBaseIds.passwordForm}-${userId}`
+    `${AdminBaseIds.passwordForm}-${editUserForm.userId}`
   );
 
   if (shouldChangePassword) {
-    isPasswordVisible = true;
+    editUserForm.isPasswordVisible = true;
     passwordForm?.classList.remove("d-none");
     return;
   }
 
-  isPasswordVisible = false;
+  editUserForm.isPasswordVisible = false;
   passwordForm?.classList.add("d-none");
 };
