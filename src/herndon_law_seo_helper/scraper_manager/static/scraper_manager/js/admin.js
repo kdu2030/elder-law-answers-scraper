@@ -1,21 +1,18 @@
 "use strict";
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var AdminBaseIds;
+(function (AdminBaseIds) {
+    AdminBaseIds["passwordForm"] = "admin-password-form";
+})(AdminBaseIds || (AdminBaseIds = {}));
+let isPasswordVisible = false;
+const onChangeEditPassword = (event, userId) => {
+    const eventTarget = event.target;
+    const shouldChangePassword = eventTarget.value === "true";
+    const passwordForm = document.getElementById(`${AdminBaseIds.passwordForm}-${userId}`);
+    if (shouldChangePassword) {
+        isPasswordVisible = true;
+        passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.remove("d-none");
+        return;
+    }
+    isPasswordVisible = false;
+    passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.add("d-none");
 };
-class AdminMFE extends HTMLElement {
-    constructor() {
-        super();
-    }
-    connectedCallback() {
-        return __awaiter(this, void 0, void 0, function* () {
-            console.log("Admin MFE connected!");
-        });
-    }
-}
-customElements.define("hl-admin-mfe", AdminMFE);

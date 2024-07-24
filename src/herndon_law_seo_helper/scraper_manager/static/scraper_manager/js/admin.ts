@@ -1,11 +1,22 @@
-class AdminMFE extends HTMLElement {
-  constructor() {
-    super();
-  }
-
-  async connectedCallback() {
-    console.log("Admin MFE connected!");
-  }
+enum AdminBaseIds {
+  passwordForm = "admin-password-form",
 }
 
-customElements.define("hl-admin-mfe", AdminMFE);
+let isPasswordVisible = false;
+
+const onChangeEditPassword = (event: Event, userId: number) => {
+  const eventTarget = event.target as HTMLInputElement;
+  const shouldChangePassword = eventTarget.value === "true";
+  const passwordForm = document.getElementById(
+    `${AdminBaseIds.passwordForm}-${userId}`
+  );
+
+  if (shouldChangePassword) {
+    isPasswordVisible = true;
+    passwordForm?.classList.remove("d-none");
+    return;
+  }
+
+  isPasswordVisible = false;
+  passwordForm?.classList.add("d-none");
+};
