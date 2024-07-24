@@ -8,14 +8,14 @@ type EditUserForm = {
   email?: string;
   password?: string;
   confirmPassword?: string;
-  isPasswordVisible: boolean;
+  shouldChangePassword: boolean;
 };
 
 type EditUserFormErrors = {
   [K in keyof EditUserForm]?: string;
 };
 
-const editUserForm: EditUserForm = { isPasswordVisible: false };
+const editUserForm: EditUserForm = { shouldChangePassword: false };
 const editUserErrors: EditUserFormErrors = {};
 
 const onClickUserEdit = (userId: string) => {
@@ -30,11 +30,11 @@ const onChangeEditPassword = (event: Event) => {
   );
 
   if (shouldChangePassword) {
-    editUserForm.isPasswordVisible = true;
+    editUserForm.shouldChangePassword = true;
     passwordForm?.classList.remove("d-none");
     return;
   }
 
-  editUserForm.isPasswordVisible = false;
+  editUserForm.shouldChangePassword = false;
   passwordForm?.classList.add("d-none");
 };
