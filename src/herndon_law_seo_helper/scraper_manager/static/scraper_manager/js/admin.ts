@@ -46,7 +46,7 @@ const validateRequiredString = (
     return errorMessage;
   }
 
-  if (!allowWhitespace || stringValue.trim().length > 0) {
+  if (!allowWhitespace && stringValue.trim().length <= 0) {
     return errorMessage;
   }
 
@@ -97,7 +97,7 @@ const updateEditUserErrorMessage = (
   removeErrorMessage(inputElement, errorMessageDiv);
 };
 
-const addErrorMessageToForm = (
+const updateFormErrorMessages = (
   userId: string,
   formErrors: EditUserFormErrors,
   targetFieldName?: string
@@ -108,6 +108,7 @@ const addErrorMessageToForm = (
       targetFieldName,
       formErrors[targetFieldName as keyof EditUserFormErrors]
     );
+    return;
   }
 
   EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
@@ -119,11 +120,19 @@ const addErrorMessageToForm = (
   });
 };
 
-const onEditUsernameBlur = (event: FocusEvent) => {
+const onEditUserTextFieldBlur = (event: FocusEvent) => {
   const eventTarget = event.target as HTMLInputElement;
-  const username = eventTarget.value;
+  const value = eventTarget.value;
+  const fieldName = eventTarget.name;
 
-  editUserForm.username = username;
+  editUserForm = Object.assign(editUserForm, { [fieldName]: value });
+  const formErrors = validateEditUserForm(editUserForm);
+
+  if (!editUserForm.userId) {
+    return;
+  }
+
+  updateFormErrorMessages(editUserForm.userId, formErrors, fieldName);
 };
 
 const onChangeEditPassword = (event: Event) => {

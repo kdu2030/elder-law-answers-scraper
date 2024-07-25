@@ -6,6 +6,8 @@
 {% endblock page_title %}
 {% block head_content %}
     <script src="{% static 'scraper_manager/js/admin.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/sign-in.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/ela-settings.js' %}"></script>
 {% endblock head_content %}
 {% block content %}
     <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
@@ -71,7 +73,7 @@
                             <p class="mb-0">{{ row.username }}</p>
                         </div>
                         <form id="admin-edit-user-form-{{ row.id }}">
-                            <div className="mb-3">
+                            <div class="mb-3">
                                 <label class="form-label">
                                     Username<span class="text-danger">*</span>
                                 </label>
@@ -79,7 +81,8 @@
                                        name="username"
                                        type="text"
                                        value="{{ row.username }}"
-                                       placeholder="Username" />
+                                       placeholder="Username"
+                                       onblur="onEditUserTextFieldBlur(event)" />
                                 <div class="invalid-feedback" id="username-error-message"></div>
                             </div>
                             <div>
