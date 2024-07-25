@@ -135,6 +135,22 @@ const onEditUserTextFieldBlur = (event: FocusEvent) => {
   updateFormErrorMessages(editUserForm.userId, formErrors, fieldName);
 };
 
+const onEditUserPasswordBlur = (event: FocusEvent) => {
+  const eventTarget = event.target as HTMLInputElement;
+  const value = eventTarget.value;
+  const fieldName = eventTarget.name;
+
+  editUserForm = Object.assign(editUserForm, { [fieldName]: value });
+  const formErrors = validateEditUserForm(editUserForm);
+
+  if (!editUserForm.userId) {
+    return;
+  }
+
+  updateFormErrorMessages(editUserForm.userId, formErrors, "password");
+  updateFormErrorMessages(editUserForm.userId, formErrors, "confirmPassword");
+};
+
 const onChangeEditPassword = (event: Event) => {
   const eventTarget = event.target as HTMLInputElement;
   const shouldChangePassword = eventTarget.value === "true";
