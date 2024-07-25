@@ -28,12 +28,15 @@ type EditUserFormErrors = {
 
 let editUserForm: EditUserForm = { shouldChangePassword: false };
 let editUserErrors: EditUserFormErrors = {};
+let initialEditForm: EditUserForm;
 
 const onClickUserEdit = (initialForm: EditUserForm) => {
   editUserForm = {
     ...editUserForm,
     ...initialForm,
   };
+
+  initialEditForm = initialForm;
 };
 
 const validateRequiredString = (
@@ -149,6 +152,38 @@ const onEditUserPasswordBlur = (event: FocusEvent) => {
 
   updateFormErrorMessages(editUserForm.userId, formErrors, "password");
   updateFormErrorMessages(editUserForm.userId, formErrors, "confirmPassword");
+};
+
+const updateStringInputValue = (
+  userId: string,
+  fieldName: string,
+  value: string | undefined
+) => {
+  const inputElement = document.querySelector(
+    `#${AdminBaseIds.editUserForm}-${userId} input[name=${fieldName}]`
+  ) as HTMLInputElement;
+
+  inputElement.value = value ?? "";
+};
+
+const onCancelEditUser = () => {
+  const shouldChangePassword = document.querySelector(
+    `#${AdminBaseIds.editUserForm}-${editUserForm.userId} input[name=shouldChangePassword]`
+  ) as HTMLInputElement;
+
+  shouldChangePassword.checked = true;
+
+  EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
+    if (!editUserForm.userId) {
+      return;
+    }
+
+    updateStringInputValue(
+      editUserForm.userId,
+      fieldName,
+      initialEditForm[fieldName as keyof EditUserForm] as string | undefined
+    );
+  });
 };
 
 const onChangeEditPassword = (event: Event) => {
