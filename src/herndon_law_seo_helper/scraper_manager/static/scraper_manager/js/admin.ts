@@ -3,6 +3,7 @@
 
 enum AdminBaseIds {
   passwordForm = "admin-password-form",
+  editUserForm = "admin-edit-user-form",
 }
 
 type EditUserForm = {
@@ -13,6 +14,13 @@ type EditUserForm = {
   confirmPassword?: string;
   shouldChangePassword: boolean;
 };
+
+const EDIT_FIELDS_WITH_VALIDATION = [
+  "username",
+  "email",
+  "password",
+  "confirmPassword",
+];
 
 type EditUserFormErrors = {
   [K in keyof EditUserForm]?: string;
@@ -66,6 +74,49 @@ const validateEditUserForm = (
     password: passwordError,
     confirmPassword: confirmPasswordError,
   };
+};
+
+const updateEditUserErrorMessage = (
+  userId: string,
+  fieldName: string | undefined,
+  errorMessage: string | undefined
+) => {
+  const inputElement = document.querySelector(
+    `#${AdminBaseIds.editUserForm}-${userId} input[name=${fieldName}]`
+  ) as HTMLInputElement;
+
+  const errorMessageDiv = document.querySelector(
+    `#${AdminBaseIds.editUserForm}-${userId} #${fieldName}-error-message`
+  ) as HTMLDivElement;
+
+  if (errorMessage) {
+    addErrorMessage(inputElement, errorMessageDiv, errorMessage);
+    return;
+  }
+
+  removeErrorMessage(inputElement, errorMessageDiv);
+};
+
+const addErrorMessageToForm = (
+  userId: string,
+  formErrors: EditUserFormErrors,
+  targetFieldName?: string
+) => {
+  if (targetFieldName) {
+    updateEditUserErrorMessage(
+      userId,
+      targetFieldName,
+      formErrors[targetFieldName as keyof EditUserFormErrors]
+    );
+  }
+
+  EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
+    updateEditUserErrorMessage(
+      userId,
+      fieldName,
+      formErrors[targetFieldName as keyof EditUserFormErrors]
+    );
+  });
 };
 
 const onEditUsernameBlur = (event: FocusEvent) => {

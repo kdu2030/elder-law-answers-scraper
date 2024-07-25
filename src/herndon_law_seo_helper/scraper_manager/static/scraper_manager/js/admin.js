@@ -4,7 +4,14 @@
 var AdminBaseIds;
 (function (AdminBaseIds) {
     AdminBaseIds["passwordForm"] = "admin-password-form";
+    AdminBaseIds["editUserForm"] = "admin-edit-user-form";
 })(AdminBaseIds || (AdminBaseIds = {}));
+const EDIT_FIELDS_WITH_VALIDATION = [
+    "username",
+    "email",
+    "password",
+    "confirmPassword",
+];
 let editUserForm = { shouldChangePassword: false };
 let editUserErrors = {};
 const onClickUserEdit = (initialForm) => {
@@ -30,6 +37,23 @@ const validateEditUserForm = (editUserForm) => {
         password: passwordError,
         confirmPassword: confirmPasswordError,
     };
+};
+const updateEditUserErrorMessage = (userId, fieldName, errorMessage) => {
+    const inputElement = document.querySelector(`#${AdminBaseIds.editUserForm}-${userId} input[name=${fieldName}]`);
+    const errorMessageDiv = document.querySelector(`#${AdminBaseIds.editUserForm}-${userId} #${fieldName}-error-message`);
+    if (errorMessage) {
+        addErrorMessage(inputElement, errorMessageDiv, errorMessage);
+        return;
+    }
+    removeErrorMessage(inputElement, errorMessageDiv);
+};
+const addErrorMessageToForm = (userId, formErrors, targetFieldName) => {
+    if (targetFieldName) {
+        updateEditUserErrorMessage(userId, targetFieldName, formErrors[targetFieldName]);
+    }
+    EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
+        updateEditUserErrorMessage(userId, fieldName, formErrors[targetFieldName]);
+    });
 };
 const onEditUsernameBlur = (event) => {
     const eventTarget = event.target;
