@@ -3,10 +3,10 @@ var AdminBaseIds;
 (function (AdminBaseIds) {
     AdminBaseIds["passwordForm"] = "admin-password-form";
 })(AdminBaseIds || (AdminBaseIds = {}));
-const editUserForm = { shouldChangePassword: false };
-const editUserErrors = {};
-const onClickUserEdit = (userId) => {
-    editUserForm.userId = userId;
+let editUserForm = { shouldChangePassword: false };
+let editUserErrors = {};
+const onClickUserEdit = (initialForm) => {
+    editUserForm = Object.assign(Object.assign({}, editUserForm), initialForm);
 };
 const onChangeEditPassword = (event) => {
     const eventTarget = event.target;

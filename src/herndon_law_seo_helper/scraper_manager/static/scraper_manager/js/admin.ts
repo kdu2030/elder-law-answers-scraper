@@ -15,11 +15,14 @@ type EditUserFormErrors = {
   [K in keyof EditUserForm]?: string;
 };
 
-const editUserForm: EditUserForm = { shouldChangePassword: false };
-const editUserErrors: EditUserFormErrors = {};
+let editUserForm: EditUserForm = { shouldChangePassword: false };
+let editUserErrors: EditUserFormErrors = {};
 
-const onClickUserEdit = (userId: string) => {
-  editUserForm.userId = userId;
+const onClickUserEdit = (initialForm: EditUserForm) => {
+  editUserForm = {
+    ...editUserForm,
+    ...initialForm,
+  };
 };
 
 const onChangeEditPassword = (event: Event) => {
