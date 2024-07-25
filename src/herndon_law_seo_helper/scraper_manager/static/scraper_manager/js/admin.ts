@@ -175,7 +175,6 @@ const onCancelEditUser = () => {
   const shouldChangePassword = document.querySelector(
     `#${AdminBaseIds.editUserForm}-${userId} input[name=shouldChangePassword]`
   ) as HTMLInputElement;
-
   shouldChangePassword.checked = true;
 
   const passwordForm = document.getElementById(
