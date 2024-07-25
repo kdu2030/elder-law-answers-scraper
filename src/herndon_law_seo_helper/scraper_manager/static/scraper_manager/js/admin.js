@@ -86,14 +86,19 @@ const updateStringInputValue = (userId, fieldName, value) => {
     inputElement.value = value !== null && value !== void 0 ? value : "";
 };
 const onCancelEditUser = () => {
-    const shouldChangePassword = document.querySelector(`#${AdminBaseIds.editUserForm}-${editUserForm.userId} input[name=shouldChangePassword]`);
+    var _a;
+    const userId = (_a = editUserForm.userId) !== null && _a !== void 0 ? _a : -1;
+    if (userId === -1) {
+        return;
+    }
+    const shouldChangePassword = document.querySelector(`#${AdminBaseIds.editUserForm}-${userId} input[name=shouldChangePassword]`);
     shouldChangePassword.checked = true;
+    const passwordForm = document.getElementById(`${AdminBaseIds.passwordForm}-${userId}`);
+    passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.add("d-none");
     EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
-        if (!editUserForm.userId) {
-            return;
-        }
-        updateStringInputValue(editUserForm.userId, fieldName, initialEditForm[fieldName]);
+        updateStringInputValue(userId, fieldName, initialEditForm[fieldName]);
     });
+    updateFormErrorMessages(userId, {});
 };
 const onChangeEditPassword = (event) => {
     const eventTarget = event.target;

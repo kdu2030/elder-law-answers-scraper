@@ -167,23 +167,31 @@ const updateStringInputValue = (
 };
 
 const onCancelEditUser = () => {
+  const userId = editUserForm.userId ?? -1;
+  if (userId === -1) {
+    return;
+  }
+
   const shouldChangePassword = document.querySelector(
-    `#${AdminBaseIds.editUserForm}-${editUserForm.userId} input[name=shouldChangePassword]`
+    `#${AdminBaseIds.editUserForm}-${userId} input[name=shouldChangePassword]`
   ) as HTMLInputElement;
 
   shouldChangePassword.checked = true;
 
-  EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
-    if (!editUserForm.userId) {
-      return;
-    }
+  const passwordForm = document.getElementById(
+    `${AdminBaseIds.passwordForm}-${userId}`
+  );
+  passwordForm?.classList.add("d-none");
 
+  EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
     updateStringInputValue(
-      editUserForm.userId,
+      userId,
       fieldName,
       initialEditForm[fieldName as keyof EditUserForm] as string | undefined
     );
   });
+
+  updateFormErrorMessages(userId, {});
 };
 
 const onChangeEditPassword = (event: Event) => {
