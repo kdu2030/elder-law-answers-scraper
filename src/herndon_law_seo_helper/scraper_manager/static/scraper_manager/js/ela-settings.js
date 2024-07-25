@@ -132,6 +132,7 @@ const validatePasswords = (password, confirmPassword) => {
     if (password !== confirmPassword) {
         return { confirmPasswordError: "Passwords do not match." };
     }
+    return {};
 };
 const updatePasswordErrorMessages = (passwordElements, errorMessages) => {
     const { passwordInput, passwordErrorDiv, confirmPasswordErrorDiv, confirmPasswordInput, } = passwordElements;

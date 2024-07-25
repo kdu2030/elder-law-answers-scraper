@@ -182,7 +182,7 @@ const onElaPasswordCancel = () => {
 const validatePasswords = (
   password: string | undefined,
   confirmPassword: string | undefined
-): PasswordErrorMessages | undefined => {
+): PasswordErrorMessages => {
   const passwordError = validatePassword(password);
 
   if (passwordError) {
@@ -196,6 +196,8 @@ const validatePasswords = (
   if (password !== confirmPassword) {
     return { confirmPasswordError: "Passwords do not match." };
   }
+
+  return {};
 };
 
 const updatePasswordErrorMessages = (

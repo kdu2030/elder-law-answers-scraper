@@ -1,3 +1,6 @@
+/// <reference path="./sign-in.ts">
+/// <reference path="./ela-settings.ts">
+
 enum AdminBaseIds {
   passwordForm = "admin-password-form",
 }
@@ -23,6 +26,53 @@ const onClickUserEdit = (initialForm: EditUserForm) => {
     ...editUserForm,
     ...initialForm,
   };
+};
+
+const validateRequiredString = (
+  fieldName: string,
+  stringValue: string | undefined,
+  allowWhitespace: boolean = false
+) => {
+  const errorMessage = `${fieldName} is required.`;
+  if (!stringValue) {
+    return errorMessage;
+  }
+
+  if (!allowWhitespace || stringValue.trim().length > 0) {
+    return errorMessage;
+  }
+
+  return;
+};
+
+const validateEditUserForm = (
+  editUserForm: EditUserForm
+): EditUserFormErrors => {
+  const usernameErrorMessage = validateRequiredString(
+    "Username",
+    editUserForm.username
+  );
+
+  const emailErrorMessage = validateEmail(editUserForm.email);
+
+  const { passwordError, confirmPasswordError } = validatePasswords(
+    editUserForm.password,
+    editUserForm.confirmPassword
+  );
+
+  return {
+    username: usernameErrorMessage,
+    email: emailErrorMessage,
+    password: passwordError,
+    confirmPassword: confirmPasswordError,
+  };
+};
+
+const onEditUsernameBlur = (event: FocusEvent) => {
+  const eventTarget = event.target as HTMLInputElement;
+  const username = eventTarget.value;
+
+  editUserForm.username = username;
 };
 
 const onChangeEditPassword = (event: Event) => {
