@@ -91,6 +91,14 @@ const updateStringInputValue = (userId, fieldName, value) => {
     const inputElement = document.querySelector(`#${AdminBaseIds.editUserForm}-${userId} input[name=${fieldName}]`);
     inputElement.value = value !== null && value !== void 0 ? value : "";
 };
+const setEditUserCheckboxValues = (editUserForm) => {
+    var _a, _b;
+    const userId = editUserForm.userId;
+    const canViewAdminInput = document.querySelector(`#${AdminBaseIds.editUserForm}-${userId} input[name=canViewAdmin]`);
+    const canEditConfig = document.querySelector(`#${AdminBaseIds.editUserForm}-${userId} input[name=canEditConfig]`);
+    canViewAdminInput.checked = (_a = editUserForm.canViewAdmin) !== null && _a !== void 0 ? _a : false;
+    canEditConfig.checked = (_b = editUserForm.canEditConfig) !== null && _b !== void 0 ? _b : false;
+};
 const onCancelEditUser = () => {
     var _a;
     const userId = (_a = editUserForm.userId) !== null && _a !== void 0 ? _a : -1;
@@ -101,6 +109,7 @@ const onCancelEditUser = () => {
     shouldChangePassword.checked = true;
     const passwordForm = document.getElementById(`${AdminBaseIds.passwordForm}-${userId}`);
     passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.add("d-none");
+    setEditUserCheckboxValues(initialEditForm);
     EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
         updateStringInputValue(userId, fieldName, initialEditForm[fieldName]);
     });

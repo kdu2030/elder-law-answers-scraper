@@ -175,6 +175,19 @@ const updateStringInputValue = (
   inputElement.value = value ?? "";
 };
 
+const setEditUserCheckboxValues = (editUserForm: EditUserForm) => {
+  const userId = editUserForm.userId;
+  const canViewAdminInput = document.querySelector(
+    `#${AdminBaseIds.editUserForm}-${userId} input[name=canViewAdmin]`
+  ) as HTMLInputElement;
+  const canEditConfig = document.querySelector(
+    `#${AdminBaseIds.editUserForm}-${userId} input[name=canEditConfig]`
+  ) as HTMLInputElement;
+
+  canViewAdminInput.checked = editUserForm.canViewAdmin ?? false;
+  canEditConfig.checked = editUserForm.canEditConfig ?? false;
+};
+
 const onCancelEditUser = () => {
   const userId = editUserForm.userId ?? -1;
   if (userId === -1) {
@@ -190,6 +203,8 @@ const onCancelEditUser = () => {
     `${AdminBaseIds.passwordForm}-${userId}`
   );
   passwordForm?.classList.add("d-none");
+
+  setEditUserCheckboxValues(initialEditForm);
 
   EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
     updateStringInputValue(
