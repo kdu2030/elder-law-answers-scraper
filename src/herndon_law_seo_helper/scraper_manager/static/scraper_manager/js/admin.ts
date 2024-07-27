@@ -13,6 +13,8 @@ type EditUserForm = {
   password?: string;
   confirmPassword?: string;
   shouldChangePassword: boolean;
+  canViewAdmin?: boolean;
+  canEditConfig?: boolean;
 };
 
 const EDIT_FIELDS_WITH_VALIDATION = [

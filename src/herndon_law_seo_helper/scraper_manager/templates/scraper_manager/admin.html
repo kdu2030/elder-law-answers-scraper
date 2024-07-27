@@ -35,11 +35,21 @@
                                     </td>
                                     <td style="vertical-align: middle">{{ row.email }}</td>
                                     <td style="vertical-align: middle">
-                                        <button class="btn btn-outline-primary outline-herndon-law me-3"
-                                                type="button"
-                                                onclick="onClickUserEdit({ userId: {{ row.id }}, username: '{{ row.username }}', email: '{{ row.email }}'})"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#admin-edit-user-modal-{{ row.id }}">Edit</button>
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onClickUserEdit({ userId: {{ row.id }}, username: '{{ row.username }}', email: '{{ row.email }}', canViewAdmin:
+                                            {% if row.can_view_admin %}
+                                                true
+                                            {% else %}
+                                                false
+                                            {% endif %}
+                                            , canEditConfig:
+                                            {% if row.can_edit_config %}
+                                                true
+                                            {% else %}
+                                                false
+                                            {% endif %}
+                                            })" data-bs-toggle="modal" data-bs-target="#admin-edit-user-modal-{{ row.id }}">
+                                            Edit
+                                        </button>
                                         <button class="btn btn-outline-danger">Delete</button>
                                     </td>
                                 </tr>
