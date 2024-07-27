@@ -251,7 +251,7 @@ const toggleSaveSpinner = (userId: number, showSpinner: boolean) => {
   spinner?.classList.add("d-none");
 };
 
-const toggleCancelEnabled = (userId: number, isDisabled: boolean) => {
+const toggleCancelDisabled = (userId: number, isDisabled: boolean) => {
   const cancelButtons = document.querySelectorAll<HTMLButtonElement>(
     `#${AdminBaseIds.editUserModal}-${userId} button[data-bs-dismiss='modal']`
   );
@@ -287,7 +287,7 @@ const saveEditUserForm = async () => {
   }
 
   toggleSaveSpinner(userId, true);
-  toggleCancelEnabled(userId, true);
+  toggleCancelDisabled(userId, true);
 
   const userRequest: PutUserSettingsRequest = {
     userId: editUserForm.userId,
@@ -318,6 +318,7 @@ const saveEditUserForm = async () => {
       "Unable to save data",
       "Unable to save updated user settings"
     );
+    toggleCancelDisabled(userId, false);
     return;
   }
 

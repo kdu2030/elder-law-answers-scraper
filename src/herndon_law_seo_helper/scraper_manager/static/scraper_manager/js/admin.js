@@ -148,7 +148,7 @@ const toggleSaveSpinner = (userId, showSpinner) => {
     }
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
 };
-const toggleCancelEnabled = (userId, isDisabled) => {
+const toggleCancelDisabled = (userId, isDisabled) => {
     const cancelButtons = document.querySelectorAll(`#${AdminBaseIds.editUserModal}-${userId} button[data-bs-dismiss='modal']`);
     cancelButtons.forEach((cancelButton) => {
         cancelButton.disabled = isDisabled;
@@ -172,7 +172,7 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
     toggleSaveSpinner(userId, true);
-    toggleCancelEnabled(userId, true);
+    toggleCancelDisabled(userId, true);
     const userRequest = {
         userId: editUserForm.userId,
         username: editUserForm.username,
@@ -194,6 +194,7 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     if (settingsResponse.isError || permissionsResponse.isError) {
         createErrorToaster("Unable to save data", "Unable to save updated user settings");
+        toggleCancelDisabled(userId, false);
         return;
     }
     createSuccessToaster("User data successfully saved", "Successfully updated user settings. The page will load momentarily with the updated users.");
