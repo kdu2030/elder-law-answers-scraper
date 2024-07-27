@@ -118,10 +118,12 @@ const onCancelEditUser = () => {
     if (userId === -1) {
         return;
     }
-    const shouldChangePassword = document.querySelector(`#${AdminBaseIds.editUserForm}-${userId} input[name=shouldChangePassword]`);
-    shouldChangePassword.checked = true;
-    const passwordForm = document.getElementById(`${AdminBaseIds.passwordForm}-${userId}`);
-    passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.add("d-none");
+    if (userId !== 0) {
+        const shouldChangePassword = document.querySelector(`#${AdminBaseIds.editUserForm}-${userId} input[name=shouldChangePassword]`);
+        shouldChangePassword.checked = true;
+        const passwordForm = document.getElementById(`${AdminBaseIds.passwordForm}-${userId}`);
+        passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.add("d-none");
+    }
     setEditUserCheckboxValues(initialEditForm);
     EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
         updateStringInputValue(userId, fieldName, initialEditForm[fieldName]);
