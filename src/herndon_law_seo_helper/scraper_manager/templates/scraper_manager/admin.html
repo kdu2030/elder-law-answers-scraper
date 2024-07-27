@@ -12,13 +12,15 @@
     <script src="{% static 'scraper_manager/js/api/put-user-permissions.js' %}"></script>
     <script src="{% static 'scraper_manager/js/api/post-user.js' %}"></script>
     <script src="{% static 'scraper_manager/js/api/delete-user.js' %}"></script>
+    <link rel="stylesheet"
+          href="{% static 'scraper_manager/styles/admin.css' %}" />
 {% endblock head_content %}
 {% block content %}
     <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
         <div class="w-75">
-            <div class="d-grid mb-3" style="grid-template-columns: 86% 14%">
+            <div class="d-grid mb-3 admin-header">
                 <h4>Admin Dashboard</h4>
-                <div class="ps-2">
+                <div class="add-user-wrapper">
                     <button class="btn btn-outline-primary outline-herndon-law"
                             data-bs-toggle="modal"
                             data-bs-target="#admin-edit-user-modal-0"
@@ -33,7 +35,7 @@
                         <thead>
                             <tr>
                                 <th scope="col" class="w-25">User</th>
-                                <th scope="col" style="width: 62%">Email</th>
+                                <th scope="col" class="admin-email-column">Email</th>
                                 <th scope="col">Actions</th>
                             </tr>
                         </thead>

@@ -1,0 +1,26 @@
+@media (max-width: 1400px) {
+    div.admin-header {
+        grid-template-columns: 75% 25%;
+        
+    }
+
+    th.admin-email-column {
+        width: 50%;
+    }
+
+    div.add-user-wrapper {
+        padding-left: 0rem;
+    }
+}
+
+.admin-header {
+    grid-template-columns: 86% 14%
+}
+
+.admin-email-column {
+    width: 62%
+}
+
+.add-user-wrapper {
+    padding-left: 0.5rem;
+}
