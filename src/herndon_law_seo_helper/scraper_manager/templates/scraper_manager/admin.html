@@ -61,9 +61,13 @@
                                             })" data-bs-toggle="modal" data-bs-target="#admin-edit-user-modal-{{ row.id }}">
                                             Edit
                                         </button>
-                                        <button class="btn btn-outline-danger"
-                                                data-bs-toggle="modal"
-                                                data-bs-target="#admin-delete-user-modal-{{ row.id }}">Delete</button>
+                                        {% if row.id != user.id %}
+                                            <button class="btn btn-outline-danger"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#admin-delete-user-modal-{{ row.id }}">
+                                                Delete
+                                            </button>
+                                        {% endif %}
                                     </td>
                                 </tr>
                             {% endfor %}
