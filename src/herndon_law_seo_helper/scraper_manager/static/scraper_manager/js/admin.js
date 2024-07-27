@@ -67,7 +67,7 @@ const updateFormErrorMessages = (userId, formErrors, targetFieldName) => {
         return;
     }
     EDIT_FIELDS_WITH_VALIDATION.forEach((fieldName) => {
-        updateEditUserErrorMessage(userId, fieldName, formErrors[targetFieldName]);
+        updateEditUserErrorMessage(userId, fieldName, formErrors[fieldName]);
     });
 };
 const onEditUserTextFieldBlur = (event) => {

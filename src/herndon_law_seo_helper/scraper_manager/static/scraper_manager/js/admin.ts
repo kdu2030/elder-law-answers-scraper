@@ -123,7 +123,7 @@ const updateFormErrorMessages = (
     updateEditUserErrorMessage(
       userId,
       fieldName,
-      formErrors[targetFieldName as keyof EditUserFormErrors]
+      formErrors[fieldName as keyof EditUserFormErrors]
     );
   });
 };
