@@ -160,7 +160,7 @@ def user_permissions_put(request: HttpRequest) -> HttpResponse:
 
     try:
         user = User.objects.get(id=user_id)
-        existing_permissions = UserPermissionCode.objects.get(user=user)
+        existing_permissions = UserPermissionCode.objects.filter(user=user)
         existing_permission_codes = list(map(
             lambda permission: permission.permission_code, existing_permissions))
 
@@ -182,5 +182,8 @@ def user_permissions_put(request: HttpRequest) -> HttpResponse:
             UserPermissionCode.objects.create(
                 user=user, permission_code=PermissionCode.EDIT_WEBSITE_CONFIG.value)
 
+        return JsonResponse({"isError": False}, status=200)
+
     except:
+        traceback.print_exc()
         return JsonResponse({"isError": True}, status=500)

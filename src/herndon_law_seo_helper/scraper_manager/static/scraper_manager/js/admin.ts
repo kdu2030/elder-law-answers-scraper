@@ -1,6 +1,7 @@
 /// <reference path="./sign-in.ts">
 /// <reference path="./ela-settings.ts">
 /// <reference path="./api/put-user-settings.ts">
+/// <reference path="./api/put-user-permissions.ts">
 
 enum AdminBaseIds {
   passwordForm = "admin-password-form",
@@ -294,8 +295,19 @@ const saveEditUserForm = async () => {
     password: editUserForm.password,
   };
 
-  const response = await putUserSettings(userRequest, csrfToken);
-  console.log(response);
+  const putUserPermissionsRequest: PutUserPermissionsRequest = {
+    userId: editUserForm.userId ?? -1,
+    canEditConfig: editUserForm.canEditConfig ?? false,
+    canViewAdmin: editUserForm.canViewAdmin ?? false,
+  };
+
+  const [settingsResponse, permissionsResponse] = await Promise.all([
+    putUserSettings(userRequest, csrfToken),
+    putUserPermissions(putUserPermissionsRequest, csrfToken),
+  ]);
+
+  console.log(settingsResponse);
+  console.log(permissionsResponse);
 
   toggleSaveSpinner(userId, false);
   toggleCancelEnabled(userId, false);
