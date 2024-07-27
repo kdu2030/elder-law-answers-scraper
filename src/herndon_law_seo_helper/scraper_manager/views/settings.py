@@ -187,7 +187,7 @@ def user_permissions_put(request: HttpRequest) -> HttpResponse:
             UserPermissionCode.objects.create(
                 user=user, permission_code=PermissionCode.VIEW_ADMIN.value)
 
-        if can_edit_config and PermissionCode.EDIT_WEBSITE_CONFIG not in existing_permission_codes:
+        if can_edit_config and PermissionCode.EDIT_WEBSITE_CONFIG.value not in existing_permission_codes:
             UserPermissionCode.objects.create(
                 user=user, permission_code=PermissionCode.EDIT_WEBSITE_CONFIG.value)
 
