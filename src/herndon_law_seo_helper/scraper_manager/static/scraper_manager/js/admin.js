@@ -3,6 +3,7 @@
 /// <reference path="./ela-settings.ts">
 /// <reference path="./api/put-user-settings.ts">
 /// <reference path="./api/put-user-permissions.ts">
+/// <reference path="./api/post-user.ts">
 /// <reference path="./toaster.ts">
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -200,6 +201,38 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
     createSuccessToaster("User data successfully saved", "Successfully updated user settings. The page will load momentarily with the updated users.");
+    yield new Promise((resolve) => setTimeout(() => resolve(), 2000));
+    location.reload();
+});
+const saveAddUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _f, _g, _h, _j, _k, _l;
+    const userId = 0;
+    const formErrors = validateEditUserForm(editUserForm);
+    updateFormErrorMessages(userId, formErrors);
+    const csrfToken = (_f = getCsrfToken()) !== null && _f !== void 0 ? _f : "";
+    if (Object.keys(formErrors).find((key) => typeof formErrors[key] === "string")) {
+        return;
+    }
+    toggleSaveSpinner(userId, true);
+    toggleCancelDisabled(userId, true);
+    const request = {
+        username: (_g = editUserForm.username) !== null && _g !== void 0 ? _g : "",
+        email: (_h = editUserForm.email) !== null && _h !== void 0 ? _h : "",
+        password: (_j = editUserForm.password) !== null && _j !== void 0 ? _j : "",
+        canViewAdmin: (_k = editUserForm.canViewAdmin) !== null && _k !== void 0 ? _k : false,
+        canEditConfig: (_l = editUserForm.canEditConfig) !== null && _l !== void 0 ? _l : false,
+    };
+    const response = yield postUser(request, csrfToken);
+    toggleSaveSpinner(userId, false);
+    if (response.formErrors) {
+        updateFormErrorMessages(userId, response.formErrors);
+    }
+    if (response.isError) {
+        createErrorToaster("Unable to save user data", "Unable to add a new user.");
+        toggleCancelDisabled(userId, false);
+        return;
+    }
+    createSuccessToaster("Successfully saved user data", "New user added. The page will load momentarily with the updated users.");
     yield new Promise((resolve) => setTimeout(() => resolve(), 2000));
     location.reload();
 });

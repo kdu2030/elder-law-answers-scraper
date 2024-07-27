@@ -2,6 +2,7 @@
 /// <reference path="./ela-settings.ts">
 /// <reference path="./api/put-user-settings.ts">
 /// <reference path="./api/put-user-permissions.ts">
+/// <reference path="./api/post-user.ts">
 /// <reference path="./toaster.ts">
 
 enum AdminBaseIds {
@@ -330,5 +331,53 @@ const saveEditUserForm = async () => {
 
   await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
 
+  location.reload();
+};
+
+const saveAddUserForm = async () => {
+  const userId = 0;
+  const formErrors = validateEditUserForm(editUserForm);
+  updateFormErrorMessages(userId, formErrors);
+  const csrfToken = getCsrfToken() ?? "";
+
+  if (
+    Object.keys(formErrors).find(
+      (key) => typeof formErrors[key as keyof EditUserFormErrors] === "string"
+    )
+  ) {
+    return;
+  }
+
+  toggleSaveSpinner(userId, true);
+  toggleCancelDisabled(userId, true);
+
+  const request: PostUserRequest = {
+    username: editUserForm.username ?? "",
+    email: editUserForm.email ?? "",
+    password: editUserForm.password ?? "",
+    canViewAdmin: editUserForm.canViewAdmin ?? false,
+    canEditConfig: editUserForm.canEditConfig ?? false,
+  };
+
+  const response = await postUser(request, csrfToken);
+
+  toggleSaveSpinner(userId, false);
+
+  if (response.formErrors) {
+    updateFormErrorMessages(userId, response.formErrors);
+  }
+
+  if (response.isError) {
+    createErrorToaster("Unable to save user data", "Unable to add a new user.");
+    toggleCancelDisabled(userId, false);
+    return;
+  }
+
+  createSuccessToaster(
+    "Successfully saved user data",
+    "New user added. The page will load momentarily with the updated users."
+  );
+
+  await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
   location.reload();
 };
