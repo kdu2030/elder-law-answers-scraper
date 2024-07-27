@@ -3,6 +3,7 @@
 /// <reference path="./ela-settings.ts">
 /// <reference path="./api/put-user-settings.ts">
 /// <reference path="./api/put-user-permissions.ts">
+/// <reference path="./toaster.ts">
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
@@ -187,8 +188,12 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
         putUserSettings(userRequest, csrfToken),
         putUserPermissions(putUserPermissionsRequest, csrfToken),
     ]);
-    console.log(settingsResponse);
-    console.log(permissionsResponse);
     toggleSaveSpinner(userId, false);
-    toggleCancelEnabled(userId, false);
+    if (settingsResponse.isError || permissionsResponse.isError) {
+        createErrorToaster("Unable to save data", "Unable to save updated user settings");
+        return;
+    }
+    createSuccessToaster("User data successfully saved", "Successfully updated user settings. The page will load momentarily with the updated users.");
+    yield new Promise((resolve) => setTimeout(() => resolve(), 2000));
+    location.reload();
 });

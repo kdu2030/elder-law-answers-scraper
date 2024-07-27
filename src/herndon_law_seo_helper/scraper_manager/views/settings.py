@@ -118,6 +118,8 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
         if not user_id:
             user = User.objects.get(id=user.id)
             update_session_auth_hash(request, user)
+        elif user_id == request.user.id:
+            update_session_auth_hash(request, user)
 
         return JsonResponse({"isError": False})
     except:

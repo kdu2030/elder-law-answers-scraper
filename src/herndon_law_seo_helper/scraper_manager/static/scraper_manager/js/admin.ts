@@ -2,6 +2,7 @@
 /// <reference path="./ela-settings.ts">
 /// <reference path="./api/put-user-settings.ts">
 /// <reference path="./api/put-user-permissions.ts">
+/// <reference path="./toaster.ts">
 
 enum AdminBaseIds {
   passwordForm = "admin-password-form",
@@ -306,9 +307,22 @@ const saveEditUserForm = async () => {
     putUserPermissions(putUserPermissionsRequest, csrfToken),
   ]);
 
-  console.log(settingsResponse);
-  console.log(permissionsResponse);
-
   toggleSaveSpinner(userId, false);
-  toggleCancelEnabled(userId, false);
+
+  if (settingsResponse.isError || permissionsResponse.isError) {
+    createErrorToaster(
+      "Unable to save data",
+      "Unable to save updated user settings"
+    );
+    return;
+  }
+
+  createSuccessToaster(
+    "User data successfully saved",
+    "Successfully updated user settings. The page will load momentarily with the updated users."
+  );
+
+  await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
+
+  location.reload();
 };
