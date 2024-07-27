@@ -1,7 +1,7 @@
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import render
 from django.contrib.auth.models import User
-from ..models.user_models import UserProfilePicture
+from ..models.user_models import UserProfilePicture, UserPermissionCode, PermissionCode
 from typing import List, Dict
 
 
@@ -10,9 +10,14 @@ def get_table_row_for_user(user: User) -> Dict[str, str]:
     username = user.username
     profile_picture = UserProfilePicture.objects.filter(user=user).first()
     image_src = "https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
+    user_permission_codes = UserPermissionCode.objects.filter(user=user) or []
+
+    can_view_admin = PermissionCode.VIEW_ADMIN.value in user_permission_codes
+    can_edit_config = PermissionCode.EDIT_WEBSITE_CONFIG.value in user_permission_codes
+
     if profile_picture:
         image_src = profile_picture.image_url
-    return {"id": user.id, "email": email, "username": username, "image_src": image_src}
+    return {"id": user.id, "email": email, "username": username, "image_src": image_src, "can_view_admin": can_view_admin, "can_edit_config": can_edit_config}
 
 
 def get_admin_data() -> List[Dict[str, str]]:

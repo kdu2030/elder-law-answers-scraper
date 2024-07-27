@@ -144,14 +144,19 @@
                             <div class="mt-3">
                                 <label class="form-label">User Permissions</label>
                                 <div class="form-check mb-3">
-                                    <input type="checkbox" class="form-check-input" value="" name="canViewAdmin" />
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           value=""
+                                           name="canViewAdmin"
+                                           checked="{% if row.can_view_admin %}true{% endif %}" />
                                     <label class="form-check-label" for="canViewAdmin">Can View Admin Dashboard</label>
                                 </div>
                                 <div class="form-check">
                                     <input type="checkbox"
                                            class="form-check-input"
                                            value=""
-                                           name="canEditWebsiteConfig" />
+                                           name="canEditWebsiteConfig"
+                                           checked="{% if row.can_edit_config %}true{% endif %}" />
                                     <label class="form-check-label" for="canEditWebsiteConfig">Can Edit Website Configuration</label>
                                 </div>
                             </div>
