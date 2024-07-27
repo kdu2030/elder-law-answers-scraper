@@ -81,6 +81,12 @@ const onEditUserPasswordBlur = (event) => {
     updateFormErrorMessages(editUserForm.userId, formErrors, "password");
     updateFormErrorMessages(editUserForm.userId, formErrors, "confirmPassword");
 };
+const onEditUserCheckboxChange = (event) => {
+    const eventTarget = event.target;
+    const checked = eventTarget.checked;
+    const fieldName = eventTarget.name;
+    editUserForm = Object.assign(editUserForm, { [fieldName]: checked });
+};
 const updateStringInputValue = (userId, fieldName, value) => {
     const inputElement = document.querySelector(`#${AdminBaseIds.editUserForm}-${userId} input[name=${fieldName}]`);
     inputElement.value = value !== null && value !== void 0 ? value : "";

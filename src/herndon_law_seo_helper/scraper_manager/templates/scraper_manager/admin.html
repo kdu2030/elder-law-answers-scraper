@@ -159,9 +159,14 @@
                                                class="form-check-input"
                                                value=""
                                                name="canViewAdmin"
+                                               onchange="onEditUserCheckboxChange(event)"
                                                checked />
                                     {% else %}
-                                        <input type="checkbox" class="form-check-input" value="" name="canViewAdmin" />
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               value=""
+                                               name="canViewAdmin"
+                                               onchange="onEditUserCheckboxChange(event)" />
                                     {% endif %}
                                     <label class="form-check-label" for="canViewAdmin">Can View Admin Dashboard</label>
                                 </div>
@@ -171,11 +176,13 @@
                                                class="form-check-input"
                                                value=""
                                                name="canEditWebsiteConfig"
+                                               onchange="onEditUserCheckboxChange(event)"
                                                checked />
                                     {% else %}
                                         <input type="checkbox"
                                                class="form-check-input"
                                                value=""
+                                               onchange="onEditUserCheckboxChange(event)"
                                                name="canEditWebsiteConfig" />
                                     {% endif %}
                                     <label class="form-check-label" for="canEditWebsiteConfig">Can Edit Website Configuration</label>

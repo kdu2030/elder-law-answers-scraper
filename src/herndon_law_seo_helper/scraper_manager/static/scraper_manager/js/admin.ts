@@ -156,6 +156,13 @@ const onEditUserPasswordBlur = (event: FocusEvent) => {
   updateFormErrorMessages(editUserForm.userId, formErrors, "confirmPassword");
 };
 
+const onEditUserCheckboxChange = (event: Event) => {
+  const eventTarget = event.target as HTMLInputElement;
+  const checked = eventTarget.checked;
+  const fieldName = eventTarget.name;
+  editUserForm = Object.assign(editUserForm, { [fieldName]: checked });
+};
+
 const updateStringInputValue = (
   userId: string,
   fieldName: string,
