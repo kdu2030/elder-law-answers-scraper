@@ -229,3 +229,23 @@ def user_post(request: HttpRequest) -> HttpResponse:
     except:
         traceback.print_exc()
         return JsonResponse({"isError": True}, status=500)
+
+
+def user_delete(request: HttpRequest, id: int) -> HttpResponse:
+    if request.method != "DELETE" or not request.user.is_authenticated:
+        return JsonResponse({"isError": True}, status=400)
+
+    view_admin_code = UserPermissionCode.objects.filter(
+        user=request.user, permission_code=PermissionCode.VIEW_ADMIN.value)
+
+    if not view_admin_code:
+        return JsonResponse({"isError": True}, status=403)
+
+    try:
+        user_to_delete = User.objects.get(id=id)
+        user_to_delete.delete()
+
+        return JsonResponse({"isError": False})
+    except:
+        traceback.print_exc()
+        return JsonResponse({"isError": True}, status=500)

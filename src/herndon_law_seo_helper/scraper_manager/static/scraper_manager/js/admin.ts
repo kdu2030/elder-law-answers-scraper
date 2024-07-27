@@ -3,6 +3,7 @@
 /// <reference path="./api/put-user-settings.ts">
 /// <reference path="./api/put-user-permissions.ts">
 /// <reference path="./api/post-user.ts">
+/// <reference path="./api/delete-user.ts">
 /// <reference path="./toaster.ts">
 
 enum AdminBaseIds {
@@ -10,6 +11,8 @@ enum AdminBaseIds {
   editUserForm = "admin-edit-user-form",
   editUserSaveSpinner = "edit-user-save-spinner",
   editUserModal = "admin-edit-user-modal",
+  deleteUserModal = "admin-delete-user-modal",
+  deleteSpinner = "delete-user-save-spinner",
 }
 
 type EditUserForm = {
@@ -240,9 +243,13 @@ const onChangeEditPassword = (event: Event) => {
   passwordForm?.classList.add("d-none");
 };
 
-const toggleSaveSpinner = (userId: number, showSpinner: boolean) => {
+const toggleSaveSpinner = (
+  userId: number,
+  showSpinner: boolean,
+  baseId?: string
+) => {
   const spinner = document.getElementById(
-    `${AdminBaseIds.editUserSaveSpinner}-${userId}`
+    `${baseId ?? AdminBaseIds.editUserSaveSpinner}-${userId}`
   );
 
   if (showSpinner) {
@@ -253,9 +260,15 @@ const toggleSaveSpinner = (userId: number, showSpinner: boolean) => {
   spinner?.classList.add("d-none");
 };
 
-const toggleCancelDisabled = (userId: number, isDisabled: boolean) => {
+const toggleCancelDisabled = (
+  userId: number,
+  isDisabled: boolean,
+  baseModalId?: string
+) => {
   const cancelButtons = document.querySelectorAll<HTMLButtonElement>(
-    `#${AdminBaseIds.editUserModal}-${userId} button[data-bs-dismiss='modal']`
+    `#${
+      baseModalId ?? AdminBaseIds.editUserModal
+    }-${userId} button[data-bs-dismiss='modal']`
   );
 
   cancelButtons.forEach((cancelButton) => {
@@ -378,6 +391,29 @@ const saveAddUserForm = async () => {
     "New user added. The page will load momentarily with the updated users."
   );
 
+  await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
+  location.reload();
+};
+
+const saveDeleteUser = async (userId: number) => {
+  const csrfToken = getCsrfToken() ?? "";
+
+  toggleSaveSpinner(userId, true, AdminBaseIds.deleteSpinner);
+  toggleCancelDisabled(userId, true, AdminBaseIds.deleteUserModal);
+
+  const response = await deleteUser(userId, csrfToken);
+
+  toggleSaveSpinner(userId, false, AdminBaseIds.deleteSpinner);
+
+  if (response.isError) {
+    createErrorToaster("Unable to delete data", "Unable to delete user.");
+    toggleCancelDisabled(userId, false, AdminBaseIds.deleteUserModal);
+  }
+
+  createSuccessToaster(
+    "Successfully deleted user.",
+    "User was deleted. The page will load momentarily with the updated users."
+  );
   await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
   location.reload();
 };

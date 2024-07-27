@@ -11,6 +11,7 @@
     <script src="{% static 'scraper_manager/js/api/put-user-settings.js' %}"></script>
     <script src="{% static 'scraper_manager/js/api/put-user-permissions.js' %}"></script>
     <script src="{% static 'scraper_manager/js/api/post-user.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/delete-user.js' %}"></script>
 {% endblock head_content %}
 {% block content %}
     <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
@@ -239,7 +240,11 @@
                     <div class="modal-footer">
                         <button class="btn btn-outline-primary outline-herndon-law"
                                 data-bs-dismiss="modal">Cancel</button>
-                        <button class="btn btn-danger">Delete</button>
+                        <button class="btn btn-danger" onclick="saveDeleteUser({{ row.id }})">
+                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                 id="delete-user-save-spinner-{{ row.id }}"></div>
+                            Delete
+                        </button>
                     </div>
                 </div>
             </div>

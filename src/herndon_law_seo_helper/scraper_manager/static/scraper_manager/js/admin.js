@@ -4,6 +4,7 @@
 /// <reference path="./api/put-user-settings.ts">
 /// <reference path="./api/put-user-permissions.ts">
 /// <reference path="./api/post-user.ts">
+/// <reference path="./api/delete-user.ts">
 /// <reference path="./toaster.ts">
 var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
@@ -20,6 +21,8 @@ var AdminBaseIds;
     AdminBaseIds["editUserForm"] = "admin-edit-user-form";
     AdminBaseIds["editUserSaveSpinner"] = "edit-user-save-spinner";
     AdminBaseIds["editUserModal"] = "admin-edit-user-modal";
+    AdminBaseIds["deleteUserModal"] = "admin-delete-user-modal";
+    AdminBaseIds["deleteSpinner"] = "delete-user-save-spinner";
 })(AdminBaseIds || (AdminBaseIds = {}));
 const EDIT_FIELDS_WITH_VALIDATION = [
     "username",
@@ -143,16 +146,16 @@ const onChangeEditPassword = (event) => {
     editUserForm.shouldChangePassword = false;
     passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.add("d-none");
 };
-const toggleSaveSpinner = (userId, showSpinner) => {
-    const spinner = document.getElementById(`${AdminBaseIds.editUserSaveSpinner}-${userId}`);
+const toggleSaveSpinner = (userId, showSpinner, baseId) => {
+    const spinner = document.getElementById(`${baseId !== null && baseId !== void 0 ? baseId : AdminBaseIds.editUserSaveSpinner}-${userId}`);
     if (showSpinner) {
         spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
         return;
     }
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
 };
-const toggleCancelDisabled = (userId, isDisabled) => {
-    const cancelButtons = document.querySelectorAll(`#${AdminBaseIds.editUserModal}-${userId} button[data-bs-dismiss='modal']`);
+const toggleCancelDisabled = (userId, isDisabled, baseModalId) => {
+    const cancelButtons = document.querySelectorAll(`#${baseModalId !== null && baseModalId !== void 0 ? baseModalId : AdminBaseIds.editUserModal}-${userId} button[data-bs-dismiss='modal']`);
     cancelButtons.forEach((cancelButton) => {
         cancelButton.disabled = isDisabled;
     });
@@ -233,6 +236,21 @@ const saveAddUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
     createSuccessToaster("Successfully saved user data", "New user added. The page will load momentarily with the updated users.");
+    yield new Promise((resolve) => setTimeout(() => resolve(), 2000));
+    location.reload();
+});
+const saveDeleteUser = (userId) => __awaiter(void 0, void 0, void 0, function* () {
+    var _m;
+    const csrfToken = (_m = getCsrfToken()) !== null && _m !== void 0 ? _m : "";
+    toggleSaveSpinner(userId, true, AdminBaseIds.deleteSpinner);
+    toggleCancelDisabled(userId, true, AdminBaseIds.deleteUserModal);
+    const response = yield deleteUser(userId, csrfToken);
+    toggleSaveSpinner(userId, false, AdminBaseIds.deleteSpinner);
+    if (response.isError) {
+        createErrorToaster("Unable to delete data", "Unable to delete user.");
+        toggleCancelDisabled(userId, false, AdminBaseIds.deleteUserModal);
+    }
+    createSuccessToaster("Successfully deleted user.", "User was deleted. The page will load momentarily with the updated users.");
     yield new Promise((resolve) => setTimeout(() => resolve(), 2000));
     location.reload();
 });
