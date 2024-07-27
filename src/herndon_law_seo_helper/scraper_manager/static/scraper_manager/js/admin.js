@@ -25,7 +25,6 @@ const EDIT_FIELDS_WITH_VALIDATION = [
     "confirmPassword",
 ];
 let editUserForm = { shouldChangePassword: false };
-let editUserErrors = {};
 let initialEditForm;
 const onClickUserEdit = (initialForm) => {
     editUserForm = Object.assign(Object.assign({}, editUserForm), initialForm);

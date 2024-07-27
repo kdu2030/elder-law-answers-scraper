@@ -32,7 +32,6 @@ type EditUserFormErrors = {
 };
 
 let editUserForm: EditUserForm = { shouldChangePassword: false };
-let editUserErrors: EditUserFormErrors = {};
 let initialEditForm: EditUserForm;
 
 const onClickUserEdit = (initialForm: EditUserForm) => {
