@@ -144,19 +144,30 @@
                             <div class="mt-3">
                                 <label class="form-label">User Permissions</label>
                                 <div class="form-check mb-3">
-                                    <input type="checkbox"
-                                           class="form-check-input"
-                                           value=""
-                                           name="canViewAdmin"
-                                           checked="{% if row.can_view_admin %}true{% endif %}" />
+                                    {% if row.can_view_admin %}
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               value=""
+                                               name="canViewAdmin"
+                                               checked />
+                                    {% else %}
+                                        <input type="checkbox" class="form-check-input" value="" name="canViewAdmin" />
+                                    {% endif %}
                                     <label class="form-check-label" for="canViewAdmin">Can View Admin Dashboard</label>
                                 </div>
                                 <div class="form-check">
-                                    <input type="checkbox"
-                                           class="form-check-input"
-                                           value=""
-                                           name="canEditWebsiteConfig"
-                                           checked="{% if row.can_edit_config %}true{% endif %}" />
+                                    {% if row.can_edit_config %}
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               value=""
+                                               name="canEditWebsiteConfig"
+                                               checked />
+                                    {% else %}
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               value=""
+                                               name="canEditWebsiteConfig" />
+                                    {% endif %}
                                     <label class="form-check-label" for="canEditWebsiteConfig">Can Edit Website Configuration</label>
                                 </div>
                             </div>
