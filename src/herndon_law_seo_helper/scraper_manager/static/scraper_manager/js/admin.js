@@ -16,6 +16,7 @@ var AdminBaseIds;
     AdminBaseIds["passwordForm"] = "admin-password-form";
     AdminBaseIds["editUserForm"] = "admin-edit-user-form";
     AdminBaseIds["editUserSaveSpinner"] = "edit-user-save-spinner";
+    AdminBaseIds["editUserModal"] = "admin-edit-user-modal";
 })(AdminBaseIds || (AdminBaseIds = {}));
 const EDIT_FIELDS_WITH_VALIDATION = [
     "username",
@@ -146,6 +147,12 @@ const toggleSaveSpinner = (userId, showSpinner) => {
     }
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
 };
+const toggleCancelEnabled = (userId, isDisabled) => {
+    const cancelButtons = document.querySelectorAll(`#${AdminBaseIds.editUserModal}-${userId} button[data-bs-dismiss='modal']`);
+    cancelButtons.forEach((cancelButton) => {
+        cancelButton.disabled = isDisabled;
+    });
+};
 const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     const userId = (_a = editUserForm.userId) !== null && _a !== void 0 ? _a : -1;
@@ -164,6 +171,7 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
         return;
     }
     toggleSaveSpinner(userId, true);
+    toggleCancelEnabled(userId, true);
     const userRequest = {
         userId: editUserForm.userId,
         username: editUserForm.username,
@@ -173,4 +181,5 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
     const response = yield putUserSettings(userRequest, csrfToken);
     console.log(response);
     toggleSaveSpinner(userId, false);
+    toggleCancelEnabled(userId, false);
 });

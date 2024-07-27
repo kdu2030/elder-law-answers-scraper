@@ -6,6 +6,7 @@ enum AdminBaseIds {
   passwordForm = "admin-password-form",
   editUserForm = "admin-edit-user-form",
   editUserSaveSpinner = "edit-user-save-spinner",
+  editUserModal = "admin-edit-user-modal",
 }
 
 type EditUserForm = {
@@ -249,6 +250,16 @@ const toggleSaveSpinner = (userId: number, showSpinner: boolean) => {
   spinner?.classList.add("d-none");
 };
 
+const toggleCancelEnabled = (userId: number, isDisabled: boolean) => {
+  const cancelButtons = document.querySelectorAll<HTMLButtonElement>(
+    `#${AdminBaseIds.editUserModal}-${userId} button[data-bs-dismiss='modal']`
+  );
+
+  cancelButtons.forEach((cancelButton) => {
+    cancelButton.disabled = isDisabled;
+  });
+};
+
 const saveEditUserForm = async () => {
   const userId = editUserForm.userId ?? -1;
   const shouldChangePassword = editUserForm.shouldChangePassword ?? false;
@@ -275,6 +286,7 @@ const saveEditUserForm = async () => {
   }
 
   toggleSaveSpinner(userId, true);
+  toggleCancelEnabled(userId, true);
 
   const userRequest: PutUserSettingsRequest = {
     userId: editUserForm.userId,
@@ -287,4 +299,5 @@ const saveEditUserForm = async () => {
   console.log(response);
 
   toggleSaveSpinner(userId, false);
+  toggleCancelEnabled(userId, false);
 };
