@@ -32,9 +32,11 @@ const EDIT_FIELDS_WITH_VALIDATION = [
 ];
 let editUserForm = { shouldChangePassword: false };
 let initialEditForm;
-const onClickUserEdit = (initialForm) => {
+let loggedInUserId;
+const onClickUserEdit = (initialForm, userId) => {
     editUserForm = Object.assign(Object.assign({}, editUserForm), initialForm);
     initialEditForm = initialForm;
+    loggedInUserId = userId;
 };
 const validateRequiredString = (fieldName, stringValue, allowWhitespace = false) => {
     const errorMessage = `${fieldName} is required.`;
@@ -205,6 +207,10 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
     }
     createSuccessToaster("User data successfully saved", "Successfully updated user settings. The page will load momentarily with the updated users.");
     yield new Promise((resolve) => setTimeout(() => resolve(), 2000));
+    if (loggedInUserId === editUserForm.userId && !editUserForm.canViewAdmin) {
+        window.location.href = "/dashboard";
+        return;
+    }
     location.reload();
 });
 const saveAddUserForm = () => __awaiter(void 0, void 0, void 0, function* () {

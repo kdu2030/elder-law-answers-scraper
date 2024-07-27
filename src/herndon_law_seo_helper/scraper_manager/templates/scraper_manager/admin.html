@@ -59,7 +59,7 @@
                                             {% else %}
                                                 false
                                             {% endif %}
-                                            })" data-bs-toggle="modal" data-bs-target="#admin-edit-user-modal-{{ row.id }}">
+                                            }, {{ user.id }})" data-bs-toggle="modal" data-bs-target="#admin-edit-user-modal-{{ row.id }}">
                                             Edit
                                         </button>
                                         {% if row.id != user.id %}

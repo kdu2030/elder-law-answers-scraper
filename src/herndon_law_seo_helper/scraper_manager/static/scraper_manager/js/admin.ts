@@ -39,14 +39,16 @@ type EditUserFormErrors = {
 
 let editUserForm: EditUserForm = { shouldChangePassword: false };
 let initialEditForm: EditUserForm;
+let loggedInUserId: number | undefined;
 
-const onClickUserEdit = (initialForm: EditUserForm) => {
+const onClickUserEdit = (initialForm: EditUserForm, userId?: number) => {
   editUserForm = {
     ...editUserForm,
     ...initialForm,
   };
 
   initialEditForm = initialForm;
+  loggedInUserId = userId;
 };
 
 const validateRequiredString = (
@@ -343,6 +345,11 @@ const saveEditUserForm = async () => {
   );
 
   await new Promise<void>((resolve) => setTimeout(() => resolve(), 2000));
+
+  if (loggedInUserId === editUserForm.userId && !editUserForm.canViewAdmin) {
+    window.location.href = "/dashboard";
+    return;
+  }
 
   location.reload();
 };
