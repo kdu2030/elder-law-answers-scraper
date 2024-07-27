@@ -1,8 +1,9 @@
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.models import User
 from ..models.user_models import UserProfilePicture, UserPermissionCode, PermissionCode
 from typing import List, Dict
+from django.contrib.auth.decorators import login_required
 
 
 def get_table_row_for_user(user: User) -> Dict[str, str]:
@@ -27,6 +28,13 @@ def get_admin_data() -> List[Dict[str, str]]:
     return list(map(lambda user: get_table_row_for_user(user), all_users))
 
 
+@login_required
 def admin_get(request: HttpRequest) -> HttpResponse:
+    can_view_admin = UserPermissionCode.objects.filter(
+        user=request.user, permission_code=PermissionCode.VIEW_ADMIN.value).first()
+
+    if not can_view_admin:
+        return redirect("/dashboard")
+
     admin_table_data = get_admin_data()
     return render(request, "scraper_manager/admin.html", {"table_data": admin_table_data})
