@@ -189,3 +189,23 @@ def user_permissions_put(request: HttpRequest) -> HttpResponse:
     except:
         traceback.print_exc()
         return JsonResponse({"isError": True}, status=500)
+
+
+def user_post(request: HttpRequest) -> HttpResponse:
+    if request.method != "POST" or not request.user.is_authenticated:
+        return JsonResponse({"isError": True}, status=500)
+
+    request_body = json.loads(request.body.decode())
+
+    user_with_matching_username = User.objects.filter(
+        username=request_body["username"]).first()
+    user_with_matching_email = User.objects.filter(
+        email=request_body["email"]).first()
+
+    if user_with_matching_username or user_with_matching_email:
+        form_errors = {
+            "username": "A user with this username already exists." if user_with_matching_username else None,
+            "email": "A user with this email already exists" if user_with_matching_email else None
+        }
+
+        return JsonResponse({"isError": True, "formErrors": form_errors}, status=400)
