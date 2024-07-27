@@ -1,5 +1,6 @@
 /// <reference path="./sign-in.ts">
 /// <reference path="./ela-settings.ts">
+/// <reference path="./api/put-user-settings.ts">
 
 enum AdminBaseIds {
   passwordForm = "admin-password-form",
@@ -248,11 +249,17 @@ const toggleSaveSpinner = (userId: number, showSpinner: boolean) => {
   spinner?.classList.add("d-none");
 };
 
-const saveEditUserForm = () => {
+const saveEditUserForm = async () => {
   const userId = editUserForm.userId ?? -1;
+  const shouldChangePassword = editUserForm.shouldChangePassword ?? false;
   const formErrors = validateEditUserForm(editUserForm);
+  const csrfToken = getCsrfToken();
 
-  if (!editUserForm.shouldChangePassword) {
+  if (!csrfToken) {
+    return;
+  }
+
+  if (!shouldChangePassword) {
     formErrors.password = undefined;
     formErrors.confirmPassword = undefined;
   }
@@ -268,4 +275,16 @@ const saveEditUserForm = () => {
   }
 
   toggleSaveSpinner(userId, true);
+
+  const userRequest: PutUserSettingsRequest = {
+    userId: editUserForm.userId,
+    username: editUserForm.username,
+    email: editUserForm.email,
+    password: editUserForm.password,
+  };
+
+  const response = await putUserSettings(userRequest, csrfToken);
+  console.log(response);
+
+  toggleSaveSpinner(userId, false);
 };

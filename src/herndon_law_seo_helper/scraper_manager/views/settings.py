@@ -11,6 +11,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.contrib.auth import update_session_auth_hash
 from typing import Dict
+import copy
 
 
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
@@ -78,8 +79,8 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
     user_id = request_body.get("userId")
 
     user: User = User.objects.get(id=user_id) if user_id else request.user
-    existing_username = request.user.username
-    existing_email = request.user.email
+    existing_username = copy.deepcopy(user.username)
+    existing_email = copy.deepcopy(user.email)
 
     try:
 

@@ -1,6 +1,16 @@
 "use strict";
 /// <reference path="./sign-in.ts">
 /// <reference path="./ela-settings.ts">
+/// <reference path="./api/put-user-settings.ts">
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var AdminBaseIds;
 (function (AdminBaseIds) {
     AdminBaseIds["passwordForm"] = "admin-password-form";
@@ -136,11 +146,16 @@ const toggleSaveSpinner = (userId, showSpinner) => {
     }
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
 };
-const saveEditUserForm = () => {
-    var _a;
+const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
+    var _a, _b;
     const userId = (_a = editUserForm.userId) !== null && _a !== void 0 ? _a : -1;
+    const shouldChangePassword = (_b = editUserForm.shouldChangePassword) !== null && _b !== void 0 ? _b : false;
     const formErrors = validateEditUserForm(editUserForm);
-    if (!editUserForm.shouldChangePassword) {
+    const csrfToken = getCsrfToken();
+    if (!csrfToken) {
+        return;
+    }
+    if (!shouldChangePassword) {
         formErrors.password = undefined;
         formErrors.confirmPassword = undefined;
     }
@@ -149,4 +164,13 @@ const saveEditUserForm = () => {
         return;
     }
     toggleSaveSpinner(userId, true);
-};
+    const userRequest = {
+        userId: editUserForm.userId,
+        username: editUserForm.username,
+        email: editUserForm.email,
+        password: editUserForm.password,
+    };
+    const response = yield putUserSettings(userRequest, csrfToken);
+    console.log(response);
+    toggleSaveSpinner(userId, false);
+});
