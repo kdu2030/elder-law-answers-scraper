@@ -32,6 +32,8 @@ enum ElaSettingsIds {
   elaPasswordSpinner = "ela-password-spinner",
   passwordReadMessage = "ela-password-message",
   testScrapeSpinner = "ela-test-scrape-spinner",
+  usernameCancelButton = "ela-username-cancel",
+  passwordCancelButton = "ela-password-cancel",
 }
 
 const csrfTokenName = "csrfmiddlewaretoken";
@@ -97,6 +99,21 @@ const getCsrfToken = (): string | undefined => {
   return csrfTokenInput?.value;
 };
 
+const toggleSettingsCancelDisabled = (
+  cancelId: string,
+  isDisabled: boolean
+) => {
+  const cancelButton = document.querySelector<HTMLButtonElement>(
+    `#${cancelId}`
+  );
+
+  if (!cancelButton) {
+    return;
+  }
+
+  cancelButton.disabled = isDisabled;
+};
+
 const onElaUsernameSave = async () => {
   const userInput = document.getElementById(
     ElaSettingsIds.usernameInput
@@ -122,6 +139,7 @@ const onElaUsernameSave = async () => {
 
   const spinner = document.getElementById(ElaSettingsIds.elaUsernameSpinner);
   spinner?.classList.remove("d-none");
+  toggleSettingsCancelDisabled(ElaSettingsIds.usernameCancelButton, true);
 
   const response = await postElaSettings(
     { username: userInput.value },
@@ -129,6 +147,7 @@ const onElaUsernameSave = async () => {
   );
 
   spinner?.classList.add("d-none");
+  toggleSettingsCancelDisabled(ElaSettingsIds.usernameCancelButton, false);
 
   if (response.isError) {
     createErrorToaster(
@@ -292,12 +311,17 @@ const onElaPasswordSave = async () => {
 
   const errorMessages = onElaPasswordBlur();
 
-  if (errorMessages || !csrfTokenInput) {
+  if (
+    errorMessages?.passwordError ||
+    errorMessages?.confirmPasswordError ||
+    !csrfTokenInput
+  ) {
     return;
   }
 
   const spinner = document.getElementById(ElaSettingsIds.elaPasswordSpinner);
   spinner?.classList.remove("d-none");
+  toggleSettingsCancelDisabled(ElaSettingsIds.passwordCancelButton, true);
 
   const response = await postElaSettings(
     {
@@ -307,6 +331,7 @@ const onElaPasswordSave = async () => {
   );
 
   spinner?.classList.add("d-none");
+  toggleSettingsCancelDisabled(ElaSettingsIds.passwordCancelButton, false);
 
   if (response.isError) {
     createErrorToaster(

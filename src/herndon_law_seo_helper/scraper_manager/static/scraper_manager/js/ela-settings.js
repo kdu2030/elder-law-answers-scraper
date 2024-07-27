@@ -30,6 +30,8 @@ var ElaSettingsIds;
     ElaSettingsIds["elaPasswordSpinner"] = "ela-password-spinner";
     ElaSettingsIds["passwordReadMessage"] = "ela-password-message";
     ElaSettingsIds["testScrapeSpinner"] = "ela-test-scrape-spinner";
+    ElaSettingsIds["usernameCancelButton"] = "ela-username-cancel";
+    ElaSettingsIds["passwordCancelButton"] = "ela-password-cancel";
 })(ElaSettingsIds || (ElaSettingsIds = {}));
 const csrfTokenName = "csrfmiddlewaretoken";
 const onChangeUsernameClick = () => {
@@ -75,6 +77,13 @@ const getCsrfToken = () => {
     const csrfTokenInput = document.getElementsByName(csrfTokenName)[0];
     return csrfTokenInput === null || csrfTokenInput === void 0 ? void 0 : csrfTokenInput.value;
 };
+const toggleSettingsCancelDisabled = (cancelId, isDisabled) => {
+    const cancelButton = document.querySelector(`#${cancelId}`);
+    if (!cancelButton) {
+        return;
+    }
+    cancelButton.disabled = isDisabled;
+};
 const onElaUsernameSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const userInput = document.getElementById(ElaSettingsIds.usernameInput);
     const userErrorMessageDiv = document.getElementById(ElaSettingsIds.usernameErrorMessage);
@@ -90,8 +99,10 @@ const onElaUsernameSave = () => __awaiter(void 0, void 0, void 0, function* () {
     removeErrorMessage(userInput, userErrorMessageDiv);
     const spinner = document.getElementById(ElaSettingsIds.elaUsernameSpinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+    toggleSettingsCancelDisabled(ElaSettingsIds.usernameCancelButton, true);
     const response = yield postElaSettings({ username: userInput.value }, csrfToken);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    toggleSettingsCancelDisabled(ElaSettingsIds.usernameCancelButton, false);
     if (response.isError) {
         createErrorToaster("Unable to save data", "Unable to save website username");
         return;
@@ -181,15 +192,19 @@ const onElaPasswordSave = () => __awaiter(void 0, void 0, void 0, function* () {
     const passwordInputElement = document.getElementById(ElaSettingsIds.passwordInput);
     const csrfTokenInput = document.getElementsByName(csrfTokenName)[0];
     const errorMessages = onElaPasswordBlur();
-    if (errorMessages || !csrfTokenInput) {
+    if ((errorMessages === null || errorMessages === void 0 ? void 0 : errorMessages.passwordError) ||
+        (errorMessages === null || errorMessages === void 0 ? void 0 : errorMessages.confirmPasswordError) ||
+        !csrfTokenInput) {
         return;
     }
     const spinner = document.getElementById(ElaSettingsIds.elaPasswordSpinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+    toggleSettingsCancelDisabled(ElaSettingsIds.passwordCancelButton, true);
     const response = yield postElaSettings({
         password: passwordInputElement.value,
     }, csrfTokenInput.value);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    toggleSettingsCancelDisabled(ElaSettingsIds.passwordCancelButton, false);
     if (response.isError) {
         createErrorToaster("Unable to save data", "Unable to save website password");
         return;
