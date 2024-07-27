@@ -16,7 +16,10 @@
         <div class="w-75">
             <div class="d-flex flex-row justify-content-between mb-3 align-items-center">
                 <h4>Admin Dashboard</h4>
-                <button class="btn btn-outline-primary outline-herndon-law">
+                <button class="btn btn-outline-primary outline-herndon-law"
+                        data-bs-toggle="modal"
+                        data-bs-target="#admin-edit-user-modal-0"
+                        onclick="onClickUserEdit({ userId: 0})">
                     <i class="bi bi-person-fill-add"></i> Add User
                 </button>
             </div>
@@ -213,4 +216,124 @@
         </div>
     </div>
 {% endfor %}
+<div class="modal fade"
+     id="admin-edit-user-modal-0"
+     tabindex="-1"
+     data-bs-backdrop="static"
+     aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Add User</h5>
+                <button type="button"
+                        data-bs-dismiss="modal"
+                        class="btn-close"
+                        aria-label="close"
+                        onclick="onCancelEditUser()"></button>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <form id="admin-edit-user-form-0">
+                        {% csrf_token %}
+                        <div class="mb-3">
+                            <label class="form-label">
+                                Username<span class="text-danger">*</span>
+                            </label>
+                            <input class="form-control"
+                                   name="username"
+                                   type="text"
+                                   value=""
+                                   placeholder="Username"
+                                   onblur="onEditUserTextFieldBlur(event)" />
+                            <div class="invalid-feedback" id="username-error-message"></div>
+                        </div>
+                        <div>
+                            <label class="form-label">
+                                Email<span class="text-danger">*</span>
+                            </label>
+                            <input class="form-control"
+                                   name="email"
+                                   type="text"
+                                   value=""
+                                   placeholder="Email"
+                                   onblur="onEditUserTextFieldBlur(event)" />
+                            <div class="invalid-feedback" id="email-error-message"></div>
+                        </div>
+                        <div id="admin-password-form-0" class="mt-3">
+                            <div class="mb-3">
+                                <label class="form-label" for="password">
+                                    Password<span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control"
+                                       type="password"
+                                       name="password"
+                                       placeholder="Password"
+                                       onblur="onEditUserPasswordBlur(event)" />
+                                <div class="invalid-feedback" id="password-error-message"></div>
+                            </div>
+                            <div>
+                                <label class="form-label" for="confirmPassword">
+                                    Confirm Password<span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control"
+                                       type="password"
+                                       name="confirmPassword"
+                                       placeholder="Confirm Password"
+                                       onblur="onEditUserPasswordBlur(event)" />
+                                <div class="invalid-feedback" id="confirmPassword-error-message"></div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            <label class="form-label">User Permissions</label>
+                            <div class="form-check mb-3">
+                                {% if row.can_view_admin %}
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           value=""
+                                           name="canViewAdmin"
+                                           onchange="onEditUserCheckboxChange(event)"
+                                           checked />
+                                {% else %}
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           value=""
+                                           name="canViewAdmin"
+                                           onchange="onEditUserCheckboxChange(event)" />
+                                {% endif %}
+                                <label class="form-check-label" for="canViewAdmin">Can View Admin Dashboard</label>
+                            </div>
+                            <div class="form-check">
+                                {% if row.can_edit_config %}
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           value=""
+                                           name="canEditConfig"
+                                           onchange="onEditUserCheckboxChange(event)"
+                                           checked />
+                                {% else %}
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           value=""
+                                           onchange="onEditUserCheckboxChange(event)"
+                                           name="canEditConfig" />
+                                {% endif %}
+                                <label class="form-check-label" for="canEditWebsiteConfig">Can Edit Website Configuration</label>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline-primary outline-herndon-law"
+                        data-bs-dismiss="modal"
+                        onclick="onCancelEditUser()">Cancel</button>
+                <button class="btn btn-primary bg-herndon-law" onclick="saveEditUserForm()">
+                    <div class="spinner-border spinner-border-sm text-white d-none"
+                         id="edit-user-save-spinner-0"></div>
+                    Save
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
