@@ -189,6 +189,9 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
         putUserPermissions(putUserPermissionsRequest, csrfToken),
     ]);
     toggleSaveSpinner(userId, false);
+    if (settingsResponse.formErrors) {
+        updateFormErrorMessages(userId, settingsResponse.formErrors);
+    }
     if (settingsResponse.isError || permissionsResponse.isError) {
         createErrorToaster("Unable to save data", "Unable to save updated user settings");
         return;

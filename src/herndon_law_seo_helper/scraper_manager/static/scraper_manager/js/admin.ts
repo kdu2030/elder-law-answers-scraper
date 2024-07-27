@@ -309,6 +309,10 @@ const saveEditUserForm = async () => {
 
   toggleSaveSpinner(userId, false);
 
+  if (settingsResponse.formErrors) {
+    updateFormErrorMessages(userId, settingsResponse.formErrors);
+  }
+
   if (settingsResponse.isError || permissionsResponse.isError) {
     createErrorToaster(
       "Unable to save data",
