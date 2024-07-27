@@ -205,7 +205,27 @@ def user_post(request: HttpRequest) -> HttpResponse:
     if user_with_matching_username or user_with_matching_email:
         form_errors = {
             "username": "A user with this username already exists." if user_with_matching_username else None,
-            "email": "A user with this email already exists" if user_with_matching_email else None
+            "email": "A user with this email already exists." if user_with_matching_email else None
         }
 
         return JsonResponse({"isError": True, "formErrors": form_errors}, status=400)
+
+    try:
+        user = User.objects.create_user(
+            username=request_body["username"], email=request_body["email"], password=request_body["password"])
+        user.save()
+
+        if request_body["canViewAdmin"]:
+            admin_permission_code = UserPermissionCode.objects.create(
+                user=user, permission_code=PermissionCode.VIEW_ADMIN.value)
+            admin_permission_code.save()
+
+        if request_body["canEditConfig"]:
+            edit_config_permission_code = UserPermissionCode.objects.create(
+                user=user, permission_code=PermissionCode.EDIT_WEBSITE_CONFIG.value)
+            edit_config_permission_code.save()
+
+        return JsonResponse({"isError": False}, status=200)
+    except:
+        traceback.print_exc()
+        return JsonResponse({"isError": True}, status=500)
