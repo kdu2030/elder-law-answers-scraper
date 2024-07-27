@@ -2,7 +2,7 @@ from django.http import HttpResponse, HttpRequest, JsonResponse
 from django.shortcuts import render
 from ..forms.setting_forms import WebsiteConfigurationForm, UserSettingsForm
 from ..models.setting_models import WebsiteConfiguration
-from ..models.user_models import UserProfilePicture
+from ..models.user_models import UserProfilePicture, UserPermissionCode, PermissionCode
 from typing import Union
 import json
 import traceback
@@ -146,3 +146,41 @@ def profile_image_put(request: HttpRequest) -> HttpResponse:
         user=request.user, file_name=file_name, image_url=image_url)
 
     return JsonResponse({"isError": False})
+
+
+def user_permissions_put(request: HttpRequest) -> HttpResponse:
+    if request.method != "PUT" or not request.user.is_authenticated:
+        return JsonResponse({"isError": True}, status=400)
+
+    request_body = json.loads(request.body.decode())
+
+    user_id = request_body.get("userId")
+    can_view_admin = request_body.get("canViewAdmin")
+    can_edit_config = request_body.get("canEditConfig")
+
+    try:
+        user = User.objects.get(id=user_id)
+        existing_permissions = UserPermissionCode.objects.get(user=user)
+        existing_permission_codes = list(map(
+            lambda permission: permission.permission_code, existing_permissions))
+
+        for permission in existing_permissions:
+            if permission.permission_code == PermissionCode.EDIT_WEBSITE_CONFIG.value and not can_edit_config:
+                permission.delete()
+                existing_permission_codes.remove(
+                    PermissionCode.EDIT_WEBSITE_CONFIG.value)
+            elif permission.permission_code == PermissionCode.VIEW_ADMIN.value and not can_view_admin:
+                permission.delete()
+                existing_permission_codes.remove(
+                    PermissionCode.VIEW_ADMIN.value)
+
+        if can_view_admin and PermissionCode.VIEW_ADMIN.value not in existing_permission_codes:
+            UserPermissionCode.objects.create(
+                user=user, permission_code=PermissionCode.VIEW_ADMIN.value)
+
+        if can_edit_config and PermissionCode.EDIT_WEBSITE_CONFIG not in existing_permission_codes:
+            UserPermissionCode.objects.create(
+                user=user, permission_code=PermissionCode.EDIT_WEBSITE_CONFIG.value)
+
+    except:
+        return JsonResponse({"isError": True}, status=500)
