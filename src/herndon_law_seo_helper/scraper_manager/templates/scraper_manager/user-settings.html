@@ -18,20 +18,22 @@
         <div class="w-75 h-75">
             <h4>Settings</h4>
             <div class="row h-100">
-                <div class="col-4">
-                    <ul class="list-group">
-                        <a href="{% url 'settings' %}"
-                           class="list-group-item list-group-item-action">
-                            <i class="bi bi-globe-americas"></i>
-                            Website Settings
-                        </a>
-                        <a href="{% url 'user_settings' %}"
-                           class="list-group-item list-group-item-action active bg-herndon-law">
-                            <i class="bi bi-gear-wide"></i>
-                            User Settings
-                        </a>
-                    </ul>
-                </div>
+                {% if can_edit_config %}
+                    <div class="col-4">
+                        <ul class="list-group">
+                            <a href="{% url 'settings' %}"
+                               class="list-group-item list-group-item-action">
+                                <i class="bi bi-globe-americas"></i>
+                                Website Settings
+                            </a>
+                            <a href="{% url 'user_settings' %}"
+                               class="list-group-item list-group-item-action active bg-herndon-law">
+                                <i class="bi bi-gear-wide"></i>
+                                User Settings
+                            </a>
+                        </ul>
+                    </div>
+                {% endif %}
                 <div class="col">
                     <div class="card h-100">
                         <div class="card-body">
