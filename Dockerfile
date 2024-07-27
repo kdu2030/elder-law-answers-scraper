@@ -1,7 +1,7 @@
 FROM python:3.11
 
-WORKDIR /.adaptable
-COPY .adaptable /.adaptable
+# WORKDIR /.adaptable
+# COPY .adaptable /.adaptable
 
 WORKDIR /app
 COPY requirements.txt /app
