@@ -249,6 +249,7 @@ const saveDeleteUser = (userId) => __awaiter(void 0, void 0, void 0, function* (
     if (response.isError) {
         createErrorToaster("Unable to delete data", "Unable to delete user.");
         toggleCancelDisabled(userId, false, AdminBaseIds.deleteUserModal);
+        return;
     }
     createSuccessToaster("Successfully deleted user.", "User was deleted. The page will load momentarily with the updated users.");
     yield new Promise((resolve) => setTimeout(() => resolve(), 2000));

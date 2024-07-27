@@ -408,6 +408,7 @@ const saveDeleteUser = async (userId: number) => {
   if (response.isError) {
     createErrorToaster("Unable to delete data", "Unable to delete user.");
     toggleCancelDisabled(userId, false, AdminBaseIds.deleteUserModal);
+    return;
   }
 
   createSuccessToaster(
