@@ -137,7 +137,7 @@ const onEditUserTextFieldBlur = (event: FocusEvent) => {
   editUserForm = Object.assign(editUserForm, { [fieldName]: value });
   const formErrors = validateEditUserForm(editUserForm);
 
-  if (!editUserForm.userId) {
+  if (editUserForm.userId == null) {
     return;
   }
 
@@ -152,7 +152,7 @@ const onEditUserPasswordBlur = (event: FocusEvent) => {
   editUserForm = Object.assign(editUserForm, { [fieldName]: value });
   const formErrors = validateEditUserForm(editUserForm);
 
-  if (!editUserForm.userId) {
+  if (editUserForm.userId == null) {
     return;
   }
 

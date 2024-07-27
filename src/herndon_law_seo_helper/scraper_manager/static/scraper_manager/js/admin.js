@@ -77,7 +77,7 @@ const onEditUserTextFieldBlur = (event) => {
     const fieldName = eventTarget.name;
     editUserForm = Object.assign(editUserForm, { [fieldName]: value });
     const formErrors = validateEditUserForm(editUserForm);
-    if (!editUserForm.userId) {
+    if (editUserForm.userId == null) {
         return;
     }
     updateFormErrorMessages(editUserForm.userId, formErrors, fieldName);
@@ -88,7 +88,7 @@ const onEditUserPasswordBlur = (event) => {
     const fieldName = eventTarget.name;
     editUserForm = Object.assign(editUserForm, { [fieldName]: value });
     const formErrors = validateEditUserForm(editUserForm);
-    if (!editUserForm.userId) {
+    if (editUserForm.userId == null) {
         return;
     }
     updateFormErrorMessages(editUserForm.userId, formErrors, "password");
