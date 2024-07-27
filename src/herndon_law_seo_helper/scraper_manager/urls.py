@@ -16,5 +16,6 @@ urlpatterns = [
          name="user_settings_put"),
     path("api/profile-image", settings.profile_image_put, name="profile_image_put"),
     path("api/permissions", settings.user_permissions_put,
-         name="user_permissions_put")
+         name="user_permissions_put"),
+    path("api/user", settings.user_post, name="user_post")
 ]
