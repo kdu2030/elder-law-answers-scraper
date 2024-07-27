@@ -1,5 +1,5 @@
 from django.http import HttpResponse, HttpRequest, JsonResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from ..forms.setting_forms import WebsiteConfigurationForm, UserSettingsForm
 from ..models.setting_models import WebsiteConfiguration
 from ..models.user_models import UserProfilePicture, UserPermissionCode, PermissionCode
@@ -14,7 +14,14 @@ from typing import Dict
 import copy
 
 
+@login_required
 def ela_settings_get(request: HttpRequest) -> HttpResponse:
+    can_edit_config = UserPermissionCode.objects.filter(
+        user=request.user, permission_code=PermissionCode.EDIT_WEBSITE_CONFIG.value).first()
+
+    if not can_edit_config:
+        return redirect("/user-settings")
+
     existing_website_configuration: WebsiteConfiguration = WebsiteConfiguration.objects.all().first()
 
     if existing_website_configuration:
