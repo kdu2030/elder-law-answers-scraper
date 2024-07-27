@@ -4,10 +4,11 @@
 enum AdminBaseIds {
   passwordForm = "admin-password-form",
   editUserForm = "admin-edit-user-form",
+  editUserSaveSpinner = "edit-user-save-spinner",
 }
 
 type EditUserForm = {
-  userId?: string;
+  userId?: number;
   username?: string;
   email?: string;
   password?: string;
@@ -82,7 +83,7 @@ const validateEditUserForm = (
 };
 
 const updateEditUserErrorMessage = (
-  userId: string,
+  userId: number,
   fieldName: string | undefined,
   errorMessage: string | undefined
 ) => {
@@ -103,7 +104,7 @@ const updateEditUserErrorMessage = (
 };
 
 const updateFormErrorMessages = (
-  userId: string,
+  userId: number,
   formErrors: EditUserFormErrors,
   targetFieldName?: string
 ) => {
@@ -164,7 +165,7 @@ const onEditUserCheckboxChange = (event: Event) => {
 };
 
 const updateStringInputValue = (
-  userId: string,
+  userId: number,
   fieldName: string,
   value: string | undefined
 ) => {
@@ -232,4 +233,39 @@ const onChangeEditPassword = (event: Event) => {
 
   editUserForm.shouldChangePassword = false;
   passwordForm?.classList.add("d-none");
+};
+
+const toggleSaveSpinner = (userId: number, showSpinner: boolean) => {
+  const spinner = document.getElementById(
+    `${AdminBaseIds.editUserSaveSpinner}-${userId}`
+  );
+
+  if (showSpinner) {
+    spinner?.classList.remove("d-none");
+    return;
+  }
+
+  spinner?.classList.add("d-none");
+};
+
+const saveEditUserForm = () => {
+  const userId = editUserForm.userId ?? -1;
+  const formErrors = validateEditUserForm(editUserForm);
+
+  if (!editUserForm.shouldChangePassword) {
+    formErrors.password = undefined;
+    formErrors.confirmPassword = undefined;
+  }
+
+  updateFormErrorMessages(userId, formErrors);
+
+  if (
+    Object.keys(formErrors).find(
+      (key) => typeof formErrors[key as keyof EditUserFormErrors] === "string"
+    )
+  ) {
+    return;
+  }
+
+  toggleSaveSpinner(userId, true);
 };

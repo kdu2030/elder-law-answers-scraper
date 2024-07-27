@@ -5,6 +5,7 @@ var AdminBaseIds;
 (function (AdminBaseIds) {
     AdminBaseIds["passwordForm"] = "admin-password-form";
     AdminBaseIds["editUserForm"] = "admin-edit-user-form";
+    AdminBaseIds["editUserSaveSpinner"] = "edit-user-save-spinner";
 })(AdminBaseIds || (AdminBaseIds = {}));
 const EDIT_FIELDS_WITH_VALIDATION = [
     "username",
@@ -126,4 +127,26 @@ const onChangeEditPassword = (event) => {
     }
     editUserForm.shouldChangePassword = false;
     passwordForm === null || passwordForm === void 0 ? void 0 : passwordForm.classList.add("d-none");
+};
+const toggleSaveSpinner = (userId, showSpinner) => {
+    const spinner = document.getElementById(`${AdminBaseIds.editUserSaveSpinner}-${userId}`);
+    if (showSpinner) {
+        spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+        return;
+    }
+    spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+};
+const saveEditUserForm = () => {
+    var _a;
+    const userId = (_a = editUserForm.userId) !== null && _a !== void 0 ? _a : -1;
+    const formErrors = validateEditUserForm(editUserForm);
+    if (!editUserForm.shouldChangePassword) {
+        formErrors.password = undefined;
+        formErrors.confirmPassword = undefined;
+    }
+    updateFormErrorMessages(userId, formErrors);
+    if (Object.keys(formErrors).find((key) => typeof formErrors[key] === "string")) {
+        return;
+    }
+    toggleSaveSpinner(userId, true);
 };

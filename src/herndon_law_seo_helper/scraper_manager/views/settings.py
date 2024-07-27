@@ -74,12 +74,15 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
     if request.method != "PUT" or not request.user.is_authenticated:
         return JsonResponse({"isError": True}, status=400)
 
-    user: User = request.user
+    request_body: Dict = json.loads(request.body.decode())
+    user_id = request_body.get("userId")
+
+    user: User = User.objects.get(id=user_id) if user_id else request.user
     existing_username = request.user.username
     existing_email = request.user.email
 
     try:
-        request_body: Dict = json.loads(request.body.decode())
+
         is_form_valid = True
         form_errors = {}
 
@@ -111,8 +114,9 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
 
         user.save()
 
-        user = User.objects.get(id=user.id)
-        update_session_auth_hash(request, user)
+        if not user_id:
+            user = User.objects.get(id=user.id)
+            update_session_auth_hash(request, user)
 
         return JsonResponse({"isError": False})
     except:

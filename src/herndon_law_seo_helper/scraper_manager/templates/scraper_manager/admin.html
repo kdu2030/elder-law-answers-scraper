@@ -194,7 +194,11 @@
                         <button class="btn btn-outline-primary outline-herndon-law"
                                 data-bs-dismiss="modal"
                                 onclick="onCancelEditUser()">Cancel</button>
-                        <button class="btn btn-primary bg-herndon-law" data-bs-dismiss="modal">Save</button>
+                        <button class="btn btn-primary bg-herndon-law" onclick="saveEditUserForm()">
+                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                 id="edit-user-save-spinner-{{ row.id }}"></div>
+                            Save
+                        </button>
                     </div>
                 </div>
             </div>
