@@ -16,22 +16,24 @@
 {% block content %}
     <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
         <div class="w-75 h-75">
-            <h4>Settings</h4>
+            <h4 class="mb-3">Settings</h4>
             <div class="row h-100">
-                <div class="col-4">
-                    <ul class="list-group">
-                        <a href="{% url 'settings' %}"
-                           class="list-group-item list-group-item-action">
-                            <i class="bi bi-globe-americas"></i>
-                            Website Settings
-                        </a>
-                        <a href="{% url 'user_settings' %}"
-                           class="list-group-item list-group-item-action active bg-herndon-law">
-                            <i class="bi bi-gear-wide"></i>
-                            User Settings
-                        </a>
-                    </ul>
-                </div>
+                {% if can_edit_config %}
+                    <div class="col-4">
+                        <ul class="list-group">
+                            <a href="{% url 'settings' %}"
+                               class="list-group-item list-group-item-action">
+                                <i class="bi bi-globe-americas"></i>
+                                Website Settings
+                            </a>
+                            <a href="{% url 'user_settings' %}"
+                               class="list-group-item list-group-item-action active bg-herndon-law">
+                                <i class="bi bi-gear-wide"></i>
+                                User Settings
+                            </a>
+                        </ul>
+                    </div>
+                {% endif %}
                 <div class="col">
                     <div class="card h-100">
                         <div class="card-body">
@@ -93,7 +95,7 @@
                                     <div class="d-flex flex-row justify-content-end mt-3">
                                         <button class="btn btn-outline-primary outline-herndon-law me-3"
                                                 type="button"
-                                                onclick="onChangeUsernameEmailCancel()">Cancel</button>
+                                                onclick="onChangeUsernameEmailCancel()" id="user-settings-username-cancel">Cancel</button>
                                         <button class="btn btn-primary bg-herndon-law"
                                                 type="button"
                                                 onclick="onUsernameEmailSave()">
@@ -130,7 +132,7 @@
                                     <div class="d-flex flex-row justify-content-end mt-3">
                                         <button class="btn btn-outline-primary outline-herndon-law me-3"
                                                 type="button"
-                                                onclick="onChangePasswordCancel()">Cancel</button>
+                                                onclick="onChangePasswordCancel()" id="user-settings-password-cancel">Cancel</button>
                                         <button class="btn btn-primary bg-herndon-law"
                                                 type="button"
                                                 onclick="onChangePasswordSave()">

@@ -1,5 +1,5 @@
 from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from ..forms.auth_forms import SignInForm
 from django.contrib.auth import login, logout
 
@@ -17,7 +17,7 @@ def sign_in_post(request: HttpRequest) -> HttpResponse:
     signin_form = SignInForm(request.POST)
     if signin_form.is_valid() and signin_form.cleaned_data["valid_user"] is not None:
         login(request, signin_form.cleaned_data["valid_user"])
-        return render(request, "scraper_manager/index.html")
+        return redirect("/dashboard")
 
     return render(request, "scraper_manager/sign-in.html", {"form": signin_form})
 
@@ -33,4 +33,4 @@ def sign_out(request: HttpRequest) -> HttpResponse:
     if request.method != "POST":
         return render(request, "scraper_manager/index.html")
     logout(request)
-    return sign_in_get(request)
+    return redirect("/signin")

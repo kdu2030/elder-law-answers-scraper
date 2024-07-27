@@ -5,6 +5,7 @@ from ..models.blog_posts import BlogPost, PostFailureLog
 from dateutil.relativedelta import relativedelta
 from ..scraper.elder_law_answers_scraper import ScraperErrorCode
 import json
+from django.contrib.auth.decorators import login_required
 
 
 class MonthData:
@@ -101,6 +102,7 @@ def get_blog_post_attempts(current_month: int, current_year: int):
     return attempt_table_data
 
 
+@login_required
 def dashboard_get(request: HttpRequest) -> HttpResponse:
     current_date = datetime.now()
     current_month = current_date.month

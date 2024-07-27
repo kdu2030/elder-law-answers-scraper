@@ -1,0 +1,359 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load static %}
+{% block page_title %}
+    Admin
+{% endblock page_title %}
+{% block head_content %}
+    <script src="{% static 'scraper_manager/js/admin.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/sign-in.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/ela-settings.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/put-user-settings.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/put-user-permissions.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/post-user.js' %}"></script>
+    <script src="{% static 'scraper_manager/js/api/delete-user.js' %}"></script>
+    <link rel="stylesheet"
+          href="{% static 'scraper_manager/styles/admin.css' %}" />
+{% endblock head_content %}
+{% block content %}
+    <div class="d-flex flex-column align-items-center min-vh-100 mt-3">
+        <div class="w-75">
+            <div class="d-grid mb-3 admin-header">
+                <h4>Admin Dashboard</h4>
+                <div class="add-user-wrapper">
+                    <button class="btn btn-outline-primary outline-herndon-law"
+                            data-bs-toggle="modal"
+                            data-bs-target="#admin-edit-user-modal-0"
+                            onclick="onClickUserEdit({ userId: 0})">
+                        <i class="bi bi-person-fill-add"></i> Add User
+                    </button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col" class="w-25">User</th>
+                                <th scope="col" class="admin-email-column">Email</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for row in table_data %}
+                                <tr>
+                                    <td style="vertical-align: middle">
+                                        <image class="me-3 rounded-50"
+                                               src="{{ row.image_src }}"
+                                               width="48px"
+                                               height="48px" />
+                                        {{ row.username }}
+                                    </td>
+                                    <td style="vertical-align: middle">{{ row.email }}</td>
+                                    <td style="vertical-align: middle">
+                                        <button class="btn btn-outline-primary outline-herndon-law me-3" type="button" onclick="onClickUserEdit({ userId: {{ row.id }}, username: '{{ row.username }}', email: '{{ row.email }}', canViewAdmin:
+                                            {% if row.can_view_admin %}
+                                                true
+                                            {% else %}
+                                                false
+                                            {% endif %}
+                                            , canEditConfig:
+                                            {% if row.can_edit_config %}
+                                                true
+                                            {% else %}
+                                                false
+                                            {% endif %}
+                                            }, {{ user.id }})" data-bs-toggle="modal" data-bs-target="#admin-edit-user-modal-{{ row.id }}">
+                                            Edit
+                                        </button>
+                                        {% if row.id != user.id %}
+                                            <button class="btn btn-outline-danger"
+                                                    data-bs-toggle="modal"
+                                                    data-bs-target="#admin-delete-user-modal-{{ row.id }}">
+                                                Delete
+                                            </button>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% for row in table_data %}
+        <div class="modal fade"
+             id="admin-edit-user-modal-{{ row.id }}"
+             tabindex="-1"
+             data-bs-backdrop="static"
+             aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Edit User {{ row.username }}</h5>
+                        <button type="button"
+                                data-bs-dismiss="modal"
+                                class="btn-close"
+                                aria-label="close"
+                                onclick="onCancelEditUser()"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="d-flex flex-row align-items-center mb-3">
+                            <image src="{{ row.image_src }}"
+                                   width="52px"
+                                   height="52px"
+                                   class="rounded-50 me-3" />
+                            <p class="mb-0">{{ row.username }}</p>
+                        </div>
+                        <form id="admin-edit-user-form-{{ row.id }}">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Username<span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control"
+                                       name="username"
+                                       type="text"
+                                       value="{{ row.username }}"
+                                       placeholder="Username"
+                                       onblur="onEditUserTextFieldBlur(event)" />
+                                <div class="invalid-feedback" id="username-error-message"></div>
+                            </div>
+                            <div>
+                                <label class="form-label">
+                                    Email<span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control"
+                                       name="email"
+                                       type="text"
+                                       value="{{ row.email }}"
+                                       placeholder="Email"
+                                       onblur="onEditUserTextFieldBlur(event)" />
+                                <div class="invalid-feedback" id="email-error-message"></div>
+                            </div>
+                            <p class="mt-3">Change password?</p>
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="shouldChangePassword"
+                                       value="false"
+                                       onchange="onChangeEditPassword(event)"
+                                       checked />
+                                <label class="form-check-label" for="no">No</label>
+                            </div>
+                            <div class="form-check mb-3">
+                                <input class="form-check-input"
+                                       type="radio"
+                                       name="shouldChangePassword"
+                                       onchange="onChangeEditPassword(event)"
+                                       value="true" />
+                                <label class="form-check-label" for="yes">Yes</label>
+                            </div>
+                            <div class="d-none" id="admin-password-form-{{ row.id }}">
+                                <div class="mb-3">
+                                    <label class="form-label" for="password">
+                                        Password<span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control"
+                                           type="password"
+                                           name="password"
+                                           placeholder="Password"
+                                           onblur="onEditUserPasswordBlur(event)" />
+                                    <div class="invalid-feedback" id="password-error-message"></div>
+                                </div>
+                                <div>
+                                    <label class="form-label" for="confirmPassword">
+                                        Confirm Password<span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control"
+                                           type="password"
+                                           name="confirmPassword"
+                                           placeholder="Confirm Password"
+                                           onblur="onEditUserPasswordBlur(event)" />
+                                    <div class="invalid-feedback" id="confirmPassword-error-message"></div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <label class="form-label">User Permissions</label>
+                                <div class="form-check mb-3">
+                                    {% if row.can_view_admin %}
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               value=""
+                                               name="canViewAdmin"
+                                               onchange="onEditUserCheckboxChange(event)"
+                                               checked />
+                                    {% else %}
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               value=""
+                                               name="canViewAdmin"
+                                               onchange="onEditUserCheckboxChange(event)" />
+                                    {% endif %}
+                                    <label class="form-check-label" for="canViewAdmin">Can View Admin Dashboard</label>
+                                </div>
+                                <div class="form-check">
+                                    {% if row.can_edit_config %}
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               value=""
+                                               name="canEditConfig"
+                                               onchange="onEditUserCheckboxChange(event)"
+                                               checked />
+                                    {% else %}
+                                        <input type="checkbox"
+                                               class="form-check-input"
+                                               value=""
+                                               onchange="onEditUserCheckboxChange(event)"
+                                               name="canEditConfig" />
+                                    {% endif %}
+                                    <label class="form-check-label" for="canEditWebsiteConfig">Can Edit Website Configuration</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-primary outline-herndon-law"
+                                data-bs-dismiss="modal"
+                                onclick="onCancelEditUser()">Cancel</button>
+                        <button class="btn btn-primary bg-herndon-law" onclick="saveEditUserForm()">
+                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                 id="edit-user-save-spinner-{{ row.id }}"></div>
+                            Save
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade"
+             data-bs-backdrop="static"
+             id="admin-delete-user-modal-{{ row.id }}">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Delete User {{ row.username }}</h5>
+                        <button type="button"
+                                data-bs-dismiss="modal"
+                                class="btn-close"
+                                aria-label="close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete user {{ row.username }}? This action cannot be undone.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-outline-primary outline-herndon-law"
+                                data-bs-dismiss="modal">Cancel</button>
+                        <button class="btn btn-danger" onclick="saveDeleteUser({{ row.id }})">
+                            <div class="spinner-border spinner-border-sm text-white d-none"
+                                 id="delete-user-save-spinner-{{ row.id }}"></div>
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+    <div class="modal fade"
+         id="admin-edit-user-modal-0"
+         tabindex="-1"
+         data-bs-backdrop="static"
+         aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Add User</h5>
+                    <button type="button"
+                            data-bs-dismiss="modal"
+                            class="btn-close"
+                            aria-label="close"
+                            onclick="onCancelEditUser()"></button>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <form id="admin-edit-user-form-0">
+                            {% csrf_token %}
+                            <div class="mb-3">
+                                <label class="form-label">
+                                    Username<span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control"
+                                       name="username"
+                                       type="text"
+                                       value=""
+                                       placeholder="Username"
+                                       onblur="onEditUserTextFieldBlur(event)" />
+                                <div class="invalid-feedback" id="username-error-message"></div>
+                            </div>
+                            <div>
+                                <label class="form-label">
+                                    Email<span class="text-danger">*</span>
+                                </label>
+                                <input class="form-control"
+                                       name="email"
+                                       type="text"
+                                       value=""
+                                       placeholder="Email"
+                                       onblur="onEditUserTextFieldBlur(event)" />
+                                <div class="invalid-feedback" id="email-error-message"></div>
+                            </div>
+                            <div id="admin-password-form-0" class="mt-3">
+                                <div class="mb-3">
+                                    <label class="form-label" for="password">
+                                        Password<span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control"
+                                           type="password"
+                                           name="password"
+                                           placeholder="Password"
+                                           onblur="onEditUserPasswordBlur(event)" />
+                                    <div class="invalid-feedback" id="password-error-message"></div>
+                                </div>
+                                <div>
+                                    <label class="form-label" for="confirmPassword">
+                                        Confirm Password<span class="text-danger">*</span>
+                                    </label>
+                                    <input class="form-control"
+                                           type="password"
+                                           name="confirmPassword"
+                                           placeholder="Confirm Password"
+                                           onblur="onEditUserPasswordBlur(event)" />
+                                    <div class="invalid-feedback" id="confirmPassword-error-message"></div>
+                                </div>
+                            </div>
+                            <div class="mt-3">
+                                <label class="form-label">User Permissions</label>
+                                <div class="form-check mb-3">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           value=""
+                                           name="canViewAdmin"
+                                           onchange="onEditUserCheckboxChange(event)" />
+                                    <label class="form-check-label" for="canViewAdmin">Can View Admin Dashboard</label>
+                                </div>
+                                <div class="form-check">
+                                    <input type="checkbox"
+                                           class="form-check-input"
+                                           value=""
+                                           onchange="onEditUserCheckboxChange(event)"
+                                           name="canEditConfig" />
+                                    <label class="form-check-label" for="canEditWebsiteConfig">Can Edit Website Configuration</label>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-outline-primary outline-herndon-law"
+                            data-bs-dismiss="modal"
+                            onclick="onCancelEditUser()">Cancel</button>
+                    <button class="btn btn-primary bg-herndon-law" onclick="saveAddUserForm()">
+                        <div class="spinner-border spinner-border-sm text-white d-none"
+                             id="edit-user-save-spinner-0"></div>
+                        Save
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock content %}

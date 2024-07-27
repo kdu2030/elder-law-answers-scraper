@@ -52,6 +52,12 @@ button.outline-herndon-law:active {
     border-color: #083360 !important; 
 }
 
+button.outline-herndon-law:disabled {
+    color: rgb(8, 51, 96, 0.5);
+    border-color: rgb(8, 51, 96, 0.5);
+}
+
+
 .rounded-50 {
     border-radius: 50%;
 }

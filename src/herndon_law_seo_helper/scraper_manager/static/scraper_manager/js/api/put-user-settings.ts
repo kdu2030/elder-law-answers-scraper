@@ -1,10 +1,11 @@
 type PutUserSettingsRequest = {
+  userId?: number;
   username?: string;
   email?: string;
   password?: string;
 };
 
-type UserSettingsFormErrors = PutUserSettingsRequest;
+type UserSettingsFormErrors = Omit<PutUserSettingsRequest, "userId">;
 
 type PutUserSettingsResponse = {
   isError: boolean;

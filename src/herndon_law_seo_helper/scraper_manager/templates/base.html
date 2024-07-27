@@ -33,10 +33,18 @@
               <li class="nav-item">
                 <a class="nav-link text-white" href={% url 'dashboard' %}>Dashboard</a>
               </li>
+              {% if can_view_admin %}
+                <li class="nav-item">
+                  <a class="nav-link text-white" href={% url 'admin_dashboard' %}>Admin</a>
+                </li>
+              {% endif %}
               <li class="nav-item">
-                <a class="nav-link text-white" href={% url 'settings' %}>Settings</a>
+                {% if can_edit_config %}
+                  <a class="nav-link text-white" href={% url 'settings' %}>Settings</a>
+                {% else %}
+                  <a class="nav-link text-white" href={% url 'user_settings' %}>Settings</a>
+                {% endif %}
               </li>
-              <li></li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle text-white d-flex align-items-center"
                    href="#"

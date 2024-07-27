@@ -30,6 +30,8 @@ enum UserSettingsId {
   profilePictureSpinner = "user-settings-profile-picture-spinner",
   existingProfilePicture = "user-settings-existing-profile-picture",
   navbarProfilePicture = "navbar-profile-picture",
+  usernameCancel = "user-settings-username-cancel",
+  passwordCancel = "user-settings-password-cancel",
 }
 
 const MAX_PROFILE_PICTURE_BYTES = 2 * 1024 * 1024;
@@ -151,6 +153,7 @@ const onUsernameEmailSave = async () => {
     return;
   }
 
+  toggleSettingsCancelDisabled(UserSettingsId.usernameCancel, true);
   spinner?.classList.remove("d-none");
 
   const response = await putUserSettings(
@@ -162,6 +165,7 @@ const onUsernameEmailSave = async () => {
   );
 
   spinner?.classList.add("d-none");
+  toggleSettingsCancelDisabled(UserSettingsId.usernameCancel, false);
 
   if (response.isError) {
     createErrorToaster(
@@ -280,6 +284,7 @@ const onChangePasswordSave = async () => {
 
   const spinner = document.getElementById(UserSettingsId.passwordSpinner);
   spinner?.classList.remove("d-none");
+  toggleSettingsCancelDisabled(UserSettingsId.passwordCancel, true);
 
   const response = await putUserSettings(
     { password: password.value ?? "" },
@@ -287,6 +292,7 @@ const onChangePasswordSave = async () => {
   );
 
   spinner?.classList.add("d-none");
+  toggleSettingsCancelDisabled(UserSettingsId.passwordCancel, false);
 
   if (response.isError) {
     createErrorToaster(

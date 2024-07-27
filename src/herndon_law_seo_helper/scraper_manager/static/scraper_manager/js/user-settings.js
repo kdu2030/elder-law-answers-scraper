@@ -40,6 +40,8 @@ var UserSettingsId;
     UserSettingsId["profilePictureSpinner"] = "user-settings-profile-picture-spinner";
     UserSettingsId["existingProfilePicture"] = "user-settings-existing-profile-picture";
     UserSettingsId["navbarProfilePicture"] = "navbar-profile-picture";
+    UserSettingsId["usernameCancel"] = "user-settings-username-cancel";
+    UserSettingsId["passwordCancel"] = "user-settings-password-cancel";
 })(UserSettingsId || (UserSettingsId = {}));
 const MAX_PROFILE_PICTURE_BYTES = 2 * 1024 * 1024;
 const onChangeUsernameEmailClick = () => {
@@ -104,12 +106,14 @@ const onUsernameEmailSave = () => __awaiter(void 0, void 0, void 0, function* ()
     if (!isEmailValid || !isUsernameValid || !csrfToken) {
         return;
     }
+    toggleSettingsCancelDisabled(UserSettingsId.usernameCancel, true);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
     const response = yield putUserSettings({
         username: usernameValue,
         email: emailValue,
     }, csrfToken);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    toggleSettingsCancelDisabled(UserSettingsId.usernameCancel, false);
     if (response.isError) {
         createErrorToaster("Unable to save user data", "Unable to save username or email");
         response.formErrors && addFormErrorsFromApi(response.formErrors);
@@ -179,8 +183,10 @@ const onChangePasswordSave = () => __awaiter(void 0, void 0, void 0, function* (
     }
     const spinner = document.getElementById(UserSettingsId.passwordSpinner);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.remove("d-none");
+    toggleSettingsCancelDisabled(UserSettingsId.passwordCancel, true);
     const response = yield putUserSettings({ password: (_a = password.value) !== null && _a !== void 0 ? _a : "" }, csrfToken);
     spinner === null || spinner === void 0 ? void 0 : spinner.classList.add("d-none");
+    toggleSettingsCancelDisabled(UserSettingsId.passwordCancel, false);
     if (response.isError) {
         createErrorToaster("Unable to save user data", "Unable to save updated password.");
         return;
