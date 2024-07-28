@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import authentication, settings, scraper_view, dashboard, admin
+from .views import authentication, settings, scraper_view, dashboard, admin, page_not_found
 
 urlpatterns = [
     path("", authentication.index, name="index"),
@@ -9,6 +9,7 @@ urlpatterns = [
     path("user-settings/", settings.user_settings_get, name="user_settings"),
     path("signin/", authentication.sign_in, name="sign_in"),
     path("signout/", authentication.sign_out, name="sign_out"),
+    path("page-not-found", page_not_found.page_not_found_get, name="page_not_found"),
     path("api/ela-settings", settings.ela_settings_post, name="ela_settings_post"),
     path("api/scrape-ela-article", scraper_view.scrape_ela_article_get,
          name="scrape_ela_article"),
