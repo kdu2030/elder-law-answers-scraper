@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+{% load i18n %}
+{% block page_title %}
+    Page Not Found
+{% endblock page_title %}
+{% block content %}
+    <div class="d-flex flex-column align-items-center">
+        <div class="w-75 min-vh-100 mt-5">
+            <h4 class="mb-3">404 - Page Not Found</h4>
+            <div class="d-grid"
+                 style="grid-template-columns: 1fr 3fr;
+                        column-gap: 2rem">
+                <img src="https://images.inc.com/uploaded_files/image/1920x1080/getty_485441942_2000133320009280233_346056.jpg"
+                     width="500px" />
+                <div>
+                    <p class="mb-3">
+                        Looks like this page retired early and is now enjoying the good life! Unfortunately, we weren't able to locate it.
+                    </p>
+                    <button class="btn btn-primary bg-herndon-law"
+                            onclick="window.open('{% url "index" %}', '_self')">
+                        <i class="bi bi-house-fill"></i> Back to Main Page
+                    </button>
+                </div>
+            </div>
+        {% endblock content %}
