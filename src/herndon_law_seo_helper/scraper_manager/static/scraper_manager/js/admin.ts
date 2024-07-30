@@ -291,6 +291,8 @@ const saveEditUserForm = async () => {
   if (!shouldChangePassword) {
     formErrors.password = undefined;
     formErrors.confirmPassword = undefined;
+    editUserForm.password = undefined;
+    editUserForm.confirmPassword = undefined;
   }
 
   updateFormErrorMessages(userId, formErrors);
