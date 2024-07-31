@@ -174,6 +174,8 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
     if (!shouldChangePassword) {
         formErrors.password = undefined;
         formErrors.confirmPassword = undefined;
+        editUserForm.password = undefined;
+        editUserForm.confirmPassword = undefined;
     }
     updateFormErrorMessages(userId, formErrors);
     if (Object.keys(formErrors).find((key) => typeof formErrors[key] === "string")) {
