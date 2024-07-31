@@ -22,4 +22,4 @@ urlpatterns = [
     path("", include("scraper_manager.urls"))
 ]
 
-# handler404 = "scraper_manager.views.page_not_found.page_not_found_get"
+handler404 = "scraper_manager.views.page_not_found.page_not_found_get"
