@@ -23,6 +23,8 @@ ENCRYPTION_KEY = os.environ["ENCRYPTION_KEY"]
 
 DEBUG = False
 
+APPEND_SLASH = True
+
 ALLOWED_HOSTS = ["*"]
 
 LOGIN_URL = "/signin"
