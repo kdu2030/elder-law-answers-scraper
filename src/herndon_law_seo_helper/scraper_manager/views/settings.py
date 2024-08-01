@@ -126,9 +126,10 @@ def user_settings_put(request: HttpRequest) -> HttpResponse:
             user = User.objects.get(id=user.id)
             update_session_auth_hash(request, user)
         elif user_id == request.user.id:
+            print("Hash updated")
             update_session_auth_hash(request, user)
 
-        return JsonResponse({"isError": False})
+        return JsonResponse({"isError": False, "user_id": user_id, "request_id": request.user.id})
     except:
         print(traceback.format_exc())
         return JsonResponse({"isError": True, "error": traceback.format_exc()}, status=500)
