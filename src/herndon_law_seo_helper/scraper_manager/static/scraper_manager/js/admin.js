@@ -194,10 +194,8 @@ const saveEditUserForm = () => __awaiter(void 0, void 0, void 0, function* () {
         canEditConfig: (_d = editUserForm.canEditConfig) !== null && _d !== void 0 ? _d : false,
         canViewAdmin: (_e = editUserForm.canViewAdmin) !== null && _e !== void 0 ? _e : false,
     };
-    const [settingsResponse, permissionsResponse] = yield Promise.all([
-        putUserSettings(userRequest, csrfToken),
-        putUserPermissions(putUserPermissionsRequest, csrfToken),
-    ]);
+    const settingsResponse = yield putUserSettings(userRequest, csrfToken);
+    const permissionsResponse = yield putUserPermissions(putUserPermissionsRequest, csrfToken);
     toggleSaveSpinner(userId, false);
     if (settingsResponse.formErrors) {
         updateFormErrorMessages(userId, settingsResponse.formErrors);

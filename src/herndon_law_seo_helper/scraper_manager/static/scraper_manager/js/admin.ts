@@ -321,10 +321,11 @@ const saveEditUserForm = async () => {
     canViewAdmin: editUserForm.canViewAdmin ?? false,
   };
 
-  const [settingsResponse, permissionsResponse] = await Promise.all([
-    putUserSettings(userRequest, csrfToken),
-    putUserPermissions(putUserPermissionsRequest, csrfToken),
-  ]);
+  const settingsResponse = await putUserSettings(userRequest, csrfToken);
+  const permissionsResponse = await putUserPermissions(
+    putUserPermissionsRequest,
+    csrfToken
+  );
 
   toggleSaveSpinner(userId, false);
 
