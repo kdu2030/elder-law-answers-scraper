@@ -57,6 +57,11 @@
                             {% endfor %}
                         </tbody>
                     </table>
+                    {% if attempt_rows|length == 0 %}
+                        <div class="ps-2">
+                            <p>There aren't any blog posts for this month yet.</p>
+                        </div>
+                    {% endif %}
                 </div>
             </div>
         </div>
