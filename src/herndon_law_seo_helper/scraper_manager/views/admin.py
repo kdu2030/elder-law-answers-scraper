@@ -10,7 +10,7 @@ def get_table_row_for_user(user: User) -> Dict[str, str]:
     email = user.email
     username = user.username
     profile_picture = UserProfilePicture.objects.filter(user=user).first()
-    image_src = "https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
+    image_src = "https://storage.gra.cloud.ovh.net/v1/AUTH_728ab22ba0c842468a897907be9a7075/flipanim/anim/j5hhfvoc.gif"
     user_permissions = UserPermissionCode.objects.filter(user=user) or []
     user_permission_codes = list(map(
         lambda permission: permission.permission_code, user_permissions))

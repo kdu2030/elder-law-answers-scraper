@@ -7,7 +7,7 @@ def get_profile_image(request: HttpResponse):
         return {}
     profile_picture = UserProfilePicture.objects.filter(
         user=request.user).first()
-    image_src = "https://i.ibb.co/y4KL53m/Default-Profile-Picture-Transparent.png"
+    image_src = "https://storage.gra.cloud.ovh.net/v1/AUTH_728ab22ba0c842468a897907be9a7075/flipanim/anim/j5hhfvoc.gif"
     if profile_picture:
         image_src = profile_picture.image_url
 
