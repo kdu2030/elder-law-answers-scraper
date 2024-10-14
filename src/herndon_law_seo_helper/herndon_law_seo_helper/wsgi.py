@@ -12,6 +12,11 @@ import os
 from django.core.wsgi import get_wsgi_application
 from whitenoise import WhiteNoise
 from django.conf import settings
+import sys
+
+path = "/home/herndonlawvamanager/elder-law-answers-scraper/src/herndon_law_seo_helper/"
+if path not in sys.path:
+    sys.path.append(path)
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE',
                       'herndon_law_seo_helper.production_settings')
