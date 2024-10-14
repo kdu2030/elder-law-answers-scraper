@@ -83,8 +83,12 @@ WSGI_APPLICATION = 'herndon_law_seo_helper.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
+database_config = Env.db_url_config(os.environ["DATABASE_URL"])
+# Necessary for MySQL in Python Anywhere since db_url_config removes $default from Database name
+database_config["NAME"] = database_config["NAME"] + "$default"
+
 DATABASES = {
-    'default': Env.db_url_config(os.environ["DATABASE_URL"])
+    'default': database_config
 }
 
 
