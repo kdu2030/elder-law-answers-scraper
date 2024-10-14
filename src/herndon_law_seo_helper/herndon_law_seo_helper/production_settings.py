@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ["*"]
 LOGIN_URL = "/signin"
 
 CSRF_TRUSTED_ORIGINS = [
-    "https://herndonlawmanager.adaptable.app", "https://herndonlawmanager.onrender.com"]
+    "https://herndonlawmanager.adaptable.app", "https://herndonlawmanager.onrender.com", "https://herndonlawvamanager.pythonanywhere.com"]
 
 
 # Application definition
