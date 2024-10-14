@@ -7,7 +7,7 @@ def get_profile_image(request: HttpResponse):
         return {}
     profile_picture = UserProfilePicture.objects.filter(
         user=request.user).first()
-    image_src = "https://storage.gra.cloud.ovh.net/v1/AUTH_728ab22ba0c842468a897907be9a7075/flipanim/anim/j5hhfvoc.gif"
+    image_src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
     if profile_picture:
         image_src = profile_picture.image_url
 
