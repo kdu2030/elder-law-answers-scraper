@@ -14,7 +14,7 @@ from whitenoise import WhiteNoise
 from django.conf import settings
 import sys
 
-path = "/home/herndonlawvamanager/elder-law-answers-scraper/src/herndon_law_seo_helper/"
+path = "/home/herndonlawvamanager/elder-law-answers-scraper/src/herndon_law_seo_helper"
 if path not in sys.path:
     sys.path.append(path)
 
