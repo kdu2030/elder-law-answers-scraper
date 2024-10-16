@@ -3,7 +3,7 @@ FROM python:3.11
 WORKDIR /app
 COPY requirements.txt /app
 
-RUN sudo curl https://packages.microsoft.com/config/debian/12/prod.list | sudo tee /etc/apt/sources.list.d/mssql-release.list
+RUN curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list
 RUN apt update && apt install -y unixodbc && ACCEPT_EULA=Y apt install -y msodbcsql17
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
