@@ -3,7 +3,7 @@ FROM python:3.11
 WORKDIR /app
 COPY requirements.txt /app
 
-RUN apt update && apt install unixodbc
+RUN apt update && apt install -y unixodbc
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
 RUN pip install -r requirements.txt
