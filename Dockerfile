@@ -4,6 +4,8 @@ WORKDIR /app
 COPY requirements.txt /app
 
 RUN curl https://packages.microsoft.com/config/debian/12/prod.list | tee /etc/apt/sources.list.d/mssql-release.list
+RUN curl -fsSL https://packages.microsoft.com/keys/microsoft.asc | gpg --dearmor -o /usr/share/keyrings/microsoft-prod.gpg
+
 RUN apt update && apt install -y unixodbc && ACCEPT_EULA=Y apt install -y msodbcsql17
 RUN apt-get clean && rm -rf /var/lib/apt/lists/*
 
