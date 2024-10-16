@@ -11,7 +11,6 @@ cssbeautifier==1.15.1
 devtools==0.9.0
 Django==4.2.13
 django-environ==0.11.2
-django-mssql-backend==2.8.1
 djlint==1.34.1
 EditorConfig==0.12.4
 executing==0.10.0
@@ -25,6 +24,7 @@ html-void-elements==0.1.0
 idna==3.7
 jsbeautifier==1.15.1
 json5==0.9.25
+mssql-django==1.5
 packaging==24.1
 pathspec==0.12.1
 psycopg==3.1.19
@@ -35,6 +35,7 @@ pydash==5.1.2
 pyee==11.1.0
 pyodbc==5.2.0
 python-dateutil==2.9.0.post0
+pytz==2024.2
 PyYAML==6.0.1
 regex==2023.12.25
 requests==2.32.3
